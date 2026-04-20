@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@import '@fontsource-variable/plus-jakarta-sans';
+
+@theme {
+  --color-forest: #2A3D22;
+  --color-moss: #4A7038;
+  --color-grove: #6A9E52;
+  --color-grove-light: #D4E3C5;
+  --color-bark: #7A8E70;
+  --color-cream: #F7F5EE;
+  --color-forest-light: #A0B090;
+  --font-sans: 'Plus Jakarta Sans Variable', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans Variable', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
