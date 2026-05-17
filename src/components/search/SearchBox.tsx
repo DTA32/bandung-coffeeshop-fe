@@ -119,7 +119,7 @@ export default function SearchBox({
 
   const dropdown = isOpen && results.length > 0 && (
     <div className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg">
-      {groupOrder.map((type) => (
+      {groupOrder.map((type) => grouped[type] && (
         <div key={type}>
           <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
             {TYPE_LABELS[type]}
