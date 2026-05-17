@@ -27,17 +27,21 @@ export const Route = createFileRoute('/cafe/$cafeId')({
     return { cafe, review, nearbyCafes }
   },
   errorComponent: () => (
-    <div className="flex h-128 items-center justify-center text-lg text-red-500">
-      Failed to load cafe details.
+    <div className="flex flex-col h-128 items-center gap-4 justify-center text-xl text-moss-dark">
+      <p>Failed to load cafe detail.</p>
+      <p className="text-lg">Uh oh, something went wrong. Please try again later.</p>
+      <Link to="/" className="py-4 px-8 text-sm bg-forest text-cream rounded-lg">
+        Back to home
+      </Link>
     </div>
   ),
   notFoundComponent: () => (
-    <div className="flex flex-col items-center justify-center py-32 text-forest">
+    <div className="flex flex-col items-center justify-center gap-4 py-32 text-forest">
       <p className="text-2xl font-semibold">Cafe not found</p>
       <p className="mt-2 text-bark">
         This cafe doesn't exist or already deleted.
       </p>
-      <Link to="/" className="mt-6 text-sm underline">
+      <Link to="/" className="py-4 px-8 text-sm bg-forest text-cream rounded-lg">
         Back to home
       </Link>
     </div>

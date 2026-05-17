@@ -1,5 +1,6 @@
 import {
   createFileRoute,
+  Link,
   useNavigate,
   useRouterState,
 } from '@tanstack/react-router'
@@ -45,8 +46,12 @@ export const Route = createFileRoute('/explore')({
   }),
   loader: ({ deps }) => searchCafes(deps),
   errorComponent: () => (
-    <div className="flex h-128 items-center justify-center text-lg text-red-500">
-      Failed to load cafes.
+    <div className="flex flex-col h-128 items-center gap-4 justify-center text-xl text-moss-dark">
+      <p>Failed to load cafes.</p>
+      <p className="text-lg">Uh oh, something went wrong while fetching the cafes. Please try again later.</p>
+      <Link to="/" className="py-4 px-8 text-sm bg-forest text-cream rounded-lg">
+        Back to home
+      </Link>
     </div>
   ),
   component: ExplorePage,

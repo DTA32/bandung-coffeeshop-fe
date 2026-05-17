@@ -138,6 +138,7 @@ function MeetInTheMiddle() {
   const [resultsRadiusKm, setResultsRadiusKm] = useState(1.0)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [alert, setAlert] = useState<string>('')
 
   const midpoint = useMemo(() => {
     if (markers.length < 2) return null
@@ -202,6 +203,10 @@ function MeetInTheMiddle() {
       })
       setResults(data)
       setResultsRadiusKm(radiusKm)
+    } catch (e) {
+      console.log(e)
+      setAlert('Failed to fetch cafes. Please try again.')
+      setTimeout(() => setAlert(''), 3000)
     } finally {
       setLoading(false)
     }
@@ -209,6 +214,11 @@ function MeetInTheMiddle() {
 
   return (
     <div className="w-screen h-[95vh] relative">
+      {alert && (
+        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-amber-800 text-sm font-semibold px-4 py-2 rounded-md shadow-md z-50 transition-opacity duration-300 z-1000">
+          {alert}
+        </div>
+      )}
       <MapContainer
         style={{ width: '100%', height: '100%' }}
         center={defaultPosition}
