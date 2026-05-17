@@ -1,7 +1,7 @@
-import CafeCard from "@/components/explore/CafeCard";
-import type {CafeListing} from "@/lib/api/search";
+import CafeCard from '@/components/explore/CafeCard'
+import type { CafeListing } from '@/lib/api/search'
 
-export default function FeaturedCafes({cafes}: {cafes: CafeListing[]}) {
+export default function FeaturedCafes({ cafes }: { cafes: CafeListing[] }) {
   return (
     <section className="flex flex-1 flex-col gap-6 bg-cream px-6 md:px-20 py-8 w-full">
       <h2 className="m-0 text-2xl md:text-3xl font-bold text-forest">
@@ -13,7 +13,10 @@ export default function FeaturedCafes({cafes}: {cafes: CafeListing[]}) {
         ))}
         {cafes.length === 0 && (
           <div className="flex justify-center items-center h-48 w-full">
-            <p className="text-md leading-[1.7] m-0 text-bark"> No featured cafes at the moment. </p>
+            <p className="text-md leading-[1.7] m-0 text-bark">
+              {' '}
+              No featured cafes at the moment.{' '}
+            </p>
           </div>
         )}
       </div>

@@ -13,7 +13,10 @@ export default function Header() {
           Explore
         </Link>
         {/* <Link to="/" className="text-sm text-moss no-underline">Directory</Link> */}
-        <Link to="/meet-in-the-middle" className="text-sm text-moss no-underline">
+        <Link
+          to="/meet-in-the-middle"
+          className="text-sm text-moss no-underline"
+        >
           Meet in the Middle
         </Link>
         <Link to="/about" className="text-sm text-moss no-underline">

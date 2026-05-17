@@ -12,8 +12,7 @@ function About() {
         <h1 className="mb-3 text-4xl font-bold sm:text-5xl">
           Under construction 🚧
         </h1>
-        <p className="m-0 max-w-3xl text-base leading-8">
-        </p>
+        <p className="m-0 max-w-3xl text-base leading-8"></p>
       </section>
     </main>
   )

@@ -1,8 +1,8 @@
-import {useEffect, useRef, useState} from 'react'
-import {useNavigate} from '@tanstack/react-router'
-import {Coffee, MapPinned, Map, Search, SlidersHorizontal} from 'lucide-react'
-import type {QuickSearchItem} from '@/lib/api/search'
-import {quickSearch} from '@/lib/api/search'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
+import type { QuickSearchItem } from '@/lib/api/search'
+import { quickSearch } from '@/lib/api/search'
 
 interface SearchBoxProps {
   variant?: 'hero' | 'srp'
@@ -17,16 +17,16 @@ const TYPE_LABELS: Record<string, string> = {
 }
 
 const TYPE_ICONS: Record<string, React.ReactNode> = {
-  cafe: <Coffee size={14} className="text-forest"/>,
-  poi: <MapPinned size={14} className="text-forest"/>,
-  area: <Map size={14} className="text-forest"/>,
-  district: <Map size={14} className="text-forest"/>,
+  cafe: <Coffee size={14} className="text-forest" />,
+  poi: <MapPinned size={14} className="text-forest" />,
+  area: <Map size={14} className="text-forest" />,
+  district: <Map size={14} className="text-forest" />,
 }
 
 export default function SearchBox({
-                                    variant = 'hero',
-                                    initialQuery = '',
-                                  }: SearchBoxProps) {
+  variant = 'hero',
+  initialQuery = '',
+}: SearchBoxProps) {
   const navigate = useNavigate()
   const [query, setQuery] = useState(initialQuery)
   const [results, setResults] = useState<QuickSearchItem[]>([])
@@ -85,7 +85,7 @@ export default function SearchBox({
   function handleSelect(item: QuickSearchItem) {
     dismiss()
     if (item.type === 'cafe') {
-      navigate({to: '/cafe/$cafeId', params: {cafeId: item.id}})
+      navigate({ to: '/cafe/$cafeId', params: { cafeId: item.id } })
     } else {
       navigate({
         to: '/explore',
@@ -100,7 +100,7 @@ export default function SearchBox({
 
   function handleSearch() {
     dismiss()
-    navigate({to: '/explore', search: {}})
+    navigate({ to: '/explore', search: {} })
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -115,11 +115,10 @@ export default function SearchBox({
     },
     {},
   )
-  const groupOrder = Object.keys(TYPE_LABELS).filter((t) => grouped[t])
+  const groupOrder = Object.keys(TYPE_LABELS)
 
   const dropdown = isOpen && results.length > 0 && (
-    <div
-      className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg">
+    <div className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg">
       {groupOrder.map((type) => (
         <div key={type}>
           <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
@@ -135,7 +134,9 @@ export default function SearchBox({
               className="flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream"
             >
               {TYPE_ICONS[item.type]}
-              <span className="text-sm font-medium text-forest">{item.name}</span>
+              <span className="text-sm font-medium text-forest">
+                {item.name}
+              </span>
             </button>
           ))}
         </div>
@@ -150,7 +151,7 @@ export default function SearchBox({
           ref={containerRef}
           className="relative flex gap-3 border border-grove-light bg-cream w-full px-4 items-center rounded-lg"
         >
-          <Search size={18} className="shrink-0 text-bark"/>
+          <Search size={18} className="shrink-0 text-bark" />
           <input
             type="text"
             value={query}
@@ -161,9 +162,11 @@ export default function SearchBox({
           />
           {dropdown}
         </div>
-        <button disabled
-                className="flex shrink-0 cursor-not-allowed items-center gap-1.5 rounded-md bg-forest px-4 py-2 text-sm font-medium text-cream opacity-40">
-          <SlidersHorizontal size={14}/>
+        <button
+          disabled
+          className="flex shrink-0 cursor-not-allowed items-center gap-1.5 rounded-md bg-forest px-4 py-2 text-sm font-medium text-cream opacity-40"
+        >
+          <SlidersHorizontal size={14} />
           Filters
         </button>
       </div>

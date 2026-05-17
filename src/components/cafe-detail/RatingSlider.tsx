@@ -7,7 +7,7 @@ interface RatingSliderProps {
 
 export default function RatingSlider({ label, rating }: RatingSliderProps) {
   const { range, score, description } = rating
-  
+
   const segmentWidth = 100 / range.length
   let activeCap = range.findIndex(
     (r) => score >= r.lower_bound && score <= r.upper_bound,
@@ -20,8 +20,12 @@ export default function RatingSlider({ label, rating }: RatingSliderProps) {
   const within = span > 0 ? (score - activeRange.lower_bound) / span : 0
   const clampedWithin = Math.min(Math.max(within, 0), 1)
   const fillPct = (activeCap + clampedWithin) * segmentWidth
-  
-  const formattedDescription = description ? description : range[activeCap].description ? range[activeCap].description : ''
+
+  const formattedDescription = description
+    ? description
+    : range[activeCap].description
+      ? range[activeCap].description
+      : ''
 
   return (
     <div className="flex flex-col gap-2 flex-1 py-5">

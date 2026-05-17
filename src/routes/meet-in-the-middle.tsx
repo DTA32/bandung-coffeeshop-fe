@@ -1,5 +1,5 @@
-import {ClientOnly, createFileRoute} from '@tanstack/react-router'
-import {useMemo, useState} from 'react'
+import { ClientOnly, createFileRoute } from '@tanstack/react-router'
+import { useMemo, useState } from 'react'
 import {
   Circle,
   MapContainer,
@@ -10,12 +10,12 @@ import {
   ZoomControl,
 } from 'react-leaflet'
 import L from 'leaflet'
-import type {LatLngExpression, LatLngTuple} from 'leaflet'
+import type { LatLngExpression, LatLngTuple } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import {ArrowUpDown, Search, X} from 'lucide-react'
+import { ArrowUpDown, Search, X } from 'lucide-react'
 import CafeListItem from '@/components/explore/CafeListItem'
-import {searchCafes} from '@/lib/api/search'
-import type {SearchCafesData} from '@/lib/api/search';
+import { searchCafes } from '@/lib/api/search'
+import type { SearchCafesData } from '@/lib/api/search'
 
 type MarkerSearch = { m?: string[] }
 
@@ -34,7 +34,7 @@ export const Route = createFileRoute('/meet-in-the-middle')({
           </div>
         }
       >
-        <MeetInTheMiddle/>
+        <MeetInTheMiddle />
       </ClientOnly>
     )
   },
@@ -49,22 +49,24 @@ function decodeMarker(entry: string, i: number): UserMarker | null {
   const lat = parseFloat(parts[0])
   const lng = parseFloat(parts[1])
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
-  const givenColor = (parts[2] && parts[2].match(/^[0-9A-Fa-f]{6}$/)) ? `#${parts[2]}` : null
+  const givenColor =
+    parts[2] && parts[2].match(/^[0-9A-Fa-f]{6}$/) ? `#${parts[2]}` : null
   const color = `${givenColor ?? '#4A7038'}`
-  const givenName = (parts.length > 3 && parts.slice(3).join(',').trim()) ? decodeURIComponent(parts.slice(3).join(',')) : null
-  const name = givenName
-    ? givenName
-    : `Marker ${i + 1}`
+  const givenName =
+    parts.length > 3 && parts.slice(3).join(',').trim()
+      ? decodeURIComponent(parts.slice(3).join(','))
+      : null
+  const name = givenName ? givenName : `Marker ${i + 1}`
   return { id: `m-${i}`, lat, lng, color, name }
 }
 
 const COLOR_CHOICES = ['#4A7038', '#2A3D22', '#6B8E23', '#A05A10', '#8FBC8F']
 const SORT_OPTIONS = [
-  {value: 'distance', label: 'Distance'},
-  {value: 'default', label: 'Best match'},
-  {value: 'rating', label: 'Rating'},
-  {value: 'price_range', label: 'Price'},
-  {value: 'updated_at', label: 'Recently updated'},
+  { value: 'distance', label: 'Distance' },
+  { value: 'default', label: 'Best match' },
+  { value: 'rating', label: 'Rating' },
+  { value: 'price_range', label: 'Price' },
+  { value: 'updated_at', label: 'Recently updated' },
 ]
 
 type UserMarker = {
@@ -106,8 +108,8 @@ const cafeIcon = L.divIcon({
 })
 
 function ClickHandler({
-                        onAdd,
-                      }: {
+  onAdd,
+}: {
   onAdd: (lat: number, lng: number) => void
 }) {
   useMapEvents({
@@ -145,10 +147,7 @@ function MeetInTheMiddle() {
     return bounds.getCenter()
   }, [markers])
 
-  function commitMarkers(
-    next: UserMarker[],
-    opts: { replace?: boolean } = {},
-  ) {
+  function commitMarkers(next: UserMarker[], opts: { replace?: boolean } = {}) {
     navigate({
       search: (prev) => ({
         ...prev,
@@ -179,13 +178,13 @@ function MeetInTheMiddle() {
   }
 
   function renameMarker(id: string, name: string) {
-    commitMarkers(markers.map((m) => (m.id === id ? {...m, name} : m)))
+    commitMarkers(markers.map((m) => (m.id === id ? { ...m, name } : m)))
   }
 
   function updateMarkerPosition(id: string, lat: number, lng: number) {
     setResults(null)
     commitMarkers(
-      markers.map((m) => (m.id === id ? {...m, lat, lng} : m)),
+      markers.map((m) => (m.id === id ? { ...m, lat, lng } : m)),
       { replace: true },
     )
   }
@@ -211,7 +210,7 @@ function MeetInTheMiddle() {
   return (
     <div className="w-screen h-[95vh] relative">
       <MapContainer
-        style={{width: '100%', height: '100%'}}
+        style={{ width: '100%', height: '100%' }}
         center={defaultPosition}
         zoom={13}
         zoomControl={false}
@@ -220,8 +219,8 @@ function MeetInTheMiddle() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ZoomControl position={'bottomleft'}/>
-        <ClickHandler onAdd={addMarker}/>
+        <ZoomControl position={'bottomleft'} />
+        <ClickHandler onAdd={addMarker} />
         {markers.map((m) => (
           <Marker
             key={m.id}
@@ -236,7 +235,7 @@ function MeetInTheMiddle() {
             }}
           />
         ))}
-        {midpoint && <Marker position={midpoint} icon={midpointIcon}/>}
+        {midpoint && <Marker position={midpoint} icon={midpointIcon} />}
         {midpoint && results && (
           <Circle
             center={midpoint}
@@ -292,7 +291,7 @@ function MeetInTheMiddle() {
                 <div className="flex items-center gap-4 min-w-0">
                   <span
                     className="w-3 h-3 rounded-full shrink-0"
-                    style={{backgroundColor: m.color}}
+                    style={{ backgroundColor: m.color }}
                   />
                   <div className="flex flex-col min-w-0">
                     {editingId === m.id ? (
@@ -366,7 +365,7 @@ function MeetInTheMiddle() {
           {midpoint && (
             <div className="flex w-full justify-between mt-4 rounded-lg">
               <div className="flex items-center gap-4">
-                <span className="w-3 h-3 rounded-full shrink-0 bg-forest"/>
+                <span className="w-3 h-3 rounded-full shrink-0 bg-forest" />
                 <div className="flex flex-col text-sm">
                   <span className="font-semibold text-forest">
                     Midpoint calculated
@@ -384,13 +383,12 @@ function MeetInTheMiddle() {
           onClick={() => runSearch()}
           className="flex items-center justify-center gap-2 font-semibold w-full bg-forest text-cream py-3 rounded-b-lg hover:bg-moss cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Search size={16}/>
+          <Search size={16} />
           <span>{loading ? 'Searching...' : 'Find Meeting Spots'}</span>
         </button>
       </div>
       {results && (
-        <div
-          className="absolute top-10 right-8 flex flex-col z-1000 max-w-sm border border-grove-light rounded-2xl bg-white/90 shadow-lg w-sm">
+        <div className="absolute top-10 right-8 flex flex-col z-1000 max-w-sm border border-grove-light rounded-2xl bg-white/90 shadow-lg w-sm">
           {results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 h-48 p-4 text-center">
               <p className="text-forest font-semibold">No cafes found</p>
@@ -410,11 +408,16 @@ function MeetInTheMiddle() {
               </div>
               <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
                 {results.cafes.map((cafe) => (
-                  <CafeListItem key={cafe.id} cafe={cafe} smallVersion={true} openNewTab={true}/>
+                  <CafeListItem
+                    key={cafe.id}
+                    cafe={cafe}
+                    smallVersion={true}
+                    openNewTab={true}
+                  />
                 ))}
               </div>
               <div className="flex gap-2 justify-center items-center w-full">
-                <ArrowUpDown size={16} className="text-bark"/>
+                <ArrowUpDown size={16} className="text-bark" />
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-bark">Sort by:</span>
                   <select

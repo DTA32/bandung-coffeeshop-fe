@@ -1,14 +1,13 @@
-import {Map} from "lucide-react";
+import { Map } from 'lucide-react'
 
-const API_KEY = "AIzaSyA5c3DX5h3qiGBOEF_kRaE05QN0kNCuQgA"
+const API_KEY = 'AIzaSyA5c3DX5h3qiGBOEF_kRaE05QN0kNCuQgA'
 
-export default function MapPreview(
-  {
-    cafeName,
-    placeId,
-    additionalClass,
-    withAlternateButton = false,
-  }: {
+export default function MapPreview({
+  cafeName,
+  placeId,
+  additionalClass,
+  withAlternateButton = false,
+}: {
   cafeName: string
   placeId: string
   additionalClass?: string
@@ -28,9 +27,10 @@ export default function MapPreview(
         <a
           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cafeName)}&query_place_id=${placeId}`}
           className="md:invisible absolute right-6 top-4 w-fit bg-white rounded-lg  overflow-hidden shadow-sm text-moss py-2 px-3 flex items-center gap-1 text-xs"
-          target="_blank" rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          <Map size={12}/>
+          <Map size={12} />
           <span>Open in Maps</span>
         </a>
       )}

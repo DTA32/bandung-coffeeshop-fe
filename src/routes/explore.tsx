@@ -3,13 +3,13 @@ import {
   useNavigate,
   useRouterState,
 } from '@tanstack/react-router'
-import {LayoutGrid, List, Map} from 'lucide-react'
+import { LayoutGrid, List, Map } from 'lucide-react'
 import SearchBox from '@/components/search/SearchBox'
 import CafeCard from '@/components/explore/CafeCard'
 import CafeListItem from '@/components/explore/CafeListItem'
 import Pagination from '@/components/explore/Pagination'
-import type {ExploreSearch} from '@/lib/api/search'
-import {cleanExploreSearch, searchCafes} from '@/lib/api/search'
+import type { ExploreSearch } from '@/lib/api/search'
+import { cleanExploreSearch, searchCafes } from '@/lib/api/search'
 
 export const Route = createFileRoute('/explore')({
   validateSearch: (search): ExploreSearch => ({
@@ -34,7 +34,7 @@ export const Route = createFileRoute('/explore')({
           ? 'grid'
           : undefined,
   }),
-  loaderDeps: ({search}) => ({
+  loaderDeps: ({ search }) => ({
     query_id: search.query_id,
     query_type: search.query_type,
     query_coords: search.query_coords,
@@ -43,8 +43,8 @@ export const Route = createFileRoute('/explore')({
     page: search.page ?? 1,
     size: search.size ?? 8,
   }),
-  loader: ({deps}) => searchCafes(deps),
-  errorComponent: ({}) => (
+  loader: ({ deps }) => searchCafes(deps),
+  errorComponent: () => (
     <div className="flex h-128 items-center justify-center text-lg text-red-500">
       Failed to load cafes.
     </div>
@@ -53,17 +53,17 @@ export const Route = createFileRoute('/explore')({
 })
 
 const SORT_OPTIONS = [
-  {value: 'default', label: 'Best match'},
-  {value: 'rating', label: 'Rating'},
-  {value: 'price_range', label: 'Price'},
-  {value: 'updated_at', label: 'Recently updated'},
+  { value: 'default', label: 'Best match' },
+  { value: 'rating', label: 'Rating' },
+  { value: 'price_range', label: 'Price' },
+  { value: 'updated_at', label: 'Recently updated' },
 ]
 
 function ExplorePage() {
   const data = Route.useLoaderData()
   const search = Route.useSearch()
   const navigate = useNavigate()
-  const isLoading = useRouterState({select: (s) => s.isLoading})
+  const isLoading = useRouterState({ select: (s) => s.isLoading })
 
   // Resolved values with defaults applied
   const page = search.page ?? 1
@@ -74,13 +74,13 @@ function ExplorePage() {
   function goTo(update: ExploreSearch) {
     navigate({
       to: '/explore',
-      search: cleanExploreSearch({...search, ...update}),
+      search: cleanExploreSearch({ ...search, ...update }),
     })
   }
 
   return (
     <main className="flex flex-col bg-cream">
-      <SearchBox variant="srp" initialQuery={search.q ?? ''}/>
+      <SearchBox variant="srp" initialQuery={search.q ?? ''} />
 
       <div className="mx-auto w-full max-w-screen-2xl px-6 md:px-16 py-6">
         <div className="mb-6 flex items-center justify-between">
@@ -89,35 +89,35 @@ function ExplorePage() {
               disabled
               className="flex cursor-not-allowed items-center gap-1.5 px-4 py-2.5 text-sm text-gray-400 rounded-lg bg-white "
             >
-              <Map size={14}/>
+              <Map size={14} />
               Show Map
             </button>
             <div className="flex overflow-hidden rounded-lg border border-white bg-white p-1 ">
               <button
-                onClick={() => goTo({view: 'grid', page: 1})}
+                onClick={() => goTo({ view: 'grid', page: 1 })}
                 className={`flex rounded-lg cursor-pointer items-center gap-1.5 border-none px-3 py-1.5 text-sm transition ${
                   view === 'grid'
                     ? 'bg-forest text-cream'
                     : 'bg-transparent text-forest hover:bg-grove-light'
                 }`}
               >
-                <LayoutGrid size={14}/>
+                <LayoutGrid size={14} />
                 Grid
               </button>
               <button
-                onClick={() => goTo({view: 'list', page: 1})}
+                onClick={() => goTo({ view: 'list', page: 1 })}
                 className={`flex rounded-lg cursor-pointer items-center gap-1.5 border-none px-3 py-1.5 text-sm transition ${
                   view === 'list'
                     ? 'bg-forest text-cream'
                     : 'bg-transparent text-forest hover:bg-grove-light'
                 }`}
               >
-                <List size={14}/>
+                <List size={14} />
                 List
               </button>
             </div>
           </div>
-          
+
           <span className="text-sm text-bark">
             {data.total} {data.total === 1 ? 'cafe' : 'cafes'} found
             <span className="font-bold">
@@ -131,7 +131,7 @@ function ExplorePage() {
             <span className="text-sm text-bark">Sort by:</span>
             <select
               value={sort}
-              onChange={(e) => goTo({sort: e.target.value, page: 1})}
+              onChange={(e) => goTo({ sort: e.target.value, page: 1 })}
               className="cursor-pointer rounded-md py-1.5 text-sm text-grove focus:outline-none"
             >
               {SORT_OPTIONS.map((opt) => (
@@ -153,13 +153,13 @@ function ExplorePage() {
           ) : view === 'grid' ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {data.cafes.map((cafe) => (
-                <CafeCard key={cafe.id} cafe={cafe}/>
+                <CafeCard key={cafe.id} cafe={cafe} />
               ))}
             </div>
           ) : (
             <div className="flex flex-col gap-4">
               {data.cafes.map((cafe) => (
-                <CafeListItem key={cafe.id} cafe={cafe}/>
+                <CafeListItem key={cafe.id} cafe={cafe} />
               ))}
             </div>
           )}
@@ -167,7 +167,7 @@ function ExplorePage() {
           <Pagination
             page={page}
             totalPages={totalPages}
-            searchForPage={(p) => cleanExploreSearch({...search, page: p})}
+            searchForPage={(p) => cleanExploreSearch({ ...search, page: p })}
           />
         </div>
       </div>

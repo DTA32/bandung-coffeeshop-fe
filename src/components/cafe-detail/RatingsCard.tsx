@@ -2,7 +2,7 @@ import type { RatingsResponse } from '@/lib/api/cafe'
 import RatingSlider from './RatingSlider'
 
 const RATING_LABELS: Record<string, string> = {
-  "price-rank": 'Price Rank',
+  'price-rank': 'Price Rank',
   vibe: 'Vibe',
   noise: 'Noise Level',
   wifi: 'Wifi Speed',
@@ -21,7 +21,10 @@ export default function RatingsCard({ ratings }: RatingsCardProps) {
       <h2 className="text-base font-bold text-forest m-0">Ratings</h2>
       {Object.keys(ratings).length === 0 && (
         <div className="flex justify-center items-center h-24">
-          <p className="text-sm leading-[1.7] m-0 text-bark"> No ratings available. </p>
+          <p className="text-sm leading-[1.7] m-0 text-bark">
+            {' '}
+            No ratings available.{' '}
+          </p>
         </div>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 xl:gap-x-16 divide-y-[0.5px] divide-grove-light">

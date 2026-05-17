@@ -1,7 +1,7 @@
-import CafeCard from "@/components/explore/CafeCard";
-import type {CafeListing} from "@/lib/api/search";
+import CafeCard from '@/components/explore/CafeCard'
+import type { CafeListing } from '@/lib/api/search'
 
-export default function NearbyCafe({cafes}: {cafes: CafeListing[]}) {
+export default function NearbyCafe({ cafes }: { cafes: CafeListing[] }) {
   if (cafes.length === 0) {
     return null
   }

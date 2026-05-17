@@ -1,6 +1,6 @@
-import {Clock} from 'lucide-react'
+import { Clock } from 'lucide-react'
 
-export default function UpdatedAt({updated_at}: {updated_at: string}) {
+export default function UpdatedAt({ updated_at }: { updated_at: string }) {
   if (isNaN(new Date(updated_at).getTime())) {
     return null
   }

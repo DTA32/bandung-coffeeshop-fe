@@ -1,4 +1,4 @@
-import {Tag} from 'lucide-react'
+import { Tag } from 'lucide-react'
 import type { CafePrice } from '@/lib/api/cafe'
 
 function fmtPrice(min: number | null, max: number | null): string | null {
@@ -17,7 +17,7 @@ interface PriceCardProps {
   price: CafePrice
 }
 
-export default function PriceCard({price}: PriceCardProps) {
+export default function PriceCard({ price }: PriceCardProps) {
   const rows = [
     {
       label: 'Coffee',
@@ -45,37 +45,38 @@ export default function PriceCard({price}: PriceCardProps) {
           <span className="text-base font-bold text-forest">Price Range</span>
           {price.price_range_min || price.price_range_max ? (
             <span className="text-xs text-bark">(exc. Food)</span>
-          ) : null
-          }
+          ) : null}
         </div>
         {price.price_range_min || price.price_range_max ? (
           <span className="text-sm font-bold text-forest">
-              {fmtPrice(price.price_range_min, price.price_range_max)}
-            </span>
-        ) : null
-        }
+            {fmtPrice(price.price_range_min, price.price_range_max)}
+          </span>
+        ) : null}
       </div>
-      <hr className="border-t border-grove-light m-0"/>
-      {rows.map(({label, value}) => (
-        value !== null && (
-          <div key={label} className="flex justify-between items-center">
-            <span className="text-xs text-bark">{label}</span>
-            <span className="text-xs font-semibold text-forest">{value}</span>
-          </div>
-        )
-      ))}
-      {rows.every(({value}) => value === null) && (
+      <hr className="border-t border-grove-light m-0" />
+      {rows.map(
+        ({ label, value }) =>
+          value !== null && (
+            <div key={label} className="flex justify-between items-center">
+              <span className="text-xs text-bark">{label}</span>
+              <span className="text-xs font-semibold text-forest">{value}</span>
+            </div>
+          ),
+      )}
+      {rows.every(({ value }) => value === null) && (
         <div className="flex justify-center items-center h-16 w-full">
-          <p className="text-sm leading-[1.7] m-0 text-bark"> No price information available yet. </p>
+          <p className="text-sm leading-[1.7] m-0 text-bark">
+            {' '}
+            No price information available yet.{' '}
+          </p>
         </div>
       )}
       {price.rank && (
         <div
-          className={`flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5 self-start ${PRICE_RANK_COLORS[price.rank.type] || 'bg-gray-100 text-gray-600'}`}>
-          <Tag size={12}/>
-          <span className="text-xs font-semibold">
-            {price.rank.label}
-          </span>
+          className={`flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5 self-start ${PRICE_RANK_COLORS[price.rank.type] || 'bg-gray-100 text-gray-600'}`}
+        >
+          <Tag size={12} />
+          <span className="text-xs font-semibold">{price.rank.label}</span>
         </div>
       )}
     </div>

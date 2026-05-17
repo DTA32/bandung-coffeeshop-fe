@@ -21,4 +21,4 @@ function HomePage() {
       <FeaturedCafes cafes={data.cafes} />
     </main>
   )
-} 
+}
