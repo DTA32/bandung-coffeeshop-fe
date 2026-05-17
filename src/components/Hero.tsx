@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section
       className="
-        flex h-90 md:h-120 w-full items-end md:items-center justify-center bg-cover bg-center
+        flex h-90 md:h-120 w-full items-end md:items-center justify-center bg-cover bg-center bg-bark
         bg-[url(https://pub-ca5dd2068b3441479a027dfdbebb0240.r2.dev/homepage.jpg)]
       "
     >
