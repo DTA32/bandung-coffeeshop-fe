@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MeetInTheMiddleRouteImport } from './routes/meet-in-the-middle'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CafeCafeIdRouteImport } from './routes/cafe.$cafeId'
 
+const MeetInTheMiddleRoute = MeetInTheMiddleRouteImport.update({
+  id: '/meet-in-the-middle',
+  path: '/meet-in-the-middle',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExploreRoute = ExploreRouteImport.update({
   id: '/explore',
   path: '/explore',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/explore': typeof ExploreRoute
+  '/meet-in-the-middle': typeof MeetInTheMiddleRoute
   '/cafe/$cafeId': typeof CafeCafeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/explore': typeof ExploreRoute
+  '/meet-in-the-middle': typeof MeetInTheMiddleRoute
   '/cafe/$cafeId': typeof CafeCafeIdRoute
 }
 export interface FileRoutesById {
@@ -52,25 +60,45 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/explore': typeof ExploreRoute
+  '/meet-in-the-middle': typeof MeetInTheMiddleRoute
   '/cafe/$cafeId': typeof CafeCafeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/explore' | '/cafe/$cafeId'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/explore'
+    | '/meet-in-the-middle'
+    | '/cafe/$cafeId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/explore' | '/cafe/$cafeId'
-  id: '__root__' | '/' | '/about' | '/explore' | '/cafe/$cafeId'
+  to: '/' | '/about' | '/explore' | '/meet-in-the-middle' | '/cafe/$cafeId'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/explore'
+    | '/meet-in-the-middle'
+    | '/cafe/$cafeId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ExploreRoute: typeof ExploreRoute
+  MeetInTheMiddleRoute: typeof MeetInTheMiddleRoute
   CafeCafeIdRoute: typeof CafeCafeIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/meet-in-the-middle': {
+      id: '/meet-in-the-middle'
+      path: '/meet-in-the-middle'
+      fullPath: '/meet-in-the-middle'
+      preLoaderRoute: typeof MeetInTheMiddleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/explore': {
       id: '/explore'
       path: '/explore'
@@ -106,6 +134,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ExploreRoute: ExploreRoute,
+  MeetInTheMiddleRoute: MeetInTheMiddleRoute,
   CafeCafeIdRoute: CafeCafeIdRoute,
 }
 export const routeTree = rootRouteImport

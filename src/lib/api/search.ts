@@ -16,6 +16,7 @@ export interface CafeListing {
   price_range: string | null
   distance: number | null
   remark: string | null
+  coordinates?: { lat: number; lng: number }
 }
 
 export interface SearchCafesData {
@@ -82,8 +83,10 @@ export async function searchCafes(
   if (params.query_id) url.searchParams.set('query_id', params.query_id)
   if (params.query_type) url.searchParams.set('query_type', params.query_type)
   if (params.sort) url.searchParams.set('sort', params.sort)
-  if (params.query_coords) url.searchParams.set('query_coords', params.query_coords)
-  if (params.radius_max != null) url.searchParams.set('radius_max', String(params.radius_max))
+  if (params.query_coords)
+    url.searchParams.set('query_coords', params.query_coords)
+  if (params.radius_max != null)
+    url.searchParams.set('radius_max', String(params.radius_max))
   if (params.page != null) url.searchParams.set('page', String(params.page))
   if (params.size != null) url.searchParams.set('size', String(params.size))
   const res = await fetch(url.toString())
