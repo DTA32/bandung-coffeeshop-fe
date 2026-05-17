@@ -17,7 +17,14 @@ import CafeListItem from '@/components/explore/CafeListItem'
 import {searchCafes} from '@/lib/api/search'
 import type {SearchCafesData} from '@/lib/api/search';
 
+type MarkerSearch = { m?: string[] }
+
 export const Route = createFileRoute('/meet-in-the-middle')({
+  validateSearch: (search: Record<string, unknown>): MarkerSearch => {
+    const raw = search.m
+    const arr = Array.isArray(raw) ? raw : raw != null ? [raw] : undefined
+    return arr ? { m: arr.map(String) } : {}
+  },
   component: () => {
     return (
       <ClientOnly
@@ -32,6 +39,24 @@ export const Route = createFileRoute('/meet-in-the-middle')({
     )
   },
 })
+
+function encodeMarker(m: UserMarker) {
+  return `${m.lat},${m.lng},${m.color.replace('#', '')},${encodeURIComponent(m.name)}`
+}
+
+function decodeMarker(entry: string, i: number): UserMarker | null {
+  const parts = entry.split(',')
+  const lat = parseFloat(parts[0])
+  const lng = parseFloat(parts[1])
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
+  const givenColor = (parts[2] && parts[2].match(/^[0-9A-Fa-f]{6}$/)) ? `#${parts[2]}` : null
+  const color = `${givenColor ?? '#4A7038'}`
+  const givenName = (parts.length > 3 && parts.slice(3).join(',').trim()) ? decodeURIComponent(parts.slice(3).join(',')) : null
+  const name = givenName
+    ? givenName
+    : `Marker ${i + 1}`
+  return { id: `m-${i}`, lat, lng, color, name }
+}
 
 const COLOR_CHOICES = ['#4A7038', '#2A3D22', '#6B8E23', '#A05A10', '#8FBC8F']
 const SORT_OPTIONS = [
@@ -95,7 +120,16 @@ function MeetInTheMiddle() {
   const defaultPosition: LatLngExpression = [
     -6.901557664008111, 107.6177579567244,
   ]
-  const [markers, setMarkers] = useState<UserMarker[]>([])
+  const search = Route.useSearch()
+  const navigate = Route.useNavigate()
+
+  const markers: UserMarker[] = useMemo(() => {
+    if (!search.m) return []
+    return search.m
+      .map((entry, i) => decodeMarker(entry, i))
+      .filter((m): m is UserMarker => m !== null)
+  }, [search.m])
+
   const [radiusKm, setRadiusKm] = useState(1.0)
   const [sort, setSort] = useState<string>('distance')
   const [results, setResults] = useState<SearchCafesData | null>(null)
@@ -111,27 +145,49 @@ function MeetInTheMiddle() {
     return bounds.getCenter()
   }, [markers])
 
-  function addMarker(lat: number, lng: number) {
-    setResults(null)
-    setMarkers((prev) => {
-      const next: UserMarker = {
-        id: `${Date.now()}-${prev.length}`,
-        lat,
-        lng,
-        name: `Marker ${prev.length + 1}`,
-        color: COLOR_CHOICES[Math.floor(Math.random() * COLOR_CHOICES.length)],
-      }
-      return [...prev, next]
+  function commitMarkers(
+    next: UserMarker[],
+    opts: { replace?: boolean } = {},
+  ) {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        m: next.length ? next.map(encodeMarker) : undefined,
+      }),
+      replace: opts.replace ?? false,
     })
   }
 
-  function removeMarker(id: string) {
-    setMarkers((prev) => prev.filter((m) => m.id !== id))
+  function addMarker(lat: number, lng: number) {
     setResults(null)
+    commitMarkers([
+      ...markers,
+      {
+        id: `m-${markers.length}`,
+        lat,
+        lng,
+        name: `Marker ${markers.length + 1}`,
+        color: COLOR_CHOICES[Math.floor(Math.random() * COLOR_CHOICES.length)],
+      },
+    ])
+  }
+
+  function removeMarker(id: string) {
+    setEditingId(null)
+    setResults(null)
+    commitMarkers(markers.filter((m) => m.id !== id))
   }
 
   function renameMarker(id: string, name: string) {
-    setMarkers((prev) => prev.map((m) => (m.id === id ? {...m, name} : m)))
+    commitMarkers(markers.map((m) => (m.id === id ? {...m, name} : m)))
+  }
+
+  function updateMarkerPosition(id: string, lat: number, lng: number) {
+    setResults(null)
+    commitMarkers(
+      markers.map((m) => (m.id === id ? {...m, lat, lng} : m)),
+      { replace: true },
+    )
   }
 
   async function runSearch(sortValue: string | undefined = sort) {
@@ -171,6 +227,13 @@ function MeetInTheMiddle() {
             key={m.id}
             position={[m.lat, m.lng]}
             icon={userIcon(m.color, m.name)}
+            draggable
+            eventHandlers={{
+              dragend: (e) => {
+                const ll = e.target.getLatLng()
+                updateMarkerPosition(m.id, ll.lat, ll.lng)
+              },
+            }}
           />
         ))}
         {midpoint && <Marker position={midpoint} icon={midpointIcon}/>}
