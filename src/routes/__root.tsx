@@ -23,12 +23,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className={"m-0 bg-cream"}>
+      <body className={'m-0 bg-cream'}>
         <Header />
         {children}
         <TanStackDevtools
           config={{ position: 'bottom-right' }}
-          plugins={[{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> }]}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
         />
         <Scripts />
       </body>

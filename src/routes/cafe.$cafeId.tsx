@@ -1,0 +1,103 @@
+import {createFileRoute, Link, notFound} from '@tanstack/react-router';
+import {getCafe, getCafeReview} from '@/lib/api/cafe';
+import {getNearbyCafes} from "@/lib/api/search";
+import CafeHero from '@/components/cafe-detail/CafeHero';
+import CafeHeroNoImage from "@/components/cafe-detail/CafeHeroNoImage";
+import CafeTitle from '@/components/cafe-detail/CafeTitle';
+import ReviewCard from '@/components/cafe-detail/ReviewCard';
+import RatingsCard from '@/components/cafe-detail/RatingsCard';
+import Disclaimer from '@/components/cafe-detail/Disclaimer';
+import QuickFacts from '@/components/cafe-detail/QuickFacts';
+import ScoreCard from '@/components/cafe-detail/ScoreCard';
+import PriceCard from '@/components/cafe-detail/PriceCard';
+import UpdatedAt from '@/components/cafe-detail/UpdatedAt';
+import NearbyCafe from "@/components/cafe-detail/NearbyCafe";
+
+export const Route = createFileRoute('/cafe/$cafeId')({
+  loader: async ({params}) => {
+    let cafe: Awaited<ReturnType<typeof getCafe>>
+    try {
+      cafe = await getCafe(params.cafeId)
+    } catch (e: any) {
+      if (e.message === '404') throw notFound()
+      throw e
+    }
+    const review = await getCafeReview(params.cafeId)
+    const nearbyCafes = await getNearbyCafes(params.cafeId)
+    return {cafe, review, nearbyCafes}
+  },
+  errorComponent: ({}) => (
+    <div className="flex h-128 items-center justify-center text-lg text-red-500">
+      Failed to load cafe details.
+    </div>
+  ),
+  notFoundComponent: () => (
+    <div className="flex flex-col items-center justify-center py-32 text-forest">
+      <p className="text-2xl font-semibold">Cafe not found</p>
+      <p className="mt-2 text-bark">
+        This cafe doesn't exist or already deleted.
+      </p>
+      <Link to="/" className="mt-6 text-sm underline">
+        Back to home
+      </Link>
+    </div>
+  ),
+  component: CafeDetailPage,
+})
+
+function CafeDetailPage() {
+  const {cafe, review, nearbyCafes} = Route.useLoaderData()
+
+  return (
+    <main className="flex flex-col bg-cream min-h-screen">
+      {(cafe.images && cafe.images.length > 0) ? (
+        <CafeHero
+          image={cafe.images}
+          cafeName={cafe.name}
+          gmapsId={cafe.gmaps_id}
+        />
+      ) : (
+        <CafeHeroNoImage
+          id={cafe.id}
+          name={cafe.name}
+          address={cafe.description}
+          isSubjective={review.is_subjective}
+          gmapsId={cafe.gmaps_id}
+        />
+      )}
+      <div className="flex flex-col md:flex-row gap-x-8 gap-y-6 px-6 md:px-16 py-9">
+        <div className="flex flex-col gap-6 flex-1 min-w-0">
+          {cafe.images && cafe.images.length > 0 && (
+            <CafeTitle
+              id={cafe.id}
+              name={cafe.name}
+              address={cafe.description}
+              isSubjective={review.is_subjective}
+            />
+          )}
+          <ReviewCard content={review.content} visited_at={review.visited_at}/>
+          <RatingsCard ratings={review.ratings}/>
+          <NearbyCafe cafes={nearbyCafes.cafes}/>
+        </div>
+        <div className="flex flex-col gap-6 w-full md:w-80 lg:w-100 shrink-0">
+          <QuickFacts
+            instagram={cafe.instagram}
+            area={cafe.location}
+            tags={review.tags}
+            openHour={cafe.open_hour}
+            closeHour={cafe.close_hour}
+          />
+          <ScoreCard
+            overallScore={review.overall_score}
+            wfcScore={review.wfc_score}
+          />
+          <PriceCard price={cafe.price}/>
+          <div className="flex flex-col">
+            <Disclaimer/>
+            <UpdatedAt updated_at={review.updated_at}/>
+          </div>
+        </div>
+      </div>
+    </main>
+  )
+}

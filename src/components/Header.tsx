@@ -8,13 +8,19 @@ export default function Header() {
         <span className="text-xl font-bold text-[#2A3D22]">BDGCafé</span>
       </Link>
 
-      <nav className="flex items-center gap-8 font-medium">
-        <Link to="/" className="text-sm text-moss no-underline">Explore</Link>
-        {/*<Link to="/" className="text-sm text-moss no-underline">Directory</Link>*/}
-        <Link to="/" className="text-sm text-moss no-underline">Meet in the Middle</Link>
-        <Link to="/about" className="text-sm text-moss no-underline">About</Link>
-        {/*<Languages size={20} color="#4A7038" />*/}
-        {/*<Sun size={20} color="#4A7038" />*/}
+      <nav className="flex items-center gap-4 md:gap-8 font-medium">
+        <Link to="/explore" className="text-sm text-moss no-underline">
+          Explore
+        </Link>
+        {/* <Link to="/" className="text-sm text-moss no-underline">Directory</Link> */}
+        <Link to="/" className="text-sm text-moss no-underline">
+          Meet in the Middle
+        </Link>
+        <Link to="/about" className="text-sm text-moss no-underline">
+          About
+        </Link>
+        {/* <Languages size={20} color="#4A7038" /> */}
+        {/* <Sun size={20} color="#4A7038" /> */}
       </nav>
     </header>
   )
