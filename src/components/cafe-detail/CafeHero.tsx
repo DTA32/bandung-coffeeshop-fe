@@ -11,11 +11,30 @@ export default function CafeHero({ image, cafeName, gmapsId }: CafeHeroProps) {
   return (
     <div className="relative h-75 w-full">
       {image && image.length > 0 && (
-        <img
-          src={image[0].url}
-          alt={image[0].alt}
-          className="w-full h-full object-cover"
-        />
+        <div className="h-full overflow-scroll flex gap-2">
+          {image.map((img, index) => {
+            const imageWidth = image.length > 4 ? 60 : 100 / image.length // TODO adjust for mobile
+            return (
+              <figure
+                key={index}
+                className={`flex-shrink-0 relative`}
+                style={{ width: imageWidth + '%' }}
+              >
+                <img
+                  key={index}
+                  src={img.url}
+                  alt={img.alt}
+                  className="w-full h-full object-cover"
+                />
+                {img.alt && (
+                  <figcaption className="absolute bottom-0 left-0 py-1 m-2 z-5 bg-black/50 text-white text-xs px-1 rounded select-none">
+                    {img.alt}
+                  </figcaption>
+                )}
+              </figure>
+            )
+          })}
+        </div>
       )}
       {gmapsId && (
         <MapPreview

@@ -16,7 +16,7 @@ export default function MapPreview({
   return (
     <>
       <iframe
-        className={`bg-white rounded-xl border border-grove-light overflow-hidden shadow-sm 
+        className={`bg-white rounded-xl border border-grove-light overflow-hidden shadow-sm z-10
           ${additionalClass || ''}
           ${withAlternateButton ? 'invisible md:visible' : ''}
         `}

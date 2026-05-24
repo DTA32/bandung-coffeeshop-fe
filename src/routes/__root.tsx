@@ -26,15 +26,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body className={'m-0 bg-cream'}>
         <Header />
         {children}
-        <TanStackDevtools
-          config={{ position: 'bottom-right' }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        {import.meta.env.PROD ? null : (
+          <TanStackDevtools
+            config={{ position: 'bottom-right' }}
+            plugins={[
+              {
+                name: 'Tanstack Router',
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+            ]}
+          />
+        )}
         <Scripts />
       </body>
     </html>

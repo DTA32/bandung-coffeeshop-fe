@@ -48,8 +48,14 @@ export const Route = createFileRoute('/explore')({
   errorComponent: () => (
     <div className="flex flex-col h-128 items-center gap-4 justify-center text-xl text-moss-dark">
       <p>Failed to load cafes.</p>
-      <p className="text-lg">Uh oh, something went wrong while fetching the cafes. Please try again later.</p>
-      <Link to="/" className="py-4 px-8 text-sm bg-forest text-cream rounded-lg">
+      <p className="text-lg">
+        Uh oh, something went wrong while fetching the cafes. Please try again
+        later.
+      </p>
+      <Link
+        to="/"
+        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
+      >
         Back to home
       </Link>
     </div>

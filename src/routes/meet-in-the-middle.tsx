@@ -60,7 +60,22 @@ function decodeMarker(entry: string, i: number): UserMarker | null {
   return { id: `m-${i}`, lat, lng, color, name }
 }
 
-const COLOR_CHOICES = ['#4A7038', '#2A3D22', '#6B8E23', '#A05A10', '#8FBC8F']
+// hail claude
+function randomGreenHex() {
+  const h = 80 + Math.random() * 80 // 80–160: yellow-green to teal-green
+  const s = 35 + Math.random() * 35 // 35–70%
+  const l = 25 + Math.random() * 25 // 25–50%
+  const a = (s * Math.min(l, 100 - l)) / 100
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12
+    const c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))
+    return Math.round((c / 100) * 255)
+      .toString(16)
+      .padStart(2, '0')
+  }
+  return `#${f(0)}${f(8)}${f(4)}`
+}
+
 const SORT_OPTIONS = [
   { value: 'distance', label: 'Distance' },
   { value: 'default', label: 'Best match' },
@@ -167,7 +182,7 @@ function MeetInTheMiddle() {
         lat,
         lng,
         name: `Marker ${markers.length + 1}`,
-        color: COLOR_CHOICES[Math.floor(Math.random() * COLOR_CHOICES.length)],
+        color: randomGreenHex(),
       },
     ])
   }

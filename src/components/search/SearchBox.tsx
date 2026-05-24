@@ -119,28 +119,31 @@ export default function SearchBox({
 
   const dropdown = isOpen && results.length > 0 && (
     <div className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg">
-      {groupOrder.map((type) => grouped[type] && (
-        <div key={type}>
-          <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
-            {TYPE_LABELS[type]}
-          </div>
-          {grouped[type].map((item) => (
-            <button
-              key={item.id}
-              onMouseDown={(e) => {
-                e.preventDefault()
-                handleSelect(item)
-              }}
-              className="flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream"
-            >
-              {TYPE_ICONS[item.type]}
-              <span className="text-sm font-medium text-forest">
-                {item.name}
-              </span>
-            </button>
-          ))}
-        </div>
-      ))}
+      {groupOrder.map(
+        (type) =>
+          grouped[type] && (
+            <div key={type}>
+              <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
+                {TYPE_LABELS[type]}
+              </div>
+              {grouped[type].map((item) => (
+                <button
+                  key={item.id}
+                  onMouseDown={(e) => {
+                    e.preventDefault()
+                    handleSelect(item)
+                  }}
+                  className="flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream"
+                >
+                  {TYPE_ICONS[item.type]}
+                  <span className="text-sm font-medium text-forest">
+                    {item.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+          ),
+      )}
     </div>
   )
 
