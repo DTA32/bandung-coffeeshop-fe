@@ -1,7 +1,6 @@
 import { Share2 } from 'lucide-react'
 import { useState } from 'react'
-import { useMediaQuery } from '@uidotdev/usehooks'
-import { ClientOnly } from '@tanstack/react-router'
+import { ClientOnly, useRouteContext } from '@tanstack/react-router'
 
 function ShareButtonInternal({
   id,
@@ -10,7 +9,8 @@ function ShareButtonInternal({
   id: string
   hideOnMobile: boolean
 }) {
-  const isMobile = useMediaQuery('(max-width: 1024px)')
+  const { ua } = useRouteContext({ from: '__root__' })
+  const isMobile = ua.isMobile
   const [showAlert, setShowAlert] = useState(false)
 
   function shareCafe({ cafeId }: { cafeId: string }) {

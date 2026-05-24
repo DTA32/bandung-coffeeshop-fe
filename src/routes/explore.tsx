@@ -46,7 +46,7 @@ export const Route = createFileRoute('/explore')({
   }),
   loader: ({ deps }) => searchCafes(deps),
   errorComponent: () => (
-    <div className="flex flex-col h-128 items-center gap-4 justify-center text-xl text-moss-dark">
+    <div className="flex flex-col h-screen md:h-128 items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Failed to load cafes.</p>
       <p className="text-lg">
         Uh oh, something went wrong while fetching the cafes. Please try again

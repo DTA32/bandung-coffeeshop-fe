@@ -16,7 +16,7 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   const data = Route.useLoaderData()
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col h-screen">
       <Hero />
       <FeaturedCafes cafes={data.cafes} />
     </main>

@@ -9,7 +9,7 @@ interface CafeHeroProps {
 
 export default function CafeHero({ image, cafeName, gmapsId }: CafeHeroProps) {
   return (
-    <div className="relative h-75 w-full">
+    <div className="relative h-70 md:h-75 w-full">
       {image && image.length > 0 && (
         <div className="h-full overflow-scroll flex gap-2">
           {image.map((img, index) => {

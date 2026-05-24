@@ -1,7 +1,9 @@
-import { Link } from '@tanstack/react-router'
+import {Link, useRouteContext} from '@tanstack/react-router'
 // import { Languages, Sun } from 'lucide-react'
 
 export default function Header() {
+  const { ua } = useRouteContext({ from: '__root__' })
+  if (ua.isMobile) return null
   return (
     <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b border-grove-light bg-cream px-6 md:px-16">
       <Link to="/" className="no-underline">
