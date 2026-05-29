@@ -8,6 +8,7 @@ import {
   useMapEvents,
   ZoomControl,
 } from 'react-leaflet'
+import { useNavigate, useRouter } from '@tanstack/react-router'
 import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
 import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
@@ -69,6 +70,8 @@ export default function MapView({
   circleRadiusM,
   focusCenter = null,
 }: Props) {
+  const navigate = useNavigate()
+  const router = useRouter()
   const circleAt =
     circleCenter !== undefined
       ? circleCenter
@@ -125,7 +128,16 @@ export default function MapView({
             position={[c.coordinates!.lat, c.coordinates!.lng]}
             icon={cafeIcon}
             eventHandlers={{
-              click: () => window.open(`/cafe/${c.id}`, '_blank'),
+              mouseover: () =>
+                router.preloadRoute({
+                  to: '/cafe/$cafeId',
+                  params: { cafeId: c.id },
+                }),
+              click: () =>
+                navigate({
+                  to: '/cafe/$cafeId',
+                  params: { cafeId: c.id },
+                }),
             }}
           >
             <Tooltip direction="top" offset={[0, -12]} opacity={1}>

@@ -53,7 +53,7 @@ export default function DesktopLayout({
   return (
     <div className="w-screen h-[95vh] relative">
       {alert && (
-        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-amber-800 text-sm font-semibold px-4 py-2 rounded-md shadow-md z-50 transition-opacity duration-300 z-1000">
+        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-amber-800 text-sm font-semibold px-4 py-2 rounded-md shadow-md z-50 transition-opacity duration-300 z-1000 text-center">
           {alert}
         </div>
       )}
@@ -165,7 +165,6 @@ export default function DesktopLayout({
                     key={cafe.id}
                     cafe={cafe}
                     smallVersion={true}
-                    openNewTab={true}
                   />
                 ))}
               </div>

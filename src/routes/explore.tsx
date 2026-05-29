@@ -122,10 +122,12 @@ function ExplorePage() {
       replace: opts?.replace ?? false,
     })
   }
+  const sortOptions =
+    search.query_coords !== undefined
+      ? [...SORT_OPTIONS, {value: 'distance', label: 'Distance'}]
+      : SORT_OPTIONS
   
-  if (search.query_coords !== undefined && !SORT_OPTIONS.some((opt) => opt.value === 'distance')) {
-    SORT_OPTIONS.push({value: 'distance', label: 'Distance'})
-  }
+  const activeSort = sortOptions.some((o) => o.value === sort) ? sort : 'default'
 
   // Grid / List / Show-Map controls, shared between the mobile bar and the desktop header.
   function viewControls(mobile: boolean) {
@@ -163,11 +165,11 @@ function ExplorePage() {
               : 'flex overflow-hidden rounded-lg border border-white bg-white p-1 '
           }
         >
-          <button onClick={() => goTo({view: 'grid', page: 1})} className={toggleBtnClass(view === 'grid')}>
+          <button onClick={() => goTo({view: 'grid'})} className={toggleBtnClass(view === 'grid')}>
             <LayoutGrid size={14}/>
             Grid
           </button>
-          <button onClick={() => goTo({view: 'list', page: 1})} className={toggleBtnClass(view === 'list')}>
+          <button onClick={() => goTo({view: 'list'})} className={toggleBtnClass(view === 'list')}>
             <List size={14}/>
             List
           </button>
@@ -203,26 +205,26 @@ function ExplorePage() {
           </div>
         )}
         <div className="flex flex-col w-full max-w-screen-2xl">
-          <div className="mb-6 flex items-center justify-between">
+          <div className="mb-6 flex items-center justify-between gap-2 md:text-center">
             {!isMobile && viewControls(isMobile)}
 
             <span className="text-sm text-bark">
-            {data.total} {data.total === 1 ? 'cafe' : 'cafes'} found
-            <span className="font-bold">
-              {data.formatted_location_name
-                ? ` ${data.formatted_location_name}`
-                : ''}
+              {data.total} {data.total === 1 ? 'cafe' : 'cafes'} found
+              <span className="font-bold">
+                {data.formatted_location_name
+                  ? ` ${data.formatted_location_name}`
+                  : ''}
+              </span>
             </span>
-          </span>
 
             <div className="flex items-center gap-2 shrink-0">
               <span className="text-sm text-bark">Sort by:</span>
               <select
-                value={sort}
+                value={activeSort}
                 onChange={(e) => goTo({sort: e.target.value, page: 1})}
                 className="cursor-pointer rounded-md py-1.5 text-sm text-grove focus:outline-none"
               >
-                {SORT_OPTIONS.map((opt) => (
+                {sortOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
                     {opt.label}
                   </option>
@@ -240,7 +242,8 @@ function ExplorePage() {
               </div>
             ) : view === 'grid' ? (
               <div className={`grid gap-6
-                grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+                grid-cols-2 md:grid-cols-3 
+                ${mapView ? `xl:grid-cols-4` : `lg:grid-cols-4`}
               `}>
                 {data.cafes.map((cafe) => (
                   <CafeCard key={cafe.id} cafe={cafe} small={false}/>

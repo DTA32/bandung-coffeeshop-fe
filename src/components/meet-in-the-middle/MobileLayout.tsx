@@ -57,7 +57,7 @@ export default function MobileLayout({
   return (
     <main className="flex flex-col bg-cream min-h-screen pb-28">
       {alert && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-amber-800 text-sm font-semibold px-4 py-2 rounded-md shadow-md z-1000 transition-opacity duration-300">
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-amber-800 text-sm font-semibold px-4 py-2 rounded-md shadow-md z-1000 transition-opacity duration-300 text-center">
           {alert}
         </div>
       )}
@@ -162,7 +162,6 @@ export default function MobileLayout({
                     key={cafe.id}
                     cafe={cafe}
                     smallVersion={true}
-                    openNewTab={true}
                   />
                 ))}
               </div>

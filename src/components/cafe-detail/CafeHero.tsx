@@ -13,7 +13,7 @@ export default function CafeHero({ image, cafeName, gmapsId }: CafeHeroProps) {
       {image && image.length > 0 && (
         <div className="h-full overflow-scroll flex gap-2">
           {image.map((img, index) => {
-            const imageWidth = image.length > 4 ? 60 : 100 / image.length // TODO adjust for mobile
+            const imageWidth = image.length > 1 ? 60 : 100
             return (
               <figure
                 key={index}

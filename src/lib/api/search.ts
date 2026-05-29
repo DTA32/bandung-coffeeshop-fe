@@ -65,7 +65,7 @@ export function cleanExploreSearch(s: ExploreSearch): ExploreSearch {
     ...(s.page !== undefined && s.page !== 1 && { page: s.page }),
     ...(s.size !== undefined && s.size !== 8 && { size: s.size }),
     ...(s.view !== undefined && s.view !== 'grid' && { view: s.view }),
-    ...(s.map_view ? { map_view: true } : { map_view: false }),
+    ...(s.map_view ? { map_view: true } : {}),
   }
 }
 
