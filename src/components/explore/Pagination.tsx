@@ -42,7 +42,7 @@ export default function Pagination({
           to="/explore"
           search={searchForPage(page - 1)}
           preload="intent"
-          className={`${linkCls} text-forest hover:bg-grove-light`}
+          className={`${linkCls} text-forest hover:bg-grove-light shrink-0`}
         >
           ← Prev
         </Link>
@@ -77,7 +77,7 @@ export default function Pagination({
           to="/explore"
           search={searchForPage(page + 1)}
           preload="intent"
-          className={`${linkCls} text-forest hover:bg-grove-light`}
+          className={`${linkCls} text-forest hover:bg-grove-light shrink-0`}
         >
           Next →
         </Link>

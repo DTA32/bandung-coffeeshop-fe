@@ -216,7 +216,7 @@ function ExplorePage() {
               <select
                 value={activeSort}
                 onChange={(e) => goTo({sort: e.target.value, page: 1})}
-                className="cursor-pointer rounded-md py-1.5 text-sm text-grove focus:outline-none"
+                className="cursor-pointer rounded-md py-1.5 text-sm text-grove focus:outline-none w-fit field-sizing-content pe-2"
               >
                 {sortOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>

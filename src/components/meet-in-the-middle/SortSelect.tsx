@@ -14,7 +14,7 @@ export default function SortSelect({ value, onChange, className }: Props) {
       onChange={(e) => onChange(e.target.value)}
       className={
         className ??
-        'cursor-pointer rounded-md py-1 text-sm text-grove focus:outline-none bg-transparent'
+        'cursor-pointer rounded-md py-1 text-sm text-grove focus:outline-none bg-transparent w-fit field-sizing-content pe-2'
       }
     >
       {sortOptions.map((opt) => (
