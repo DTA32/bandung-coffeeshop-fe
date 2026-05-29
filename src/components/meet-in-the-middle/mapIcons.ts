@@ -23,6 +23,17 @@ export const midpointIcon = L.divIcon({
   iconAnchor: [0, 0],
 })
 
+export const queryMarkerIcon = L.divIcon({
+  className: '',
+  html: `
+    <div style="position:relative;width:28px;height:28px;transform:translate(-50%,-50%)">
+      <div style="position:absolute;inset:0;border-radius:50%;background:#6A9E52AA"></div>
+      <div style="position:absolute;top:50%;left:50%;width:14px;height:14px;border-radius:50%;background:#4A7038;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.3);transform:translate(-50%,-50%)"></div>
+    </div>`,
+  iconSize: [0, 0],
+  iconAnchor: [0, 0],
+})
+
 export const cafeIcon = L.divIcon({
   className: '',
   html: `<div style="width:24px;height:24px;border-radius:50%;background:#F7F5EE;border:2px solid #6A9E52;box-shadow:0 1px 4px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;line-height:1">☕</div>`,

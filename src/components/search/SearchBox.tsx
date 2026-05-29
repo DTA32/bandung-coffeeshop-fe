@@ -118,7 +118,7 @@ export default function SearchBox({
   const groupOrder = Object.keys(TYPE_LABELS)
 
   const dropdown = isOpen && results.length > 0 && (
-    <div className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg">
+    <div className="absolute left-0 right-0 top-full z-2000 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg">
       {groupOrder.map(
         (type) =>
           grouped[type] && (

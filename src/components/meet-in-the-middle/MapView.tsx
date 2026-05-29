@@ -4,10 +4,11 @@ import {
   Marker,
   TileLayer,
   Tooltip,
+  useMap,
   useMapEvents,
   ZoomControl,
 } from 'react-leaflet'
-import type { ControlPosition, LatLngExpression } from 'leaflet'
+import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
 import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
 import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
@@ -27,6 +28,13 @@ function ClickHandler({
   return null
 }
 
+// Recenters the map whenever `center` changes (e.g. geolocation).
+function MapController({ center }: { center: LatLngExpression | null }) {
+  const map = useMap()
+  if (center) map.setView(center, 15)
+  return null
+}
+
 type Props = {
   markers: UserMarker[]
   midpoint: LatLngExpression | null
@@ -35,6 +43,15 @@ type Props = {
   onAddMarker: (lat: number, lng: number) => void
   onMoveMarker: (id: string, lat: number, lng: number) => void
   zoomControlPosition: ControlPosition
+  center?: LatLngExpression
+  zoom?: number
+  // Override the per-marker icon (default: labeled userIcon).
+  markerIcon?: (m: UserMarker) => DivIcon
+  // When provided, draws the radius circle here instead of around the midpoint.
+  circleCenter?: LatLngExpression | null
+  circleRadiusM?: number
+  // Imperatively recenters the map when this changes.
+  focusCenter?: LatLngExpression | null
 }
 
 export default function MapView({
@@ -45,12 +62,25 @@ export default function MapView({
   onAddMarker,
   onMoveMarker,
   zoomControlPosition,
+  center = DEFAULT_CENTER,
+  zoom = 13,
+  markerIcon,
+  circleCenter,
+  circleRadiusM,
+  focusCenter = null,
 }: Props) {
+  const circleAt =
+    circleCenter !== undefined
+      ? circleCenter
+      : midpoint && results
+        ? midpoint
+        : null
+  const circleR = circleRadiusM ?? resultsRadiusKm * 1000
   return (
     <MapContainer
       style={{ width: '100%', height: '100%' }}
-      center={DEFAULT_CENTER}
-      zoom={13}
+      center={center}
+      zoom={zoom}
       zoomControl={false}
     >
       <TileLayer
@@ -59,11 +89,12 @@ export default function MapView({
       />
       <ZoomControl position={zoomControlPosition} />
       <ClickHandler onAdd={onAddMarker} />
+      <MapController center={focusCenter} />
       {markers.map((m) => (
         <Marker
           key={m.id}
           position={[m.lat, m.lng]}
-          icon={userIcon(m.color, m.name)}
+          icon={markerIcon ? markerIcon(m) : userIcon(m.color, m.name)}
           draggable
           eventHandlers={{
             dragend: (e) => {
@@ -74,10 +105,10 @@ export default function MapView({
         />
       ))}
       {midpoint && <Marker position={midpoint} icon={midpointIcon} />}
-      {midpoint && results && (
+      {circleAt && (
         <Circle
-          center={midpoint}
-          radius={resultsRadiusKm * 1000}
+          center={circleAt}
+          radius={circleR}
           pathOptions={{
             color: '#2A3D22',
             fillColor: '#2A3D22',

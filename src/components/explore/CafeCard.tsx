@@ -4,9 +4,11 @@ import type { CafeListing } from '@/lib/api/search'
 export default function CafeCard({
   cafe,
   showBorder = false,
+  small = true
 }: {
   cafe: CafeListing
   showBorder?: boolean
+  small?: boolean
 }) {
   let formattedRemark = cafe.remark
   if (cafe.price_range && cafe.remark) {
@@ -18,8 +20,9 @@ export default function CafeCard({
     <Link
       to="/cafe/$cafeId"
       params={{ cafeId: cafe.id }}
-      className={`flex flex-col overflow-hidden rounded-xl bg-white no-underline transition hover:shadow-md max-w-xs w-full shrink-0
+      className={`flex flex-col overflow-hidden rounded-xl bg-white no-underline transition hover:shadow-md w-full shrink-0
       ${showBorder && `border-[0.5px] border-grove-light`}
+      ${small && `max-w-xs`}
       `}
     >
       <div className="aspect-video w-full overflow-hidden bg-grove-light">
