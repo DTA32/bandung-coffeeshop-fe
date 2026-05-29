@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import {Link, useNavigate} from '@tanstack/react-router'
 import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
 import type { QuickSearchItem } from '@/lib/api/search'
 import { quickSearch } from '@/lib/api/search'
@@ -84,18 +84,14 @@ export default function SearchBox({
 
   function handleSelect(item: QuickSearchItem) {
     dismiss()
-    if (item.type === 'cafe') {
-      navigate({ to: '/cafe/$cafeId', params: { cafeId: item.id } })
-    } else {
-      navigate({
-        to: '/explore',
-        search: {
-          q: item.name,
-          query_type: item.type,
-          query_id: item.id,
-        },
-      })
-    }
+    navigate({
+      to: '/explore',
+      search: {
+        q: item.name,
+        query_type: item.type,
+        query_id: item.id,
+      },
+    })
   }
 
   function handleSearch() {
@@ -126,21 +122,39 @@ export default function SearchBox({
               <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
                 {TYPE_LABELS[type]}
               </div>
-              {grouped[type].map((item) => (
-                <button
-                  key={item.id}
-                  onMouseDown={(e) => {
-                    e.preventDefault()
-                    handleSelect(item)
-                  }}
-                  className="flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream"
-                >
-                  {TYPE_ICONS[item.type]}
-                  <span className="text-sm font-medium text-forest">
-                    {item.name}
-                  </span>
-                </button>
-              ))}
+              {grouped[type].map((item) => {
+                if (type === 'cafe') {
+                  return (
+                    <Link 
+                      to="/cafe/$cafeId" 
+                      params={{ cafeId: item.id }} 
+                      key={item.id}
+                      className="flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream"
+                    >
+                      {TYPE_ICONS[item.type]}
+                      <span className="text-sm font-medium text-forest">
+                        {item.name}
+                      </span>
+                    </Link>
+                  )
+                } else {
+                  return (
+                    <button
+                      key={item.id}
+                      onMouseDown={(e) => {
+                        e.preventDefault()
+                        handleSelect(item)
+                      }}
+                      className="flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream"
+                    >
+                      {TYPE_ICONS[item.type]}
+                      <span className="text-sm font-medium text-forest">
+                        {item.name}
+                      </span>
+                    </button>
+                  )
+                }
+              })}
             </div>
           ),
       )}
