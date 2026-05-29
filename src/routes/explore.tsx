@@ -93,7 +93,7 @@ function ExplorePage() {
     <main className="flex flex-col bg-cream">
       <SearchBox variant="srp" initialQuery={search.q ?? ''} />
 
-      <div className="mx-auto w-full max-w-screen-2xl px-6 md:px-16 py-6">
+      <div className="mx-auto w-full max-w-screen-2xl px-6 md:px-16 py-6 h-screen md:h-auto">
         <div className="mb-6 flex items-center justify-between">
           <div className="hidden md:flex items-center gap-2">
             <button

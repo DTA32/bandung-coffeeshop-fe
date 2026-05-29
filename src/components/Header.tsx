@@ -1,4 +1,4 @@
-import {Link, useRouteContext} from '@tanstack/react-router'
+import { Link, useRouteContext } from '@tanstack/react-router'
 // import { Languages, Sun } from 'lucide-react'
 
 export default function Header() {
