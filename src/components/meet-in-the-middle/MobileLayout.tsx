@@ -120,7 +120,6 @@ export default function MobileLayout({
           resultsRadiusKm={resultsRadiusKm}
           onAddMarker={onAddMarker}
           onMoveMarker={onMoveMarker}
-          zoomControlPosition="topright"
         />
       </div>
       <button

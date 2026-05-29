@@ -43,7 +43,7 @@ type Props = {
   resultsRadiusKm: number
   onAddMarker: (lat: number, lng: number) => void
   onMoveMarker: (id: string, lat: number, lng: number) => void
-  zoomControlPosition: ControlPosition
+  zoomControlPosition?: ControlPosition
   center?: LatLngExpression
   zoom?: number
   // Override the per-marker icon (default: labeled userIcon).
@@ -90,7 +90,9 @@ export default function MapView({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <ZoomControl position={zoomControlPosition} />
+      {zoomControlPosition && (
+        <ZoomControl position={zoomControlPosition} />
+      )}
       <ClickHandler onAdd={onAddMarker} />
       <MapController center={focusCenter} />
       {markers.map((m) => (
