@@ -1,10 +1,4 @@
-export const SORT_OPTIONS = [
-  { value: 'distance', label: 'Distance' },
-  { value: 'default', label: 'Best match' },
-  { value: 'rating', label: 'Rating' },
-  { value: 'price_range', label: 'Price' },
-  { value: 'updated_at', label: 'Recently updated' },
-]
+import { SORT_OPTIONS } from "@/lib/constants";
 
 type Props = {
   value: string
@@ -13,6 +7,7 @@ type Props = {
 }
 
 export default function SortSelect({ value, onChange, className }: Props) {
+  const sortOptions = [...SORT_OPTIONS, {value: 'distance', label: 'Distance'}]
   return (
     <select
       value={value}
@@ -22,7 +17,7 @@ export default function SortSelect({ value, onChange, className }: Props) {
         'cursor-pointer rounded-md py-1 text-sm text-grove focus:outline-none bg-transparent'
       }
     >
-      {SORT_OPTIONS.map((opt) => (
+      {sortOptions.map((opt) => (
         <option key={opt.value} value={opt.value}>
           {opt.label}
         </option>

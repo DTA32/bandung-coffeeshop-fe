@@ -12,6 +12,7 @@ import ExploreMapView from '@/components/explore/ExploreMapView'
 import Pagination from '@/components/explore/Pagination'
 import type {ExploreSearch} from '@/lib/api/search'
 import {cleanExploreSearch, searchCafes} from '@/lib/api/search'
+import { SORT_OPTIONS } from "@/lib/constants";
 
 export const Route = createFileRoute('/explore')({
   validateSearch: (search): ExploreSearch => ({
@@ -68,13 +69,6 @@ export const Route = createFileRoute('/explore')({
   ),
   component: ExplorePage,
 })
-
-const SORT_OPTIONS = [
-  {value: 'default', label: 'Best match'},
-  {value: 'rating', label: 'Rating'},
-  {value: 'price_range', label: 'Price'},
-  {value: 'updated_at', label: 'Recently updated'},
-]
 
 function ExplorePage() {
   const data = Route.useLoaderData()
