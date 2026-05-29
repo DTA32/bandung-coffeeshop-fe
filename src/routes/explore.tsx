@@ -191,7 +191,7 @@ function ExplorePage() {
         </div>
       )}
 
-      <div className="mx-auto w-full px-6 md:px-16 py-6 h-full flex gap-6 justify-center flex-col lg:flex-row">
+      <div className="mx-auto w-full px-6 md:px-16 py-6 h-full flex gap-6 md:justify-center flex-col lg:flex-row min-h-screen md:min-h-0">
         {(mapView && !isMobile) && (
           <div className="w-full max-w-2xl h-160">
             <ExploreMapView

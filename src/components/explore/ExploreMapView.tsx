@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {ClientOnly, useRouteContext} from '@tanstack/react-router'
 import type { LatLngExpression } from 'leaflet'
-import {Locate, Map, MapPin} from 'lucide-react'
+import {Info, Locate, Map} from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import type { SearchCafesData } from '@/lib/api/search'
 import MapView from '@/components/meet-in-the-middle/MapView'
@@ -84,7 +84,7 @@ export default function ExploreMapView({
         {!isMobile && (
           <button
             onClick={onHideMap}
-            className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-forest px-3.5 py-2 text-sm text-cream shadow-md transition-colors hover:bg-moss"
+            className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-forest px-3.5 py-2 text-sm text-cream shadow-md transition-colors hover:bg-moss w-fit"
           >
             <Map size={14} />
             Hide Map
@@ -101,7 +101,7 @@ export default function ExploreMapView({
       </div>
       {!marker && (
         <div className="absolute bottom-2 left-2 z-1000 flex items-center gap-1.5 rounded-xl bg-white/80 px-2 py-1 text-[11px] text-moss-dark shadow-sm">
-          <MapPin size={12} />
+          <Info size={12} />
           Click anywhere to find cafe near that spot
         </div>
       )}
