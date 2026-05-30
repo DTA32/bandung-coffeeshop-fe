@@ -1,11 +1,23 @@
+import { notFound } from '@tanstack/react-router'
 import { API_BASE } from '@/lib/api/index'
 
 export type LocationType = 'cafe' | 'poi' | 'area' | 'district'
+
+// A location reference used to express hierarchy (a location + its ancestors)
+export interface Location {
+  id: string
+  name: string
+  type: LocationType
+}
 
 export interface QuickSearchItem {
   id: string
   name: string
   type: LocationType
+  // Outermost → innermost ancestors, excluding the item itself.
+  // area → [district]; poi → [district, area]; district/cafe → [].
+  // Populated by the backend; may be absent until that ships.
+  ancestors?: Location[]
 }
 
 export interface CafeListing {
@@ -27,6 +39,7 @@ export interface SearchCafesData {
   page: number
   size: number
   cafes: CafeListing[]
+  locations?: Location[]
 }
 
 export interface SearchCafesParams {
@@ -37,11 +50,21 @@ export interface SearchCafesParams {
   sort?: string
   page?: number
   size?: number
+  // Filters (backend-supported) — forwarded as query params when present.
+  tag?: string
+  rating_category_type?: string
+  rating_category_id?: string
+  is_featured?: boolean
+  order?: string
 }
 
-// URL search state for /explore — all fields optional; absence = use default
+// URL search state for the explore routes — all fields optional; absence = use default.
+// The focused location normally lives in the PATH (/explore/<district>/<area>/<poi>); this
+// carries filters + view state + coordinate search.
 export interface ExploreSearch {
-  q?: string
+  // Fallback location focus for the base /explore route: used when a SEO path
+  // can't be built (e.g. ancestors missing). The path is canonical; these are
+  // the legacy/degraded form. Ignored by the splat route (path wins).
   query_id?: string
   query_type?: string
   query_coords?: string
@@ -51,12 +74,17 @@ export interface ExploreSearch {
   size?: number // absent / undefined → 8
   view?: 'grid' | 'list' // absent / undefined → 'grid'
   map_view?: boolean // absent / undefined → false
+  // Reserved filters — URL-addressable now, UI to follow. See exploreLoaderDeps/searchCafes.
+  tag?: string
+  rating_category_type?: string
+  rating_category_id?: string
+  is_featured?: boolean
+  order?: 'asc' | 'desc'
 }
 
 // Returns a copy with default-valued fields removed so they don't pollute the URL
 export function cleanExploreSearch(s: ExploreSearch): ExploreSearch {
   return {
-    ...(s.q !== undefined && { q: s.q }),
     ...(s.query_id !== undefined && { query_id: s.query_id }),
     ...(s.query_type !== undefined && { query_type: s.query_type }),
     ...(s.query_coords !== undefined && { query_coords: s.query_coords }),
@@ -66,6 +94,15 @@ export function cleanExploreSearch(s: ExploreSearch): ExploreSearch {
     ...(s.size !== undefined && s.size !== 8 && { size: s.size }),
     ...(s.view !== undefined && s.view !== 'grid' && { view: s.view }),
     ...(s.map_view ? { map_view: true } : {}),
+    ...(s.tag !== undefined && { tag: s.tag }),
+    ...(s.rating_category_type !== undefined && {
+      rating_category_type: s.rating_category_type,
+    }),
+    ...(s.rating_category_id !== undefined && {
+      rating_category_id: s.rating_category_id,
+    }),
+    ...(s.is_featured ? { is_featured: true } : {}),
+    ...(s.order !== undefined && { order: s.order }),
   }
 }
 
@@ -91,7 +128,18 @@ export async function searchCafes(
     url.searchParams.set('radius_max', String(params.radius_max))
   if (params.page != null) url.searchParams.set('page', String(params.page))
   if (params.size != null) url.searchParams.set('size', String(params.size))
+  if (params.tag) url.searchParams.set('tag', params.tag)
+  if (params.rating_category_type)
+    url.searchParams.set('rating_category_type', params.rating_category_type)
+  if (params.rating_category_id)
+    url.searchParams.set('rating_category_id', params.rating_category_id)
+  if (params.is_featured != null)
+    url.searchParams.set('is_featured', String(params.is_featured))
+  if (params.order) url.searchParams.set('order', params.order)
   const res = await fetch(url.toString())
+  // 404 = the focused location (district/area/poi slug) doesn't exist →
+  // render the route's notFoundComponent. Other failures → errorComponent.
+  if (res.status === 404) throw notFound()
   if (!res.ok) throw new Error('Failed to fetch cafes')
   const json: { success: boolean; data: SearchCafesData } = await res.json()
   return json.data

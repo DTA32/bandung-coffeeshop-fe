@@ -39,7 +39,7 @@ export default function Pagination({
     <div className="flex items-center justify-center gap-1 py-8">
       {page > 1 ? (
         <Link
-          to="/explore"
+          to="."
           search={searchForPage(page - 1)}
           preload="intent"
           className={`${linkCls} text-forest hover:bg-grove-light shrink-0`}
@@ -58,7 +58,7 @@ export default function Pagination({
         ) : (
           <Link
             key={p}
-            to="/explore"
+            to="."
             search={searchForPage(p)}
             preload="intent"
             className={`${linkCls} ${
@@ -74,7 +74,7 @@ export default function Pagination({
 
       {page < totalPages ? (
         <Link
-          to="/explore"
+          to="."
           search={searchForPage(page + 1)}
           preload="intent"
           className={`${linkCls} text-forest hover:bg-grove-light shrink-0`}

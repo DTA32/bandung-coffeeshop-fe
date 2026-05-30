@@ -79,7 +79,7 @@ function Widgets(): React.JSX.Element {
         )}
         <QuickFacts
           instagram={cafe.instagram}
-          area={cafe.location}
+          locations={cafe.locations}
           tags={review.tags}
           openHour={cafe.open_hour}
           closeHour={cafe.close_hour}
@@ -117,7 +117,7 @@ function Widgets(): React.JSX.Element {
       <div className="flex flex-col gap-6 w-full md:w-80 lg:w-100 shrink-0">
         <QuickFacts
           instagram={cafe.instagram}
-          area={cafe.location}
+          locations={cafe.locations}
           tags={review.tags}
           openHour={cafe.open_hour}
           closeHour={cafe.close_hour}
