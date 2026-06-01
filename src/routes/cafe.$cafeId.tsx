@@ -7,7 +7,6 @@ import {
 import { getCafe, getCafeReview } from '@/lib/api/cafe'
 import { getNearbyCafes } from '@/lib/api/search'
 import CafeHero from '@/components/cafe-detail/CafeHero'
-import CafeHeroNoImage from '@/components/cafe-detail/CafeHeroNoImage'
 import CafeTitle from '@/components/cafe-detail/CafeTitle'
 import ReviewCard from '@/components/cafe-detail/ReviewCard'
 import RatingsCard from '@/components/cafe-detail/RatingsCard'
@@ -18,6 +17,7 @@ import PriceCard from '@/components/cafe-detail/PriceCard'
 import UpdatedAt from '@/components/cafe-detail/UpdatedAt'
 import NearbyCafe from '@/components/cafe-detail/NearbyCafe'
 import { TriangleAlert } from 'lucide-react'
+import type { JSX } from "react";
 
 export const Route = createFileRoute('/cafe/$cafeId')({
   loader: async ({ params }) => {
@@ -63,7 +63,7 @@ export const Route = createFileRoute('/cafe/$cafeId')({
   component: CafeDetailPage,
 })
 
-function Widgets(): React.JSX.Element {
+function Widgets(): JSX.Element {
   const { cafe, review, nearbyCafes } = Route.useLoaderData()
   const { ua } = useRouteContext({ from: '__root__' })
   if (ua.isMobile) {
@@ -141,21 +141,14 @@ function CafeDetailPage() {
 
   return (
     <main className="flex flex-col bg-cream min-h-screen">
-      {cafe.images.length > 0 ? (
-        <CafeHero
-          image={cafe.images}
-          cafeName={cafe.name}
-          gmapsId={cafe.gmaps_id}
-        />
-      ) : (
-        <CafeHeroNoImage
-          id={cafe.id}
-          name={cafe.name}
-          address={cafe.description}
-          isSubjective={review.is_subjective}
-          gmapsId={cafe.gmaps_id}
-        />
-      )}
+      <CafeHero
+        id={cafe.id}
+        name={cafe.name}
+        address={cafe.description}
+        image={cafe.images}
+        isSubjective={review.is_subjective}
+        gmapsId={cafe.gmaps_id}
+      />
       {cafe.status !== 'active' && (
         <div className="rounded-2xl bg-red-50 p-4 mx-6 md:mx-16 mt-4">
           <div className="flex items-center">
