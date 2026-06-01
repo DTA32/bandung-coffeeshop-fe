@@ -20,7 +20,7 @@ export interface CafeRank {
 
 export interface CafeImage {
   url: string
-  alt: string
+  description: string
 }
 
 export interface CafeData {

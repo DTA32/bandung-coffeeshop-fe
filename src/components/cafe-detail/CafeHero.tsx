@@ -34,13 +34,13 @@ function WithImage(
               <img
                 key={index}
                 src={img.url}
-                alt={img.alt}
+                alt={img.description}
                 className="w-full h-full object-cover"
               />
-              {img.alt && (
+              {img.description && (
                 <figcaption
                   className="absolute bottom-0 left-0 py-1 m-2 z-5 bg-black/50 text-white text-xs px-1 rounded select-none">
-                  {img.alt}
+                  {img.description}
                 </figcaption>
               )}
             </figure>

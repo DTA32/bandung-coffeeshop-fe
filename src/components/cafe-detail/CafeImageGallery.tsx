@@ -96,12 +96,12 @@ function CafeImageGalleryInternal({
         <figure className="flex h-full max-h-full flex-col items-center justify-center">
           <img
             src={images[index].url}
-            alt={images[index].alt}
+            alt={images[index].description}
             className="h-[95%] max-w-full object-contain"
           />
-          {images[index].alt && (
+          {images[index].description && (
             <figcaption className="mt-2 max-w-2xl text-center text-sm text-white/80 select-none">
-              {images[index].alt}
+              {images[index].description}
             </figcaption>
           )}
         </figure>
@@ -135,7 +135,7 @@ function CafeImageGalleryInternal({
             >
               <img
                 src={img.url}
-                alt={img.alt}
+                alt={img.description}
                 className="h-full w-full object-cover"
               />
             </button>
