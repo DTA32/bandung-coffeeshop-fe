@@ -117,12 +117,14 @@ export default function SearchBox({
       setIsOpen(false)
       return
     }
-    timerRef.current = setTimeout(async () => {
-      const items = await quickSearch(query)
-      if (cancelledRef.current) return
-      setResults(items)
-      setIsOpen(items.length > 0)
-    }, 300)
+    if (query != initialQuery) {
+      timerRef.current = setTimeout(async () => {
+        const items = await quickSearch(query)
+        if (cancelledRef.current) return
+        setResults(items)
+        setIsOpen(items.length > 0)
+      }, 300)
+    }
     return () => clearTimeout(timerRef.current)
   }, [query])
 
