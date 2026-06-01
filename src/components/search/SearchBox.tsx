@@ -3,6 +3,7 @@ import {Link, useNavigate} from '@tanstack/react-router'
 import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
 import type { QuickSearchItem } from '@/lib/api/search'
 import { quickSearch } from '@/lib/api/search'
+import { exploreSplat, locationTypeDepth } from '@/lib/explore'
 
 interface SearchBoxProps {
   variant?: 'hero' | 'srp'
@@ -21,6 +22,62 @@ const TYPE_ICONS: Record<string, React.ReactNode> = {
   poi: <MapPinned size={14} className="text-forest" />,
   area: <Map size={14} className="text-forest" />,
   district: <Map size={14} className="text-forest" />,
+}
+
+const RESULT_ITEM_CLASS =
+  'flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream'
+
+// Renders a quicksearch result as a Link to its destination:
+//   cafe → detail page; district / area / poi → SEO explore path built from the
+//   item's ancestors + itself. When ancestors are missing/incomplete the depth
+//   won't match, so we fall back to the base /explore route with the legacy
+//   query_id/query_type search params (search still works, URL just isn't canonical).
+function ResultLink({
+  item,
+  onSelect,
+  children,
+}: {
+  item: QuickSearchItem
+  onSelect: () => void
+  children: React.ReactNode
+}) {
+  if (item.type === 'cafe') {
+    return (
+      <Link
+        to="/cafe/$cafeId"
+        params={{ cafeId: item.id }}
+        onClick={onSelect}
+        className={RESULT_ITEM_CLASS}
+      >
+        {children}
+      </Link>
+    )
+  }
+
+  const refs = [...(item.ancestors ?? []), item]
+  if (refs.length === locationTypeDepth(item.type)) {
+    return (
+      <Link
+        to="/explore/$"
+        params={{ _splat: exploreSplat(refs) }}
+        onClick={onSelect}
+        className={RESULT_ITEM_CLASS}
+      >
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <Link
+      to="/explore"
+      search={{ query_id: item.id, query_type: item.type }}
+      onClick={onSelect}
+      className={RESULT_ITEM_CLASS}
+    >
+      {children}
+    </Link>
+  )
 }
 
 export default function SearchBox({
@@ -60,12 +117,14 @@ export default function SearchBox({
       setIsOpen(false)
       return
     }
-    timerRef.current = setTimeout(async () => {
-      const items = await quickSearch(query)
-      if (cancelledRef.current) return
-      setResults(items)
-      setIsOpen(items.length > 0)
-    }, 300)
+    if (query != initialQuery) {
+      timerRef.current = setTimeout(async () => {
+        const items = await quickSearch(query)
+        if (cancelledRef.current) return
+        setResults(items)
+        setIsOpen(items.length > 0)
+      }, 300)
+    }
     return () => clearTimeout(timerRef.current)
   }, [query])
 
@@ -81,18 +140,6 @@ export default function SearchBox({
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [])
-
-  function handleSelect(item: QuickSearchItem) {
-    dismiss()
-    navigate({
-      to: '/explore',
-      search: {
-        q: item.name,
-        query_type: item.type,
-        query_id: item.id,
-      },
-    })
-  }
 
   function handleSearch() {
     dismiss()
@@ -122,39 +169,14 @@ export default function SearchBox({
               <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
                 {TYPE_LABELS[type]}
               </div>
-              {grouped[type].map((item) => {
-                if (type === 'cafe') {
-                  return (
-                    <Link 
-                      to="/cafe/$cafeId" 
-                      params={{ cafeId: item.id }} 
-                      key={item.id}
-                      className="flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream"
-                    >
-                      {TYPE_ICONS[item.type]}
-                      <span className="text-sm font-medium text-forest">
-                        {item.name}
-                      </span>
-                    </Link>
-                  )
-                } else {
-                  return (
-                    <button
-                      key={item.id}
-                      onMouseDown={(e) => {
-                        e.preventDefault()
-                        handleSelect(item)
-                      }}
-                      className="flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream"
-                    >
-                      {TYPE_ICONS[item.type]}
-                      <span className="text-sm font-medium text-forest">
-                        {item.name}
-                      </span>
-                    </button>
-                  )
-                }
-              })}
+              {grouped[type].map((item) => (
+                <ResultLink key={item.id} item={item} onSelect={dismiss}>
+                  {TYPE_ICONS[item.type]}
+                  <span className="text-sm font-medium text-forest">
+                    {item.name}
+                  </span>
+                </ResultLink>
+              ))}
             </div>
           ),
       )}

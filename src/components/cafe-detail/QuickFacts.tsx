@@ -1,9 +1,11 @@
 import { Link } from '@tanstack/react-router'
-import type { CafeLocation, CafeTags } from '@/lib/api/cafe'
+import type { CafeTags } from '@/lib/api/cafe'
+import {exploreSplat} from "@/lib/explore";
+import type {Location} from "@/lib/api/search";
 
 interface QuickFactsProps {
   instagram: string | null
-  area: CafeLocation | null
+  locations: Location[]
   tags: CafeTags[]
   openHour: string | null
   closeHour: string | null
@@ -11,7 +13,7 @@ interface QuickFactsProps {
 
 export default function QuickFacts({
   instagram,
-  area,
+  locations,
   tags,
   openHour,
   closeHour,
@@ -45,15 +47,15 @@ export default function QuickFacts({
           </a>
         </span>
       )}
-      {area && (
+      {locations.length == 2 && (
         <span className="flex justify-between items-center">
           <span className="text-xs text-bark">Area</span>
           <Link
-            disabled={true}
-            to={`/explore/area/${area.id}`}
+            to={`/explore/$`}
+            params={{ _splat: exploreSplat(locations) }}
             className="text-xs font-semibold text-forest hover:underline"
           >
-            {area.name}
+            {locations[1].name}
           </Link>
         </span>
       )}
@@ -66,7 +68,12 @@ export default function QuickFacts({
                 <Link
                   disabled={true}
                   key={index}
-                  to={`/explore/tags/${tag.slug}`}
+                  to={`/explore/$`}
+                  // params={{ _splat: exploreSplat([{
+                  //     id: tag.slug,
+                  //     name: tag.name,
+                  //     type: 'tag',
+                  //   }]) }}
                   className="text-xs font-semibold text-forest hover:underline"
                 >
                   {tag.name}
@@ -96,7 +103,7 @@ export default function QuickFacts({
           <span className="text-xs font-semibold text-forest">{hours}</span>
         </div>
       )}
-      {!instagram && !area && tags.length === 0 && hours === '' && (
+      {!instagram && locations.length !== 2 && tags.length === 0 && hours === '' && (
         <div className="flex justify-center items-center h-16">
           <span className="text-xs text-bark">No quick facts available.</span>
         </div>

@@ -10,19 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MeetInTheMiddleRouteImport } from './routes/meet-in-the-middle'
-import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ExploreIndexRouteImport } from './routes/explore.index'
+import { Route as ExploreSplatRouteImport } from './routes/explore.$'
 import { Route as CafeCafeIdRouteImport } from './routes/cafe.$cafeId'
 
 const MeetInTheMiddleRoute = MeetInTheMiddleRouteImport.update({
   id: '/meet-in-the-middle',
   path: '/meet-in-the-middle',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExploreRoute = ExploreRouteImport.update({
-  id: '/explore',
-  path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -35,6 +31,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExploreIndexRoute = ExploreIndexRouteImport.update({
+  id: '/explore/',
+  path: '/explore/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreSplatRoute = ExploreSplatRouteImport.update({
+  id: '/explore/$',
+  path: '/explore/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CafeCafeIdRoute = CafeCafeIdRouteImport.update({
   id: '/cafe/$cafeId',
   path: '/cafe/$cafeId',
@@ -44,50 +50,62 @@ const CafeCafeIdRoute = CafeCafeIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/explore': typeof ExploreRoute
   '/meet-in-the-middle': typeof MeetInTheMiddleRoute
   '/cafe/$cafeId': typeof CafeCafeIdRoute
+  '/explore/$': typeof ExploreSplatRoute
+  '/explore/': typeof ExploreIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/explore': typeof ExploreRoute
   '/meet-in-the-middle': typeof MeetInTheMiddleRoute
   '/cafe/$cafeId': typeof CafeCafeIdRoute
+  '/explore/$': typeof ExploreSplatRoute
+  '/explore': typeof ExploreIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/explore': typeof ExploreRoute
   '/meet-in-the-middle': typeof MeetInTheMiddleRoute
   '/cafe/$cafeId': typeof CafeCafeIdRoute
+  '/explore/$': typeof ExploreSplatRoute
+  '/explore/': typeof ExploreIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
-    | '/explore'
     | '/meet-in-the-middle'
     | '/cafe/$cafeId'
+    | '/explore/$'
+    | '/explore/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/explore' | '/meet-in-the-middle' | '/cafe/$cafeId'
+  to:
+    | '/'
+    | '/about'
+    | '/meet-in-the-middle'
+    | '/cafe/$cafeId'
+    | '/explore/$'
+    | '/explore'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/explore'
     | '/meet-in-the-middle'
     | '/cafe/$cafeId'
+    | '/explore/$'
+    | '/explore/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  ExploreRoute: typeof ExploreRoute
   MeetInTheMiddleRoute: typeof MeetInTheMiddleRoute
   CafeCafeIdRoute: typeof CafeCafeIdRoute
+  ExploreSplatRoute: typeof ExploreSplatRoute
+  ExploreIndexRoute: typeof ExploreIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -97,13 +115,6 @@ declare module '@tanstack/react-router' {
       path: '/meet-in-the-middle'
       fullPath: '/meet-in-the-middle'
       preLoaderRoute: typeof MeetInTheMiddleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/explore': {
-      id: '/explore'
-      path: '/explore'
-      fullPath: '/explore'
-      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -120,6 +131,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/explore/': {
+      id: '/explore/'
+      path: '/explore'
+      fullPath: '/explore/'
+      preLoaderRoute: typeof ExploreIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore/$': {
+      id: '/explore/$'
+      path: '/explore/$'
+      fullPath: '/explore/$'
+      preLoaderRoute: typeof ExploreSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cafe/$cafeId': {
       id: '/cafe/$cafeId'
       path: '/cafe/$cafeId'
@@ -133,9 +158,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  ExploreRoute: ExploreRoute,
   MeetInTheMiddleRoute: MeetInTheMiddleRoute,
   CafeCafeIdRoute: CafeCafeIdRoute,
+  ExploreSplatRoute: ExploreSplatRoute,
+  ExploreIndexRoute: ExploreIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,9 +1,5 @@
 import { API_BASE } from '@/lib/api'
-
-export interface CafeLocation {
-  id: string
-  name: string
-}
+import type { Location } from "@/lib/api/search";
 
 export interface CafePrice {
   price_range_min: number | null
@@ -37,7 +33,7 @@ export interface CafeData {
   open_hour: string | null
   close_hour: string | null
   gmaps_id: string | null
-  location: CafeLocation | null
+  locations: Location[]
   price: CafePrice
 }
 

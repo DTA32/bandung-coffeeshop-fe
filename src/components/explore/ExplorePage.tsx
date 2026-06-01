@@ -1,80 +1,64 @@
 import {
-  createFileRoute,
   Link,
-  useNavigate, useRouteContext,
+  useNavigate,
+  useRouteContext,
   useRouterState,
 } from '@tanstack/react-router'
-import {LayoutGrid, List, Map} from 'lucide-react'
+import { LayoutGrid, List, Map } from 'lucide-react'
 import SearchBox from '@/components/search/SearchBox'
 import CafeCard from '@/components/explore/CafeCard'
 import CafeListItem from '@/components/explore/CafeListItem'
 import ExploreMapView from '@/components/explore/ExploreMapView'
 import Pagination from '@/components/explore/Pagination'
-import type {ExploreSearch} from '@/lib/api/search'
-import {cleanExploreSearch, searchCafes} from '@/lib/api/search'
-import { SORT_OPTIONS } from "@/lib/constants";
+import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
+import { cleanExploreSearch } from '@/lib/api/search'
+import { SORT_OPTIONS } from '@/lib/constants'
 
-export const Route = createFileRoute('/explore')({
-  validateSearch: (search): ExploreSearch => ({
-    q: search.q as string | undefined,
-    query_id: search.query_id as string | undefined,
-    query_type: search.query_type as string | undefined,
-    query_coords: search.query_coords as string | undefined,
-    radius_max: search.radius_max as number | undefined,
-    sort: search.sort as string | undefined,
-    page:
-      search.page !== undefined
-        ? Math.max(1, Number(search.page) || 1)
-        : undefined,
-    size:
-      search.size !== undefined
-        ? Math.max(1, Number(search.size) || 8)
-        : undefined,
-    view:
-      search.view === 'list'
-        ? 'list'
-        : search.view === 'grid'
-          ? 'grid'
-          : undefined,
-    map_view:
-      search.map_view === true || search.map_view === 'true'
-        ? true
-        : undefined,
-  }),
-  loaderDeps: ({search}) => ({
-    query_id: search.query_id,
-    query_type: search.query_type,
-    query_coords: search.query_coords,
-    radius_max: search.radius_max,
-    sort: search.sort ?? 'default',
-    page: search.page ?? 1,
-    size: search.size ?? 8,
-  }),
-  loader: ({deps}) => searchCafes(deps),
-  errorComponent: () => (
-    <div
-      className="flex flex-col h-screen md:h-128 items-center gap-4 justify-center text-xl text-moss-dark text-center">
+// Shared error UI for both explore routes.
+export function ExploreError() {
+  return (
+    <div className="flex flex-col h-screen md:h-128 items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Failed to load cafes.</p>
       <p className="text-lg">
         Uh oh, something went wrong while fetching the cafes. Please try again
         later.
       </p>
-      <Link
-        to="/"
-        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
-      >
+      <Link to="/" className="py-4 px-8 text-sm bg-forest text-cream rounded-lg">
         Back to home
       </Link>
     </div>
-  ),
-  component: ExplorePage,
-})
+  )
+}
 
-function ExplorePage() {
-  const data = Route.useLoaderData()
-  const search = Route.useSearch()
+// Shown when the focused location doesn't exist (unknown slug, or an invalid
+// path depth) — distinct from a generic fetch failure.
+export function ExploreNotFound() {
+  return (
+    <div className="flex flex-col h-screen md:h-128 items-center gap-4 justify-center text-xl text-moss-dark text-center">
+      <p>Not found.</p>
+      <p className="text-lg">
+        We couldn&apos;t find what you've requested. Try searching for a cafe, area, or
+        district.
+      </p>
+      <Link
+        to="/explore"
+        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
+      >
+        Browse all cafes
+      </Link>
+    </div>
+  )
+}
+
+export default function ExplorePage({
+  data,
+  search,
+}: {
+  data: SearchCafesData
+  search: ExploreSearch
+}) {
   const navigate = useNavigate()
-  const isLoading = useRouterState({select: (s) => s.isLoading})
+  const isLoading = useRouterState({ select: (s) => s.isLoading })
   const { ua } = useRouteContext({ from: '__root__' })
   const isMobile = ua.isMobile
 
@@ -89,38 +73,42 @@ function ExplorePage() {
   const marker = (() => {
     if (!search.query_coords) return null
     const [lat, lng] = search.query_coords.split(',').map(Number)
-    return Number.isFinite(lat) && Number.isFinite(lng) ? {lat, lng} : null
+    return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null
   })()
 
+  // Search-only update → stay on the current location path (relative nav).
   function goTo(update: ExploreSearch) {
     navigate({
-      to: '/explore',
-      search: cleanExploreSearch({...search, ...update}),
+      to: '.',
+      search: cleanExploreSearch({ ...search, ...update }),
     })
   }
 
-  // Place/move the single map marker → coordinate search (auto-refetched by the loader)
+  // Placing a marker switches to coordinate search → the base /explore route
+  // (drops any location path; coordinate search has no natural path).
   function placeMarker(lat: number, lng: number, opts?: { replace?: boolean }) {
     navigate({
       to: '/explore',
       search: cleanExploreSearch({
         ...search,
+        // Coordinate search is mutually exclusive with a location focus.
+        query_id: undefined,
+        query_type: undefined,
         map_view: true,
         query_coords: `${lat},${lng}`,
         radius_max: 1500,
-        query_id: undefined,
-        query_type: undefined,
         page: 1,
-        sort: "distance",
+        sort: 'distance',
       }),
       replace: opts?.replace ?? false,
     })
   }
+
   const sortOptions =
     search.query_coords !== undefined
-      ? [...SORT_OPTIONS, {value: 'distance', label: 'Distance'}]
+      ? [...SORT_OPTIONS, { value: 'distance', label: 'Distance' }]
       : SORT_OPTIONS
-  
+
   const activeSort = sortOptions.some((o) => o.value === sort) ? sort : 'default'
 
   // Grid / List / Show-Map controls, shared between the mobile bar and the desktop header.
@@ -141,14 +129,14 @@ function ExplorePage() {
       >
         {(mobile || !mapView) && (
           <button
-            onClick={() => goTo({map_view: mapView ? undefined : true, view: 'list'})}
+            onClick={() => goTo({ map_view: mapView ? undefined : true, view: mapView ? undefined : 'list' })}
             className={`flex cursor-pointer items-center gap-1.5 text-sm rounded-lg transition ${
               mobile
                 ? `px-3 py-1.5 border border-grove-light ${mapView ? 'bg-forest text-cream' : 'bg-white text-forest hover:bg-grove-light'}`
                 : 'px-4 py-2.5 bg-white text-forest hover:bg-grove-light'
             }`}
           >
-            <Map size={14}/>
+            <Map size={14} />
             {mobile ? 'Map' : 'Show Map'}
           </button>
         )}
@@ -159,12 +147,12 @@ function ExplorePage() {
               : 'flex overflow-hidden rounded-lg border border-white bg-white p-1 '
           }
         >
-          <button onClick={() => goTo({view: 'grid'})} className={toggleBtnClass(view === 'grid')}>
-            <LayoutGrid size={14}/>
+          <button onClick={() => goTo({ view: 'grid' })} className={toggleBtnClass(view === 'grid')}>
+            <LayoutGrid size={14} />
             Grid
           </button>
-          <button onClick={() => goTo({view: 'list'})} className={toggleBtnClass(view === 'list')}>
-            <List size={14}/>
+          <button onClick={() => goTo({ view: 'list' })} className={toggleBtnClass(view === 'list')}>
+            <List size={14} />
             List
           </button>
         </div>
@@ -174,27 +162,27 @@ function ExplorePage() {
 
   return (
     <main className="flex flex-col bg-cream">
-      <SearchBox variant="srp" initialQuery={search.q ?? ''} />
+      <SearchBox variant="srp" initialQuery={data.location_name ?? ''} />
       {isMobile && viewControls(isMobile)}
-      {(mapView && isMobile) && (
+      {mapView && isMobile && (
         <div className="w-full h-80">
           <ExploreMapView
             marker={marker}
             results={data}
             onPlace={placeMarker}
-            onHideMap={() => goTo({map_view: undefined})}
+            onHideMap={() => goTo({ map_view: undefined, view: undefined })}
           />
         </div>
       )}
 
       <div className="mx-auto w-full px-6 md:px-16 py-6 h-full flex gap-6 md:justify-center flex-col lg:flex-row min-h-screen md:min-h-0">
-        {(mapView && !isMobile) && (
+        {mapView && !isMobile && (
           <div className="w-full max-w-2xl h-160">
             <ExploreMapView
               marker={marker}
               results={data}
               onPlace={placeMarker}
-              onHideMap={() => goTo({map_view: undefined})}
+              onHideMap={() => goTo({ map_view: undefined, view: undefined })}
             />
           </div>
         )}
@@ -215,7 +203,7 @@ function ExplorePage() {
               <span className="text-sm text-bark">Sort by:</span>
               <select
                 value={activeSort}
-                onChange={(e) => goTo({sort: e.target.value, page: 1})}
+                onChange={(e) => goTo({ sort: e.target.value, page: 1 })}
                 className="cursor-pointer rounded-md py-1.5 text-sm text-grove focus:outline-none w-fit field-sizing-content pe-2"
               >
                 {sortOptions.map((opt) => (
@@ -235,18 +223,20 @@ function ExplorePage() {
                 No cafes found.
               </div>
             ) : view === 'grid' ? (
-              <div className={`grid gap-6
-                grid-cols-2 md:grid-cols-3 
+              <div
+                className={`grid gap-6
+                grid-cols-2 md:grid-cols-3
                 ${mapView ? `xl:grid-cols-4` : `lg:grid-cols-4`}
-              `}>
+              `}
+              >
                 {data.cafes.map((cafe) => (
-                  <CafeCard key={cafe.id} cafe={cafe} small={false}/>
+                  <CafeCard key={cafe.id} cafe={cafe} small={false} />
                 ))}
               </div>
             ) : (
               <div className="flex flex-col gap-4">
                 {data.cafes.map((cafe) => (
-                  <CafeListItem key={cafe.id} cafe={cafe}/>
+                  <CafeListItem key={cafe.id} cafe={cafe} />
                 ))}
               </div>
             )}
@@ -254,7 +244,7 @@ function ExplorePage() {
             <Pagination
               page={page}
               totalPages={totalPages}
-              searchForPage={(p) => cleanExploreSearch({...search, page: p})}
+              searchForPage={(p) => cleanExploreSearch({ ...search, page: p })}
             />
           </div>
         </div>
