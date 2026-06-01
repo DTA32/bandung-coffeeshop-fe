@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import type { CafeTags } from '@/lib/api/cafe'
-import {exploreSplat} from "#/lib/explore.ts";
-import type {Location} from "#/lib/api/search.ts";
+import {exploreSplat} from "@/lib/explore";
+import type {Location} from "@/lib/api/search";
 
 interface QuickFactsProps {
   instagram: string | null

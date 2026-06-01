@@ -13,8 +13,7 @@ export const LOCATION_DEPTH = ['district', 'area', 'poi'] as const
 type DepthType = (typeof LOCATION_DEPTH)[number]
 
 // Parse the splat ("<district>/<area>/<poi>") into the leaf's API query.
-// Only the leaf + its depth-derived type matter to the search API; parent
-// segments are for SEO/breadcrumbs. Returns null for invalid depth (→ notFound).
+// TODO support other type (tag, featured, etc.) once we have explore routes for those.
 export function parseExploreSplat(
   splat: string | undefined,
 ): { query_id: string; query_type: DepthType } | null {
