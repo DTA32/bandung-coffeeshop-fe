@@ -1,14 +1,14 @@
 import type {LocationData} from "@/lib/api/location";
-import {Link} from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import type {Location} from "@/lib/type";
-import {exploreSplat} from "#/lib/explore.ts";
+import { exploreSplat } from "@/lib/explore";
 
 const locationTypeMapping: Record<string, string> = {
   'area': 'Area',
   'poi': 'Point of Interest',
 }
 
-export default function LocationContent({location}: { location: LocationData }) {
+export default function LocationDetail({location, isMobile}: { location: LocationData, isMobile: boolean }) {
   const descendantName = location.descendants && location.descendants.length > 0 && location.descendants[0].type in locationTypeMapping
     ? locationTypeMapping[location.descendants[0].type]
     : 'Related locations'
@@ -21,7 +21,7 @@ export default function LocationContent({location}: { location: LocationData }) 
   const refs = [...location.ancestors, currentLocation]
   return (
     <div className="flex flex-col gap-4">
-      <div className="h-60 overflow-scroll flex gap-2 w-full bg-grove-light">
+      <div className={`${isMobile ? `h-50` : `h-60`} overflow-scroll flex gap-2 w-full bg-grove-light relative`}>
         {location.images.map((img, index) => {
           return (
             <figure
@@ -43,18 +43,36 @@ export default function LocationContent({location}: { location: LocationData }) 
             </figure>
           )
         })}
-      </div>
-      <h1 className="text-2xl font-bold">
-        {location.show_welcome_text && (
-          <span className="font-normal">Welcome to&nbsp;</span>
+        {isMobile && (
+          <div
+            className="absolute left-0 bottom-0 text-xl font-bold text-white bg-linear-to-t from-black/70 to-transparent w-full min-h-32 flex items-end px-6 py-3">
+            <h1 className="">
+              {location.show_welcome_text && (
+                <span className="font-normal">Welcome to&nbsp;</span>
+              )}
+              {location.name}
+            </h1>
+          </div>
         )}
-        {location.name}
-      </h1>
+      </div>
+      {!isMobile && (
+        <h1 className="text-2xl font-bold">
+          {location.show_welcome_text && (
+            <span className="font-normal">Welcome to&nbsp;</span>
+          )}
+          {location.name}
+        </h1>
+      )}
       {location.description && (
-        <p className="text-gray-600 whitespace-pre-line">{location.description}</p>
+        <div className={`${isMobile && `px-6 bg-white text-sm py-4`}`}>
+          {isMobile && (
+            <h2 className="text-base font-semibold mb-2">About</h2>
+          )}
+          <p className="text-gray-600 whitespace-pre-line">{location.description}</p>
+        </div>
       )}
       {location.descendants && location.descendants.length > 0 && (
-        <div className="flex flex-col gap-5 p-6 bg-white rounded-2xl">
+        <div className={`flex flex-col gap-5 p-6 bg-white ${!isMobile && `rounded-2xl`}`}>
           <h2 className="text-lg font-semibold">{descendantName}</h2>
           <div className="flex overflow-scroll md:grid md:grid-cols-3 gap-4 pb-1">
             {location.descendants.map((desc) => {

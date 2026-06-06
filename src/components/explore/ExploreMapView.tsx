@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {ClientOnly, useRouteContext} from '@tanstack/react-router'
+import { ClientOnly } from '@tanstack/react-router'
 import L, {type LatLngExpression } from 'leaflet'
 import {Info, Locate, Map} from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
@@ -16,6 +16,7 @@ type Props = {
   results: SearchCafesData
   onPlace: (lat: number, lng: number, opts?: { replace?: boolean }) => void
   onHideMap: () => void
+  isMobile: boolean
   polygon?: any | null
 }
 
@@ -24,12 +25,11 @@ export default function ExploreMapView({
   results,
   onPlace,
   onHideMap,
+  isMobile,
   polygon = null
 }: Props) {
   const [focusCenter, setFocusCenter] = useState<LatLngExpression | null>(null)
   const [alert, setAlert] = useState<string>('')
-  const { ua } = useRouteContext({ from: '__root__' })
-  const isMobile = ua.isMobile
 
   function findNearby() {
     navigator.geolocation.getCurrentPosition((pos) => {

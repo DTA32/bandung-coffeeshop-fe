@@ -9,12 +9,12 @@ import SearchBox from '@/components/search/SearchBox'
 import CafeCard from '@/components/explore/CafeCard'
 import CafeListItem from '@/components/explore/CafeListItem'
 import ExploreMapView from '@/components/explore/ExploreMapView'
+import LocationDetail from "@/components/explore/LocationDetail";
 import Pagination from '@/components/explore/Pagination'
 import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
 import { SORT_OPTIONS } from '@/lib/constants'
 import type { LocationData } from "@/lib/api/location";
-import LocationContent from "#/components/explore/LocationContent.tsx";
 
 // Shared error UI for both explore routes.
 export function ExploreError() {
@@ -168,6 +168,11 @@ export default function ExplorePage({
     <main className="flex flex-col bg-cream">
       <SearchBox variant="srp" initialQuery={data.location_name ?? ''} />
       {isMobile && viewControls(isMobile)}
+      {location && !mapView && isMobile && location.type !== 'poi' && (
+        <div className="w-full h-fit">
+          <LocationDetail location={location} isMobile={isMobile}/>
+        </div>
+      )}
       {mapView && isMobile && (
         <div className="w-full h-80">
           <ExploreMapView
@@ -175,14 +180,15 @@ export default function ExplorePage({
             results={data}
             onPlace={placeMarker}
             onHideMap={() => goTo({ map_view: undefined, view: undefined })}
+            isMobile={isMobile}
           />
         </div>
       )}
 
       <div className="mx-auto w-full px-6 md:px-16 py-6 h-full flex gap-6 md:justify-center flex-col lg:flex-row min-h-screen md:min-h-0">
-        {location && !mapView && location.type !== 'poi' && (
+        {location && !mapView && !isMobile && location.type !== 'poi' && (
           <div className="w-full max-w-2xl h-fit md:h-160">
-            <LocationContent location={location}/>
+            <LocationDetail location={location} isMobile={isMobile}/>
           </div>
         )}
         {mapView && !isMobile && (
@@ -192,6 +198,7 @@ export default function ExplorePage({
               results={data}
               onPlace={placeMarker}
               onHideMap={() => goTo({ map_view: undefined, view: undefined })}
+              isMobile={isMobile}
               polygon={location?.polygon}
             />
           </div>
