@@ -32,7 +32,7 @@ export default function LocationDetail({location, isMobile}: { location: Locatio
                 key={index}
                 src={img.url}
                 alt={img.description}
-                className="w-full h-full object-cover object-bottom"
+                className="w-full h-full object-cover"
               />
               {img.description && (
                 <figcaption

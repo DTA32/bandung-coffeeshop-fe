@@ -8,8 +8,7 @@ import { LayoutGrid, List, Map } from 'lucide-react'
 import SearchBox from '@/components/search/SearchBox'
 import CafeCard from '@/components/explore/CafeCard'
 import CafeListItem from '@/components/explore/CafeListItem'
-import ExploreMapView from '@/components/explore/ExploreMapView'
-import LocationDetail from "@/components/explore/LocationDetail";
+import ExplorePanel from '@/components/explore/ExplorePanel'
 import Pagination from '@/components/explore/Pagination'
 import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
@@ -168,40 +167,29 @@ export default function ExplorePage({
     <main className="flex flex-col bg-cream">
       <SearchBox variant="srp" initialQuery={data.location_name ?? ''} />
       {isMobile && viewControls(isMobile)}
-      {location && !mapView && isMobile && location.type !== 'poi' && (
-        <div className="w-full h-fit">
-          <LocationDetail location={location} isMobile={isMobile}/>
-        </div>
+      {isMobile && (
+        <ExplorePanel
+          mapView={mapView}
+          isMobile={isMobile}
+          location={location}
+          marker={marker}
+          results={data}
+          onPlace={placeMarker}
+          onHideMap={() => goTo({ map_view: undefined, view: undefined })}
+        />
       )}
-      {mapView && isMobile && (
-        <div className="w-full h-80">
-          <ExploreMapView
+
+      <div className="mx-auto w-full px-6 md:px-16 py-6 h-full flex gap-6 md:justify-center flex-col lg:flex-row min-h-screen md:min-h-0">
+        {!isMobile && (
+          <ExplorePanel
+            mapView={mapView}
+            isMobile={isMobile}
+            location={location}
             marker={marker}
             results={data}
             onPlace={placeMarker}
             onHideMap={() => goTo({ map_view: undefined, view: undefined })}
-            isMobile={isMobile}
           />
-        </div>
-      )}
-
-      <div className="mx-auto w-full px-6 md:px-16 py-6 h-full flex gap-6 md:justify-center flex-col lg:flex-row min-h-screen md:min-h-0">
-        {location && !mapView && !isMobile && location.type !== 'poi' && (
-          <div className="w-full max-w-2xl h-fit md:h-160">
-            <LocationDetail location={location} isMobile={isMobile}/>
-          </div>
-        )}
-        {mapView && !isMobile && (
-          <div className="w-full max-w-2xl h-160">
-            <ExploreMapView
-              marker={marker}
-              results={data}
-              onPlace={placeMarker}
-              onHideMap={() => goTo({ map_view: undefined, view: undefined })}
-              isMobile={isMobile}
-              polygon={location?.polygon}
-            />
-          </div>
         )}
         <div className="flex flex-col w-full max-w-screen-2xl">
           <div className="mb-6 flex items-center justify-between gap-2 md:text-center">
