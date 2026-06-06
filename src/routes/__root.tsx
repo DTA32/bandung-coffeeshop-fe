@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar'
 import { getUserAgentInfo } from '@/lib/helper'
 
 import appCss from '@/styles.css?url'
+import Footer from "@/components/Footer";
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
@@ -29,7 +30,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className={'m-0 bg-cream'}>
+      <body className={'m-0 bg-cream flex flex-col min-h-screen'}>
         <Header />
         {children}
         {import.meta.env.PROD ? null : (
@@ -43,6 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             ]}
           />
         )}
+        <Footer />
         <Navbar />
         <Scripts />
       </body>

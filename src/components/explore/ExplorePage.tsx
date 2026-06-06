@@ -180,7 +180,7 @@ export default function ExplorePage({
   }
 
   return (
-    <main className="flex flex-col bg-cream">
+    <main className="flex flex-col bg-cream flex-1">
       <SearchBox variant="srp" initialQuery={data.location_name ?? ''} />
       {isMobile && viewControls(isMobile)}
       {isMobile && (
