@@ -3,7 +3,7 @@ import type { CafeListing } from '@/lib/api/search'
 
 export default function FeaturedCafes({ cafes }: { cafes: CafeListing[] }) {
   return (
-    <section className="flex flex-1 flex-col gap-6 bg-cream px-6 md:px-20 py-8 w-full">
+    <section className="flex flex-1 flex-col gap-6 bg-cream px-6 md:px-20 w-full">
       <h2 className="m-0 text-2xl md:text-3xl font-bold text-forest">
         Featured Cafes
       </h2>

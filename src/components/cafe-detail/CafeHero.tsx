@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import type {CafeImage} from '@/lib/api/cafe'
+import type {LocationImage} from '@/lib/type'
 import MapPreview from '@/components/cafe-detail/MapPreview'
 import CafeImageGallery from '@/components/cafe-detail/CafeImageGallery'
 import {Info} from "lucide-react";
@@ -10,12 +10,12 @@ interface CafeHeroProps {
   name: string
   address: string | null
   isSubjective: boolean
-  image: CafeImage[] | null
+  image: LocationImage[] | null
   gmapsId: string | null
 }
 
 function WithImage(
-  {image, name, gmapsId}: { image: CafeImage[]; name: string; gmapsId: string | null }
+  {image, name, gmapsId}: { image: LocationImage[]; name: string; gmapsId: string | null }
 ) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 

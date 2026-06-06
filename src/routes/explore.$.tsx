@@ -9,6 +9,7 @@ import {
   parseExploreSplat,
   validateExploreSearch,
 } from '@/lib/explore'
+import { getLocation } from "@/lib/api/location";
 
 // Nested location paths:
 //   /explore/<district>             → district
@@ -18,18 +19,42 @@ import {
 export const Route = createFileRoute('/explore/$')({
   validateSearch: validateExploreSearch,
   loaderDeps: ({ search }) => exploreLoaderDeps(search),
-  loader: ({ params, deps }) => {
+  loader: async ({ params, deps }) => {
     const focus = parseExploreSplat(params._splat)
     if (!focus) throw notFound()
-    return searchCafes({ ...deps, ...focus })
+    const [searchData, locationData] = await Promise.all([
+      searchCafes({ ...deps, ...focus }),
+      getLocation(focus.query_id),
+    ])
+    if (Array.isArray(locationData)) {
+      throw new Error(`Expected single location, got array`)
+    }
+    return { searchData, locationData }
   },
   errorComponent: ExploreError,
   notFoundComponent: ExploreNotFound,
   component: ExploreSplat,
 })
 
+function validatePath(splat: string | undefined, ancestors: string[] = []): void {
+  if (typeof splat !== 'string') return
+  const segments = splat.split('/').filter(Boolean)
+  if (segments.length < 1 || segments.length > 3) return
+  const expected = [...ancestors, segments[segments.length - 1]]
+  if (segments.length !== expected.length) {
+    throw notFound()
+  }
+  for (let i = 0; i < segments.length; i++) {
+    if (segments[i] !== expected[i]) {
+      throw notFound()
+    }
+  }
+}
+
 function ExploreSplat() {
-  const data = Route.useLoaderData()
+  const {searchData, locationData} = Route.useLoaderData()
   const search = Route.useSearch()
-  return <ExplorePage data={data} search={search} />
+  const params = Route.useParams()
+  validatePath(params._splat, locationData.ancestors.map((a) => a.id))
+  return <ExplorePage data={searchData} search={search} location={locationData} />
 }

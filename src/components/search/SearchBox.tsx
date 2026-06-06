@@ -4,6 +4,7 @@ import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
 import type { QuickSearchItem } from '@/lib/api/search'
 import { quickSearch } from '@/lib/api/search'
 import { exploreSplat, locationTypeDepth } from '@/lib/explore'
+import type { Location } from "@/lib/type";
 
 interface SearchBoxProps {
   variant?: 'hero' | 'srp'
@@ -54,7 +55,8 @@ function ResultLink({
     )
   }
 
-  const refs = [...(item.ancestors ?? []), item]
+  const itemLocation = item as Location
+  const refs = [...(item.ancestors ?? []), itemLocation]
   if (refs.length === locationTypeDepth(item.type)) {
     return (
       <Link

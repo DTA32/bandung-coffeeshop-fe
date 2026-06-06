@@ -1,14 +1,6 @@
 import { notFound } from '@tanstack/react-router'
 import { API_BASE } from '@/lib/api/index'
-
-export type LocationType = 'cafe' | 'poi' | 'area' | 'district'
-
-// A location reference used to express hierarchy (a location + its ancestors)
-export interface Location {
-  id: string
-  name: string
-  type: LocationType
-}
+import type { LocationType, Location } from "@/lib/type";
 
 export interface QuickSearchItem {
   id: string

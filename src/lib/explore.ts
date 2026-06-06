@@ -1,9 +1,9 @@
 import type {
   ExploreSearch,
-  Location,
-  LocationType,
   SearchCafesParams,
 } from '@/lib/api/search'
+
+import type { Location, LocationType } from '@/lib/type'
 
 // Path depth → location type. Index 0 = first path segment.
 //   /explore/<district>             → depth 1 → district

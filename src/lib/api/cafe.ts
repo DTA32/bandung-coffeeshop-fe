@@ -1,5 +1,5 @@
 import { API_BASE } from '@/lib/api'
-import type { Location } from "@/lib/api/search";
+import type { Location, LocationImage, ApiResponse } from "@/lib/type";
 
 export interface CafePrice {
   price_range_min: number | null
@@ -18,17 +18,12 @@ export interface CafeRank {
   label: string
 }
 
-export interface CafeImage {
-  url: string
-  description: string
-}
-
 export interface CafeData {
   id: string
   name: string
   description: string | null
   status: string
-  images: CafeImage[]
+  images: LocationImage[]
   instagram: string | null
   open_hour: string | null
   close_hour: string | null
@@ -75,11 +70,6 @@ export interface CafeReview {
   visited_at: string | null
   updated_at: string
   ratings: RatingsResponse
-}
-
-interface ApiResponse<T> {
-  success: boolean
-  data: T
 }
 
 export async function getCafe(id: string): Promise<CafeData> {

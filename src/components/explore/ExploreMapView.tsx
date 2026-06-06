@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {ClientOnly, useRouteContext} from '@tanstack/react-router'
-import type { LatLngExpression } from 'leaflet'
+import L, {type LatLngExpression } from 'leaflet'
 import {Info, Locate, Map} from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import type { SearchCafesData } from '@/lib/api/search'
@@ -16,6 +16,7 @@ type Props = {
   results: SearchCafesData
   onPlace: (lat: number, lng: number, opts?: { replace?: boolean }) => void
   onHideMap: () => void
+  polygon?: any | null
 }
 
 export default function ExploreMapView({
@@ -23,6 +24,7 @@ export default function ExploreMapView({
   results,
   onPlace,
   onHideMap,
+  polygon = null
 }: Props) {
   const [focusCenter, setFocusCenter] = useState<LatLngExpression | null>(null)
   const [alert, setAlert] = useState<string>('')
@@ -41,6 +43,9 @@ export default function ExploreMapView({
       setTimeout(() => setAlert(''), 3000)
     })
   }
+  
+  const polygonCenterLatLng = polygon ? L.geoJson(polygon).getBounds().getCenter() : null
+  const polygonCenter: LatLngExpression | null = polygonCenterLatLng ? [polygonCenterLatLng.lat, polygonCenterLatLng.lng] as LatLngExpression : null
 
   const position: LatLngExpression | null = marker
     ? [marker.lat, marker.lng]
@@ -73,11 +78,12 @@ export default function ExploreMapView({
           onMoveMarker={(_id, lat, lng) => onPlace(lat, lng, { replace: true })}
           zoomControlPosition="topright"
           zoom={14}
-          center={position ?? undefined}
+          center={polygonCenter ? polygonCenter : position ?? undefined}
           markerIcon={() => queryMarkerIcon}
           circleCenter={position}
           circleRadiusM={RADIUS_M}
           focusCenter={focusCenter}
+          polygon={polygon}
         />
       </ClientOnly>
       <div className="flex flex-col absolute left-4 top-4 z-1000 gap-2">

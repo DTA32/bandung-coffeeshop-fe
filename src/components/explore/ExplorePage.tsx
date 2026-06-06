@@ -13,6 +13,8 @@ import Pagination from '@/components/explore/Pagination'
 import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
 import { SORT_OPTIONS } from '@/lib/constants'
+import type { LocationData } from "@/lib/api/location";
+import LocationContent from "#/components/explore/LocationContent.tsx";
 
 // Shared error UI for both explore routes.
 export function ExploreError() {
@@ -53,9 +55,11 @@ export function ExploreNotFound() {
 export default function ExplorePage({
   data,
   search,
+  location,
 }: {
   data: SearchCafesData
   search: ExploreSearch
+  location?: LocationData
 }) {
   const navigate = useNavigate()
   const isLoading = useRouterState({ select: (s) => s.isLoading })
@@ -176,6 +180,11 @@ export default function ExplorePage({
       )}
 
       <div className="mx-auto w-full px-6 md:px-16 py-6 h-full flex gap-6 md:justify-center flex-col lg:flex-row min-h-screen md:min-h-0">
+        {location && !mapView && location.type !== 'poi' && (
+          <div className="w-full max-w-2xl h-fit md:h-160">
+            <LocationContent location={location}/>
+          </div>
+        )}
         {mapView && !isMobile && (
           <div className="w-full max-w-2xl h-160">
             <ExploreMapView
@@ -183,6 +192,7 @@ export default function ExplorePage({
               results={data}
               onPlace={placeMarker}
               onHideMap={() => goTo({ map_view: undefined, view: undefined })}
+              polygon={location?.polygon}
             />
           </div>
         )}

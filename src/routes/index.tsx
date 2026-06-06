@@ -1,24 +1,31 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { getFeaturedCafes } from '@/lib/api/search'
+import {createFileRoute} from '@tanstack/react-router'
+import {getFeaturedCafes} from '@/lib/api/search'
 import Hero from '@/components/Hero'
 import FeaturedCafes from '@/components/FeaturedCafes'
+import DistrictList from '@/components/DistrictList'
+import {getLocation} from "@/lib/api/location";
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    try {
-      return await getFeaturedCafes()
-    } catch {
-      return { cafes: [] }
-    }
+    const [featuredCafes, districts] = await Promise.all([
+      getFeaturedCafes(),
+      getLocation(),
+    ])
+    return {featuredCafes, districts}
   },
   component: HomePage,
 })
+
 function HomePage() {
-  const data = Route.useLoaderData()
+  const {featuredCafes, districts} = Route.useLoaderData()
+  if (!Array.isArray(districts)) {
+    throw new Error('Expected districts to be an array')
+  }
   return (
-    <main className="flex flex-col h-screen">
-      <Hero />
-      <FeaturedCafes cafes={data.cafes} />
+    <main className="flex flex-col min-h-screen gap-8">
+      <Hero/>
+      <FeaturedCafes cafes={featuredCafes.cafes}/>
+      <DistrictList districts={districts}/>
     </main>
   )
 }
