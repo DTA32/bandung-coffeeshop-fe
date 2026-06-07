@@ -51,7 +51,7 @@ export default function DesktopLayout({
   onSearch,
 }: Props) {
   return (
-    <div className="w-screen h-[95vh] relative">
+    <main className="w-screen h-[95vh] relative">
       {alert && (
         <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-amber-800 text-sm font-semibold px-4 py-2 rounded-md shadow-md z-50 transition-opacity duration-300 z-1000 text-center">
           {alert}
@@ -179,6 +179,6 @@ export default function DesktopLayout({
           )}
         </div>
       )}
-    </div>
+    </main>
   )
 }
