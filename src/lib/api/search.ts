@@ -1,6 +1,6 @@
 import { notFound } from '@tanstack/react-router'
 import { API_BASE } from '@/lib/api/index'
-import type { LocationType, Location } from "@/lib/type";
+import type { LocationType, Location } from '@/lib/type'
 
 export interface QuickSearchItem {
   id: string

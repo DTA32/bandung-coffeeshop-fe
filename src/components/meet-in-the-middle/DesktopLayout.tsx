@@ -161,11 +161,7 @@ export default function DesktopLayout({
               </div>
               <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
                 {results.cafes.map((cafe) => (
-                  <CafeListItem
-                    key={cafe.id}
-                    cafe={cafe}
-                    smallVersion={true}
-                  />
+                  <CafeListItem key={cafe.id} cafe={cafe} smallVersion={true} />
                 ))}
               </div>
               <div className="flex gap-2 justify-center items-center w-full">

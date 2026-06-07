@@ -9,7 +9,7 @@ import {
   parseExploreSplat,
   validateExploreSearch,
 } from '@/lib/explore'
-import { getLocation } from "@/lib/api/location";
+import { getLocation } from '@/lib/api/location'
 
 // Nested location paths:
 //   /explore/<district>             → district
@@ -36,7 +36,10 @@ export const Route = createFileRoute('/explore/$')({
   component: ExploreSplat,
 })
 
-function validatePath(splat: string | undefined, ancestors: string[] = []): void {
+function validatePath(
+  splat: string | undefined,
+  ancestors: string[] = [],
+): void {
   if (typeof splat !== 'string') return
   const segments = splat.split('/').filter(Boolean)
   if (segments.length < 1 || segments.length > 3) return
@@ -52,9 +55,14 @@ function validatePath(splat: string | undefined, ancestors: string[] = []): void
 }
 
 function ExploreSplat() {
-  const {searchData, locationData} = Route.useLoaderData()
+  const { searchData, locationData } = Route.useLoaderData()
   const search = Route.useSearch()
   const params = Route.useParams()
-  validatePath(params._splat, locationData.ancestors.map((a) => a.id))
-  return <ExplorePage data={searchData} search={search} location={locationData} />
+  validatePath(
+    params._splat,
+    locationData.ancestors.map((a) => a.id),
+  )
+  return (
+    <ExplorePage data={searchData} search={search} location={locationData} />
+  )
 }

@@ -1,5 +1,5 @@
 import { API_BASE } from '@/lib/api'
-import type { Location, LocationImage, ApiResponse } from "@/lib/type";
+import type { Location, LocationImage, ApiResponse } from '@/lib/type'
 
 export interface CafePrice {
   price_range_min: number | null

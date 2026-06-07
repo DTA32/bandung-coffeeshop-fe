@@ -13,7 +13,7 @@ import Pagination from '@/components/explore/Pagination'
 import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
 import { SORT_OPTIONS } from '@/lib/constants'
-import type { LocationData } from "@/lib/api/location";
+import type { LocationData } from '@/lib/api/location'
 
 // Shared error UI for both explore routes.
 export function ExploreError() {
@@ -24,7 +24,10 @@ export function ExploreError() {
         Uh oh, something went wrong while fetching the cafes. Please try again
         later.
       </p>
-      <Link to="/" className="py-4 px-8 text-sm bg-forest text-cream rounded-lg">
+      <Link
+        to="/"
+        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
+      >
         Back to home
       </Link>
     </div>
@@ -38,8 +41,8 @@ export function ExploreNotFound() {
     <div className="flex flex-col h-screen md:h-128 items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Not found.</p>
       <p className="text-lg">
-        We couldn&apos;t find what you've requested. Try searching for a cafe, area, or
-        district.
+        We couldn&apos;t find what you've requested. Try searching for a cafe,
+        area, or district.
       </p>
       <Link
         to="/explore"
@@ -112,7 +115,9 @@ export default function ExplorePage({
       ? [...SORT_OPTIONS, { value: 'distance', label: 'Distance' }]
       : SORT_OPTIONS
 
-  const activeSort = sortOptions.some((o) => o.value === sort) ? sort : 'default'
+  const activeSort = sortOptions.some((o) => o.value === sort)
+    ? sort
+    : 'default'
 
   // Grid / List / Show-Map controls, shared between the mobile bar and the desktop header.
   function viewControls(mobile: boolean) {
@@ -132,7 +137,12 @@ export default function ExplorePage({
       >
         {(mobile || !mapView) && (
           <button
-            onClick={() => goTo({ map_view: mapView ? undefined : true, view: mapView ? undefined : 'list' })}
+            onClick={() =>
+              goTo({
+                map_view: mapView ? undefined : true,
+                view: mapView ? undefined : 'list',
+              })
+            }
             className={`flex cursor-pointer items-center gap-1.5 text-sm rounded-lg transition ${
               mobile
                 ? `px-3 py-1.5 border border-grove-light ${mapView ? 'bg-forest text-cream' : 'bg-white text-forest hover:bg-grove-light'}`
@@ -150,11 +160,17 @@ export default function ExplorePage({
               : 'flex overflow-hidden rounded-lg border border-white bg-white p-1 '
           }
         >
-          <button onClick={() => goTo({ view: 'grid' })} className={toggleBtnClass(view === 'grid')}>
+          <button
+            onClick={() => goTo({ view: 'grid' })}
+            className={toggleBtnClass(view === 'grid')}
+          >
             <LayoutGrid size={14} />
             Grid
           </button>
-          <button onClick={() => goTo({ view: 'list' })} className={toggleBtnClass(view === 'list')}>
+          <button
+            onClick={() => goTo({ view: 'list' })}
+            className={toggleBtnClass(view === 'list')}
+          >
             <List size={14} />
             List
           </button>

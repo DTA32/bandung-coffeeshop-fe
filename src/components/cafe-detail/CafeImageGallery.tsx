@@ -3,10 +3,10 @@ import type { TouchEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { ClientOnly } from '@tanstack/react-router'
-import type { CafeImage } from '@/lib/api/cafe'
+import type { LocationImage } from '@/lib/type'
 
 interface CafeImageGalleryProps {
-  images: CafeImage[]
+  images: LocationImage[]
   startIndex: number
   onClose: () => void
 }

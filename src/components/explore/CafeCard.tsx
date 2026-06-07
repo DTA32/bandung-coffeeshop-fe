@@ -4,7 +4,7 @@ import type { CafeListing } from '@/lib/api/search'
 export default function CafeCard({
   cafe,
   showBorder = false,
-  small = true
+  small = true,
 }: {
   cafe: CafeListing
   showBorder?: boolean

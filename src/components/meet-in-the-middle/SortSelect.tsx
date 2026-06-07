@@ -1,4 +1,4 @@
-import { SORT_OPTIONS } from "@/lib/constants";
+import { SORT_OPTIONS } from '@/lib/constants'
 
 type Props = {
   value: string
@@ -7,7 +7,10 @@ type Props = {
 }
 
 export default function SortSelect({ value, onChange, className }: Props) {
-  const sortOptions = [...SORT_OPTIONS, {value: 'distance', label: 'Distance'}]
+  const sortOptions = [
+    ...SORT_OPTIONS,
+    { value: 'distance', label: 'Distance' },
+  ]
   return (
     <select
       value={value}

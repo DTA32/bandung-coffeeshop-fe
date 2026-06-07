@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { ClientOnly } from '@tanstack/react-router'
-import L, {type LatLngExpression } from 'leaflet'
-import {Info, Locate, Map} from 'lucide-react'
+import L from 'leaflet'
+import type { LatLngExpression } from 'leaflet'
+import { Info, Locate, Map } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import type { SearchCafesData } from '@/lib/api/search'
 import MapView from '@/components/meet-in-the-middle/MapView'
@@ -26,33 +27,43 @@ export default function ExploreMapView({
   onPlace,
   onHideMap,
   isMobile,
-  polygon = null
+  polygon = null,
 }: Props) {
   const [focusCenter, setFocusCenter] = useState<LatLngExpression | null>(null)
   const [alert, setAlert] = useState<string>('')
 
   function findNearby() {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const { latitude, longitude } = pos.coords
-      onPlace(latitude, longitude)
-      setFocusCenter([latitude, longitude])
-    },
-    (err) => {
-      console.error('Geolocation error:', err)
-      setAlert('Unable to access your location. Please allow location access and try again.')
-      setTimeout(() => setAlert(''), 3000)
-    })
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords
+        onPlace(latitude, longitude)
+        setFocusCenter([latitude, longitude])
+      },
+      (err) => {
+        console.error('Geolocation error:', err)
+        setAlert(
+          'Unable to access your location. Please allow location access and try again.',
+        )
+        setTimeout(() => setAlert(''), 3000)
+      },
+    )
   }
-  
-  const polygonCenterLatLng = polygon ? L.geoJson(polygon).getBounds().getCenter() : null
-  const polygonCenter: LatLngExpression | null = polygonCenterLatLng ? [polygonCenterLatLng.lat, polygonCenterLatLng.lng] as LatLngExpression : null
+
+  const polygonCenterLatLng = polygon
+    ? L.geoJson(polygon).getBounds().getCenter()
+    : null
+  const polygonCenter: LatLngExpression | null = polygonCenterLatLng
+    ? ([polygonCenterLatLng.lat, polygonCenterLatLng.lng] as LatLngExpression)
+    : null
 
   const position: LatLngExpression | null = marker
     ? [marker.lat, marker.lng]
     : null
 
   return (
-    <div className={`relative h-full w-full overflow-hidden ${!isMobile && `rounded-2xl`}`}>
+    <div
+      className={`relative h-full w-full overflow-hidden ${!isMobile && `rounded-2xl`}`}
+    >
       <ClientOnly
         fallback={
           <div className="flex h-full items-center justify-center bg-grove-light/30 text-lg text-forest">
@@ -68,7 +79,15 @@ export default function ExploreMapView({
         <MapView
           markers={
             marker
-              ? [{ id: 'query', lat: marker.lat, lng: marker.lng, name: '', color: '' }]
+              ? [
+                  {
+                    id: 'query',
+                    lat: marker.lat,
+                    lng: marker.lng,
+                    name: '',
+                    color: '',
+                  },
+                ]
               : []
           }
           midpoint={null}
@@ -78,7 +97,7 @@ export default function ExploreMapView({
           onMoveMarker={(_id, lat, lng) => onPlace(lat, lng, { replace: true })}
           zoomControlPosition="topright"
           zoom={14}
-          center={polygonCenter ? polygonCenter : position ?? undefined}
+          center={polygonCenter ? polygonCenter : (position ?? undefined)}
           markerIcon={() => queryMarkerIcon}
           circleCenter={position}
           circleRadiusM={RADIUS_M}
@@ -96,7 +115,7 @@ export default function ExploreMapView({
             Hide Map
           </button>
         )}
-  
+
         <button
           onClick={findNearby}
           className="flex cursor-pointer items-center gap-2 rounded-lg bg-white px-2 py-2 text-sm text-bark shadow-md transition-colors hover:bg-white/80"

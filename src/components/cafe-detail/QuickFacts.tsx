@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import type { CafeTags } from '@/lib/api/cafe'
-import {exploreSplat} from "@/lib/explore";
-import type { Location } from "@/lib/type";
+import { exploreSplat } from '@/lib/explore'
+import type { Location } from '@/lib/type'
 
 interface QuickFactsProps {
   instagram: string | null
@@ -103,11 +103,14 @@ export default function QuickFacts({
           <span className="text-xs font-semibold text-forest">{hours}</span>
         </div>
       )}
-      {!instagram && locations.length !== 2 && tags.length === 0 && hours === '' && (
-        <div className="flex justify-center items-center h-16">
-          <span className="text-xs text-bark">No quick facts available.</span>
-        </div>
-      )}
+      {!instagram &&
+        locations.length !== 2 &&
+        tags.length === 0 &&
+        hours === '' && (
+          <div className="flex justify-center items-center h-16">
+            <span className="text-xs text-bark">No quick facts available.</span>
+          </div>
+        )}
     </div>
   )
 }
