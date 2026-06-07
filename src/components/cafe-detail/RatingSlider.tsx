@@ -29,10 +29,14 @@ export default function RatingSlider({ label, rating }: RatingSliderProps) {
 
   return (
     <div className="flex flex-col gap-2 flex-1 py-5">
-      <span className="text-xs font-semibold text-moss">{label}</span>
+      <h3 className="text-xs font-semibold text-moss">{label}</h3>
 
       {/* Track */}
-      <div className="relative h-5">
+      <div
+        role="img"
+        aria-label={`${label}: ${activeRange.name}`}
+        className="relative h-5"
+      >
         {/* Background line */}
         <div className="absolute top-1/2 left-0 right-0 h-0.5 -translate-y-1/2 bg-grove-light rounded-full" />
         {/* Active line */}

@@ -26,7 +26,7 @@ export default function CafeTitle({
       <div className="flex gap-2 min-w-fit">
         {isSubjective && (
           <div className="flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-md shrink-0">
-            <Info size={13} />
+            <Info size={13} aria-hidden="true" />
             <span>Highly subjective review</span>
           </div>
         )}

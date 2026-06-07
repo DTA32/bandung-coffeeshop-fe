@@ -14,7 +14,7 @@ export default function Footer() {
           </p>
         </div>
         <div className="flex-1 flex flex-col gap-2">
-          <h3 className="font-semibold">Quick Links</h3>
+          <h2 className="font-semibold">Quick Links</h2>
           <ul className="text-bark">
             <li>
               <Link
@@ -51,7 +51,7 @@ export default function Footer() {
           </ul>
         </div>
         <div className="flex-1 flex flex-col gap-2">
-          <h3 className="font-semibold">Contact Us</h3>
+          <h2 className="font-semibold">Contact Us</h2>
           <p className="text-bark">
             Email:{' '}
             <a

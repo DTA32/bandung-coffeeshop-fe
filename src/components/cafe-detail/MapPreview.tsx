@@ -16,6 +16,7 @@ export default function MapPreview({
   return (
     <>
       <iframe
+        title={`Map of ${cafeName}`}
         className={`bg-white rounded-xl border border-grove-light overflow-hidden shadow-sm z-10
           ${additionalClass || ''}
           ${withAlternateButton ? 'invisible md:visible' : ''}
@@ -29,8 +30,9 @@ export default function MapPreview({
           className="md:invisible absolute right-6 top-4 w-fit bg-white rounded-lg  overflow-hidden shadow-sm text-moss py-2 px-3 flex items-center gap-1 text-xs"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`Open ${cafeName} in Google Maps (opens in new tab)`}
         >
-          <Map size={12} />
+          <Map size={12} aria-hidden="true" />
           <span>Open in Maps</span>
         </a>
       )}

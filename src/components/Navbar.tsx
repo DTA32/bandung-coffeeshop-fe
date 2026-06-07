@@ -13,7 +13,7 @@ export default function Navbar() {
             className: 'bg-forest text-cream justify-center',
           }}
         >
-          <Home size={14} />
+          <Home size={14} aria-hidden="true" />
           <span>Home</span>
         </Link>
         <Link
@@ -22,7 +22,7 @@ export default function Navbar() {
             className: 'bg-forest text-cream justify-center',
           }}
         >
-          <Compass size={14} />
+          <Compass size={14} aria-hidden="true" />
           <span>Explore</span>
         </Link>
         <Link
@@ -31,7 +31,7 @@ export default function Navbar() {
             className: 'bg-forest text-cream justify-center',
           }}
         >
-          <MapPin size={14} />
+          <MapPin size={14} aria-hidden="true" />
           <span className="truncate">Meet in</span>
           <span className="truncate">the Middle</span>
         </Link>

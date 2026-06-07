@@ -36,7 +36,10 @@ export default function Pagination({
   const disabledCls = `${linkCls} cursor-default text-bark opacity-40`
 
   return (
-    <div className="flex items-center justify-center gap-1 py-8">
+    <nav
+      aria-label="Pagination"
+      className="flex items-center justify-center gap-1 py-8"
+    >
       {page > 1 ? (
         <Link
           to="."
@@ -52,7 +55,11 @@ export default function Pagination({
 
       {pages.map((p, i) =>
         p === '...' ? (
-          <span key={`ellipsis-${i}`} className="px-2 text-sm text-bark">
+          <span
+            key={`ellipsis-${i}`}
+            aria-hidden="true"
+            className="px-2 text-sm text-bark"
+          >
             …
           </span>
         ) : (
@@ -61,6 +68,7 @@ export default function Pagination({
             to="."
             search={searchForPage(p)}
             preload="intent"
+            aria-current={p === page ? 'page' : undefined}
             className={`${linkCls} ${
               p === page
                 ? 'bg-forest text-cream'
@@ -84,6 +92,6 @@ export default function Pagination({
       ) : (
         <span className={disabledCls}>Next →</span>
       )}
-    </div>
+    </nav>
   )
 }

@@ -47,11 +47,11 @@ export default function CafeListItem({
         )}
       </div>
       <div className="flex flex-col justify-center gap-1">
-        <span
-          className={`font-semibold text-forest ${smallVersion ? `text-sm` : ''}`}
+        <h3
+          className={`font-semibold text-forest m-0 ${smallVersion ? `text-sm` : ''}`}
         >
           {cafe.name}
-        </span>
+        </h3>
         {distanceStr && (
           <span
             className={`${smallVersion ? 'text-xs' : `text-sm`} text-grove`}

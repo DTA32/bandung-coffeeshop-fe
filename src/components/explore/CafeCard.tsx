@@ -36,9 +36,9 @@ export default function CafeCard({
       </div>
       <div className="flex flex-col gap-2 p-4 min-h-24">
         <div className="flex flex-col gap-1">
-          <span className="font-semibold text-forest line-clamp-1">
+          <h3 className="font-semibold text-forest line-clamp-1 m-0">
             {cafe.name}
-          </span>
+          </h3>
           {cafe.area && (
             <span className="text-sm text-bark">{cafe.area}, Bandung</span>
           )}

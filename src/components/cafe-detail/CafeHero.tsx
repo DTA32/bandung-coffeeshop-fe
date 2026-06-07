@@ -31,24 +31,27 @@ function WithImage({
         {image.map((img, index) => {
           const imageWidth = image.length > 1 ? 60 : 100
           return (
-            <figure
+            <button
               key={index}
-              className={`flex-shrink-0 relative cursor-pointer`}
-              style={{ width: imageWidth + '%' }}
+              type="button"
               onClick={() => setOpenIndex(index)}
+              aria-label={`View photos of ${name}`}
+              className="flex-shrink-0 block cursor-pointer border-none bg-transparent p-0"
+              style={{ width: imageWidth + '%' }}
             >
-              <img
-                key={index}
-                src={img.url}
-                alt={img.description}
-                className="w-full h-full object-cover"
-              />
-              {img.description && (
-                <figcaption className="absolute bottom-0 left-0 py-1 m-2 z-5 bg-black/50 text-white text-xs px-1 rounded select-none">
-                  {img.description}
-                </figcaption>
-              )}
-            </figure>
+              <figure className="relative m-0 h-full w-full">
+                <img
+                  src={img.url}
+                  alt={img.description || `Photo of ${name}`}
+                  className="w-full h-full object-cover"
+                />
+                {img.description && (
+                  <figcaption className="absolute bottom-0 left-0 py-1 m-2 z-5 bg-black/50 text-white text-xs px-1 rounded select-none">
+                    {img.description}
+                  </figcaption>
+                )}
+              </figure>
+            </button>
           )
         })}
       </div>
@@ -90,7 +93,7 @@ function WithoutImage({
           <div className="flex gap-2 min-w-fit">
             {isSubjective && (
               <div className="flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-md shrink-0">
-                <Info size={13} />
+                <Info size={13} aria-hidden="true" />
                 <span>Highly subjective review</span>
               </div>
             )}

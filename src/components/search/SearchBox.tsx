@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
 import type { QuickSearchItem } from '@/lib/api/search'
@@ -45,6 +45,7 @@ function ResultLink({
   if (item.type === 'cafe') {
     return (
       <Link
+        role="option"
         to="/cafe/$cafeId"
         params={{ cafeId: item.id }}
         onClick={onSelect}
@@ -60,6 +61,7 @@ function ResultLink({
   if (refs.length === locationTypeDepth(item.type)) {
     return (
       <Link
+        role="option"
         to="/explore/$"
         params={{ _splat: exploreSplat(refs) }}
         onClick={onSelect}
@@ -72,6 +74,7 @@ function ResultLink({
 
   return (
     <Link
+      role="option"
       to="/explore"
       search={{ query_id: item.id, query_type: item.type }}
       onClick={onSelect}
@@ -87,6 +90,7 @@ export default function SearchBox({
   initialQuery = '',
 }: SearchBoxProps) {
   const navigate = useNavigate()
+  const listboxId = useId()
   const [query, setQuery] = useState(initialQuery)
   const [results, setResults] = useState<QuickSearchItem[]>([])
   const [isOpen, setIsOpen] = useState(false)
@@ -163,7 +167,11 @@ export default function SearchBox({
   const groupOrder = Object.keys(TYPE_LABELS)
 
   const dropdown = isOpen && results.length > 0 && (
-    <div className="absolute left-0 right-0 top-full z-2000 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg">
+    <div
+      id={listboxId}
+      role="listbox"
+      className="absolute left-0 right-0 top-full z-2000 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg"
+    >
       {groupOrder.map(
         (type) =>
           grouped[type] && (
@@ -192,12 +200,17 @@ export default function SearchBox({
           ref={containerRef}
           className="relative flex gap-3 border border-grove-light bg-cream w-full px-4 items-center rounded-lg"
         >
-          <Search size={18} className="shrink-0 text-bark" />
+          <Search size={18} className="shrink-0 text-bark" aria-hidden="true" />
           <input
             type="text"
             value={query}
             onChange={(e) => handleChange(e.target.value)}
             onKeyDown={handleKeyDown}
+            role="combobox"
+            aria-label="Search cafes by name or area"
+            aria-expanded={isOpen}
+            aria-controls={listboxId}
+            aria-autocomplete="list"
             className="flex-1 bg-transparent text-sm text-forest focus:outline-none py-3"
             placeholder="Search cafe name or area..."
           />
@@ -207,7 +220,7 @@ export default function SearchBox({
           disabled
           className="flex shrink-0 cursor-not-allowed items-center gap-1.5 rounded-md bg-forest px-4 py-2 text-sm font-medium text-cream opacity-40"
         >
-          <SlidersHorizontal size={14} />
+          <SlidersHorizontal size={14} aria-hidden="true" />
           Filters
         </button>
       </div>
@@ -224,6 +237,11 @@ export default function SearchBox({
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
+        role="combobox"
+        aria-label="Search cafes by name or area"
+        aria-expanded={isOpen}
+        aria-controls={listboxId}
+        aria-autocomplete="list"
         className="flex-1 rounded-lg p-2 text-sm text-forest focus:outline-none"
         placeholder="Search cafe name or area..."
       />

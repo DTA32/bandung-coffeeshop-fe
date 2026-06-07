@@ -42,7 +42,7 @@ export default function PriceCard({ price }: PriceCardProps) {
     <div className="bg-white rounded-2xl p-5 flex flex-col gap-3.5">
       <div className="flex justify-between items-end">
         <div className="flex items-end gap-1">
-          <span className="text-base font-bold text-forest">Price Range</span>
+          <h2 className="text-base font-bold text-forest m-0">Price Range</h2>
           {price.price_range_min || price.price_range_max ? (
             <span className="text-xs text-bark">(exc. Food)</span>
           ) : null}
@@ -54,15 +54,19 @@ export default function PriceCard({ price }: PriceCardProps) {
         ) : null}
       </div>
       <hr className="border-t border-grove-light m-0" />
-      {rows.map(
-        ({ label, value }) =>
-          value !== null && (
-            <div key={label} className="flex justify-between items-center">
-              <span className="text-xs text-bark">{label}</span>
-              <span className="text-xs font-semibold text-forest">{value}</span>
-            </div>
-          ),
-      )}
+      <dl className="flex flex-col gap-3.5 m-0">
+        {rows.map(
+          ({ label, value }) =>
+            value !== null && (
+              <div key={label} className="flex justify-between items-center">
+                <dt className="text-xs text-bark">{label}</dt>
+                <dd className="text-xs font-semibold text-forest m-0">
+                  {value}
+                </dd>
+              </div>
+            ),
+        )}
+      </dl>
       {rows.every(({ value }) => value === null) && (
         <div className="flex justify-center items-center h-16 w-full">
           <p className="text-sm leading-[1.7] m-0 text-bark">
@@ -75,7 +79,7 @@ export default function PriceCard({ price }: PriceCardProps) {
         <div
           className={`flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5 self-start ${PRICE_RANK_COLORS[price.rank.type] || 'bg-gray-100 text-gray-600'}`}
         >
-          <Tag size={12} />
+          <Tag size={12} aria-hidden="true" />
           <span className="text-xs font-semibold">{price.rank.label}</span>
         </div>
       )}

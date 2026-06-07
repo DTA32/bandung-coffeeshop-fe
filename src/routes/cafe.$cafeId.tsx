@@ -33,7 +33,7 @@ export const Route = createFileRoute('/cafe/$cafeId')({
     return { cafe, review, nearbyCafes }
   },
   errorComponent: () => (
-    <div className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
+    <main className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Failed to load cafe detail.</p>
       <p className="text-lg">
         Uh oh, something went wrong. Please try again later.
@@ -44,10 +44,10 @@ export const Route = createFileRoute('/cafe/$cafeId')({
       >
         Back to home
       </Link>
-    </div>
+    </main>
   ),
   notFoundComponent: () => (
-    <div className="flex flex-1 flex-col items-center justify-center gap-4 py-32 text-forest">
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 py-32 text-forest">
       <p className="text-2xl font-semibold">Cafe not found</p>
       <p className="mt-2 text-bark">
         This cafe doesn't exist or already deleted.
@@ -58,7 +58,7 @@ export const Route = createFileRoute('/cafe/$cafeId')({
       >
         Back to home
       </Link>
-    </div>
+    </main>
   ),
   component: CafeDetailPage,
 })
@@ -114,7 +114,10 @@ function Widgets(): JSX.Element {
         <RatingsCard ratings={review.ratings} />
         <NearbyCafe cafes={nearbyCafes.cafes} />
       </div>
-      <div className="flex flex-col gap-6 w-full md:w-80 lg:w-100 shrink-0">
+      <aside
+        aria-label="Cafe details"
+        className="flex flex-col gap-6 w-full md:w-80 lg:w-100 shrink-0"
+      >
         <QuickFacts
           instagram={cafe.instagram}
           locations={cafe.locations}
@@ -131,7 +134,7 @@ function Widgets(): JSX.Element {
           <Disclaimer />
           <UpdatedAt updated_at={review.updated_at} />
         </div>
-      </div>
+      </aside>
     </div>
   )
 }
@@ -153,7 +156,11 @@ function CafeDetailPage() {
         <div className="rounded-2xl bg-red-50 p-4 mx-6 md:mx-16 mt-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <TriangleAlert size={20} className="text-red-400" />
+              <TriangleAlert
+                size={20}
+                className="text-red-400"
+                aria-hidden="true"
+              />
             </div>
             <div className="flex flex-col ml-3 text-red-800">
               <p className="font-medium">This cafe is {cafe.status}.</p>

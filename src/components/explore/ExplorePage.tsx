@@ -18,7 +18,7 @@ import type { LocationData } from '@/lib/api/location'
 // Shared error UI for both explore routes.
 export function ExploreError() {
   return (
-    <div className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
+    <main className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Failed to load cafes.</p>
       <p className="text-lg">
         Uh oh, something went wrong while fetching the cafes. Please try again
@@ -30,7 +30,7 @@ export function ExploreError() {
       >
         Back to home
       </Link>
-    </div>
+    </main>
   )
 }
 
@@ -38,7 +38,7 @@ export function ExploreError() {
 // path depth) — distinct from a generic fetch failure.
 export function ExploreNotFound() {
   return (
-    <div className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
+    <main className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Not found.</p>
       <p className="text-lg">
         We couldn&apos;t find what you've requested. Try searching for a cafe,
@@ -50,7 +50,7 @@ export function ExploreNotFound() {
       >
         Browse all cafes
       </Link>
-    </div>
+    </main>
   )
 }
 
@@ -143,13 +143,14 @@ export default function ExplorePage({
                 view: mapView ? undefined : 'list',
               })
             }
+            aria-pressed={mapView}
             className={`flex cursor-pointer items-center gap-1.5 text-sm rounded-lg transition ${
               mobile
                 ? `px-3 py-1.5 border border-grove-light ${mapView ? 'bg-forest text-cream' : 'bg-white text-forest hover:bg-grove-light'}`
                 : 'px-4 py-2.5 bg-white text-forest hover:bg-grove-light'
             }`}
           >
-            <Map size={14} />
+            <Map size={14} aria-hidden="true" />
             {mobile ? 'Map' : 'Show Map'}
           </button>
         )}
@@ -162,16 +163,18 @@ export default function ExplorePage({
         >
           <button
             onClick={() => goTo({ view: 'grid' })}
+            aria-pressed={view === 'grid'}
             className={toggleBtnClass(view === 'grid')}
           >
-            <LayoutGrid size={14} />
+            <LayoutGrid size={14} aria-hidden="true" />
             Grid
           </button>
           <button
             onClick={() => goTo({ view: 'list' })}
+            aria-pressed={view === 'list'}
             className={toggleBtnClass(view === 'list')}
           >
-            <List size={14} />
+            <List size={14} aria-hidden="true" />
             List
           </button>
         </div>
@@ -211,18 +214,21 @@ export default function ExplorePage({
           <div className="mb-6 flex items-center justify-between gap-2 md:text-center">
             {!isMobile && viewControls(isMobile)}
 
-            <span className="text-sm text-bark">
+            <h2 className="text-sm text-bark">
               {data.total} {data.total === 1 ? 'cafe' : 'cafes'} found
               <span className="font-bold">
                 {data.formatted_location_name
                   ? ` ${data.formatted_location_name}`
                   : ''}
               </span>
-            </span>
+            </h2>
 
             <div className="flex items-center gap-2 shrink-0">
-              <span className="text-sm text-bark">Sort by:</span>
+              <label htmlFor="sort-select" className="text-sm text-bark">
+                Sort by:
+              </label>
               <select
+                id="sort-select"
                 value={activeSort}
                 onChange={(e) => goTo({ sort: e.target.value, page: 1 })}
                 className="cursor-pointer rounded-md py-1.5 text-sm text-grove focus:outline-none w-fit field-sizing-content pe-2"

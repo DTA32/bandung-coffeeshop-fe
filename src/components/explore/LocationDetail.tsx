@@ -71,7 +71,7 @@ export default function LocationDetail({
       )}
       {location.description && (
         <div className={`${isMobile && `px-6 bg-white text-sm py-4`}`}>
-          {isMobile && <h2 className="text-base font-semibold mb-2">About</h2>}
+          <h2 className="text-base font-semibold mb-2">About</h2>
           <p className="text-gray-600 whitespace-pre-line">
             {location.description}
           </p>

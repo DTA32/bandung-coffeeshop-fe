@@ -61,6 +61,7 @@ function CafeImageGalleryInternal({
     <div
       role="dialog"
       aria-modal="true"
+      aria-label="Image gallery"
       className="fixed inset-0 z-[3000] flex flex-col bg-black/90"
       onClick={onClose}
     >

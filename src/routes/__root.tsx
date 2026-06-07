@@ -31,8 +31,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className={'m-0 bg-cream flex flex-col min-h-screen'}>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-forest focus:px-4 focus:py-2 focus:text-cream"
+        >
+          Skip to main content
+        </a>
         <Header />
-        {children}
+        <div id="main" className="contents">
+          {children}
+        </div>
         {import.meta.env.PROD ? null : (
           <TanStackDevtools
             config={{ position: 'bottom-right' }}

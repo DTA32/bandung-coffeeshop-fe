@@ -21,9 +21,12 @@ export default function ReviewCard({ content, visited_at }: ReviewCardProps) {
         <h2 className="text-base font-bold  m-0">Review</h2>
         {visited_at_formatted && (
           <div className="flex flex-row items-center gap-1 text-bark">
-            <CalendarDays size={14} className="shrink-0" />
+            <CalendarDays size={14} className="shrink-0" aria-hidden="true" />
             <p className="text-xs leading-relaxed m-0">
-              Visited {visited_at_formatted}
+              Visited{' '}
+              <time dateTime={visited_at ?? undefined}>
+                {visited_at_formatted}
+              </time>
             </p>
           </div>
         )}
