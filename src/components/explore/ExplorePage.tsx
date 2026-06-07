@@ -183,7 +183,7 @@ export default function ExplorePage({
   }
 
   return (
-    <main className="flex flex-col bg-cream flex-1">
+    <main className={`flex flex-col bg-cream flex-1 transition-opacity ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
       <SearchBox variant="srp" initialQuery={data.location_name ?? ''} />
       {isMobile && viewControls(isMobile)}
       {isMobile && (
@@ -242,9 +242,7 @@ export default function ExplorePage({
             </div>
           </div>
 
-          <div
-            className={`transition-opacity ${isLoading ? 'opacity-50' : 'opacity-100'}`}
-          >
+          <div>
             {data.cafes.length === 0 ? (
               <div className="flex h-128 items-center justify-center text-lg text-bark">
                 No cafes found.

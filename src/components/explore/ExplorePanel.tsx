@@ -57,9 +57,7 @@ export default function ExplorePanel({
   if (location && location.type !== 'poi') {
     return (
       <aside
-        className={
-          isMobile ? 'w-full h-fit' : 'w-full max-w-2xl h-fit md:h-160'
-        }
+        className={isMobile ? 'w-full h-fit' : 'w-full max-w-2xl h-fit'}
       >
         <LocationDetail location={location} isMobile={isMobile} />
       </aside>
