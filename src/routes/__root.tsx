@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar'
 import { getUserAgentInfo } from '@/lib/helper'
 
 import appCss from '@/styles.css?url'
-import Footer from "@/components/Footer";
+import Footer from '@/components/Footer'
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
