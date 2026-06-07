@@ -1,9 +1,6 @@
-import type {
-  ExploreSearch,
-  Location,
-  LocationType,
-  SearchCafesParams,
-} from '@/lib/api/search'
+import type { ExploreSearch, SearchCafesParams } from '@/lib/api/search'
+
+import type { Location, LocationType } from '@/lib/type'
 
 // Path depth → location type. Index 0 = first path segment.
 //   /explore/<district>             → depth 1 → district
@@ -18,7 +15,8 @@ export function parseExploreSplat(
   splat: string | undefined,
 ): { query_id: string; query_type: DepthType } | null {
   const segments = (splat ?? '').split('/').filter(Boolean)
-  if (segments.length < 1 || segments.length > LOCATION_DEPTH.length) return null
+  if (segments.length < 1 || segments.length > LOCATION_DEPTH.length)
+    return null
   return {
     query_id: segments[segments.length - 1],
     query_type: LOCATION_DEPTH[segments.length - 1],
@@ -71,7 +69,11 @@ export function validateExploreSearch(
         ? true
         : undefined,
     order:
-      search.order === 'asc' ? 'asc' : search.order === 'desc' ? 'desc' : undefined,
+      search.order === 'asc'
+        ? 'asc'
+        : search.order === 'desc'
+          ? 'desc'
+          : undefined,
   }
 }
 

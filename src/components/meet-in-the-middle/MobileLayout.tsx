@@ -157,11 +157,7 @@ export default function MobileLayout({
               </div>
               <div className="flex flex-col gap-2">
                 {results.cafes.map((cafe) => (
-                  <CafeListItem
-                    key={cafe.id}
-                    cafe={cafe}
-                    smallVersion={true}
-                  />
+                  <CafeListItem key={cafe.id} cafe={cafe} smallVersion={true} />
                 ))}
               </div>
             </>

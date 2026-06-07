@@ -13,10 +13,9 @@ import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
 import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
 import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
+import { GeoJSON } from 'react-leaflet/GeoJSON'
 
-const DEFAULT_CENTER: LatLngExpression = [
-  -6.901557664008111, 107.6177579567244,
-]
+const DEFAULT_CENTER: LatLngExpression = [-6.901557664008111, 107.6177579567244]
 
 function ClickHandler({
   onAdd,
@@ -53,6 +52,7 @@ type Props = {
   circleRadiusM?: number
   // Imperatively recenters the map when this changes.
   focusCenter?: LatLngExpression | null
+  polygon?: any | null
 }
 
 export default function MapView({
@@ -69,6 +69,7 @@ export default function MapView({
   circleCenter,
   circleRadiusM,
   focusCenter = null,
+  polygon = null,
 }: Props) {
   const navigate = useNavigate()
   const router = useRouter()
@@ -90,9 +91,7 @@ export default function MapView({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {zoomControlPosition && (
-        <ZoomControl position={zoomControlPosition} />
-      )}
+      {zoomControlPosition && <ZoomControl position={zoomControlPosition} />}
       <ClickHandler onAdd={onAddMarker} />
       <MapController center={focusCenter} />
       {markers.map((m) => (
@@ -147,6 +146,18 @@ export default function MapView({
             </Tooltip>
           </Marker>
         ))}
+      {polygon && (
+        <GeoJSON
+          key={JSON.stringify(polygon)}
+          data={polygon}
+          style={{
+            color: '#2A3D22',
+            fillColor: '#2A3D22',
+            fillOpacity: 0.1,
+            weight: 0.5,
+          }}
+        />
+      )}
     </MapContainer>
   )
 }

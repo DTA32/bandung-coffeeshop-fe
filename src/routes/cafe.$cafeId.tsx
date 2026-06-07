@@ -17,7 +17,7 @@ import PriceCard from '@/components/cafe-detail/PriceCard'
 import UpdatedAt from '@/components/cafe-detail/UpdatedAt'
 import NearbyCafe from '@/components/cafe-detail/NearbyCafe'
 import { TriangleAlert } from 'lucide-react'
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
 export const Route = createFileRoute('/cafe/$cafeId')({
   loader: async ({ params }) => {
