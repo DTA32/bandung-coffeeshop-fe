@@ -18,7 +18,7 @@ import type { LocationData } from '@/lib/api/location'
 // Shared error UI for both explore routes.
 export function ExploreError() {
   return (
-    <div className="flex flex-col h-screen md:h-128 items-center gap-4 justify-center text-xl text-moss-dark text-center">
+    <div className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Failed to load cafes.</p>
       <p className="text-lg">
         Uh oh, something went wrong while fetching the cafes. Please try again
@@ -38,7 +38,7 @@ export function ExploreError() {
 // path depth) — distinct from a generic fetch failure.
 export function ExploreNotFound() {
   return (
-    <div className="flex flex-col h-screen md:h-128 items-center gap-4 justify-center text-xl text-moss-dark text-center">
+    <div className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Not found.</p>
       <p className="text-lg">
         We couldn&apos;t find what you've requested. Try searching for a cafe,
@@ -195,7 +195,7 @@ export default function ExplorePage({
         />
       )}
 
-      <div className="mx-auto w-full px-6 md:px-16 py-6 h-full flex gap-6 md:justify-center flex-col lg:flex-row min-h-screen md:min-h-0">
+      <div className="mx-auto flex-1 w-full px-6 md:px-16 py-6 flex gap-6 md:justify-center flex-col lg:flex-row min-h-[85vh]">
         {!isMobile && (
           <ExplorePanel
             mapView={mapView}

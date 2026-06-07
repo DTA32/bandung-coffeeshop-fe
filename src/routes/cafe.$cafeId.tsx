@@ -33,7 +33,7 @@ export const Route = createFileRoute('/cafe/$cafeId')({
     return { cafe, review, nearbyCafes }
   },
   errorComponent: () => (
-    <div className="flex flex-col h-screen md:h-128 items-center gap-4 justify-center text-xl text-moss-dark text-center">
+    <div className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
       <p>Failed to load cafe detail.</p>
       <p className="text-lg">
         Uh oh, something went wrong. Please try again later.
@@ -47,7 +47,7 @@ export const Route = createFileRoute('/cafe/$cafeId')({
     </div>
   ),
   notFoundComponent: () => (
-    <div className="flex flex-col items-center justify-center gap-4 py-32 text-forest">
+    <div className="flex flex-1 flex-col items-center justify-center gap-4 py-32 text-forest">
       <p className="text-2xl font-semibold">Cafe not found</p>
       <p className="mt-2 text-bark">
         This cafe doesn't exist or already deleted.
@@ -100,7 +100,7 @@ function Widgets(): JSX.Element {
     )
   }
   return (
-    <div className="flex flex-col md:flex-row gap-x-8 gap-y-4 mx-6 md:mx-16 py-9">
+    <div className="flex flex-col md:flex-row gap-x-8 gap-y-4 mx-6 md:mx-16 py-8">
       <div className="flex flex-col gap-6 flex-1 min-w-0">
         {cafe.images.length > 0 && (
           <CafeTitle

@@ -30,7 +30,7 @@ export const Route = createFileRoute('/meet-in-the-middle')({
     return (
       <ClientOnly
         fallback={
-          <div className="flex flex-1 h-screen md:h-128 items-center justify-center text-lg text-forest">
+          <div className="flex flex-1 items-center justify-center text-lg text-forest">
             Loading map...
           </div>
         }
