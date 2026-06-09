@@ -28,6 +28,10 @@ export default function CafeListItem({
   } else if (cafe.price_range) {
     formattedRemark = cafe.price_range
   }
+  let description = cafe.description
+  if (cafe.area) {
+    description = cafe.area + ', Bandung'
+  }
   return (
     <Link
       to="/cafe/$cafeId"
@@ -59,9 +63,11 @@ export default function CafeListItem({
             {distanceStr} away
           </span>
         )}
-        {!distanceStr && cafe.area && (
-          <span className={`${smallVersion ? 'text-xs' : `text-sm`} text-bark`}>
-            {cafe.area}, Bandung
+        {!distanceStr && description && (
+          <span
+            className={`${smallVersion ? 'text-xs' : `text-sm`} text-bark line-clamp-1`}
+          >
+            {description}
           </span>
         )}
         {formattedRemark && (

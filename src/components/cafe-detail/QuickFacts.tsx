@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import type { CafeTags } from '@/lib/api/cafe'
+import { LOCATION_SHORT_LABELS } from '@/lib/constants'
 import { exploreSplat } from '@/lib/explore'
 import type { Location } from '@/lib/type'
 
@@ -9,6 +10,31 @@ interface QuickFactsProps {
   tags: CafeTags[]
   openHour: string | null
   closeHour: string | null
+}
+
+function getLastLocation(locations: Location[]) {
+  // only supports district and area for now
+  if (locations.length > 2 || locations.length < 1) {
+    return null
+  }
+  const lastLocation = locations.at(-1)
+  if (lastLocation === undefined) return null
+  return (
+    <div className="flex justify-between items-center">
+      <dt className="text-xs text-bark">
+        {LOCATION_SHORT_LABELS[lastLocation.type]}
+      </dt>
+      <dd className="text-xs font-semibold text-forest m-0">
+        <Link
+          to={`/explore/$`}
+          params={{ _splat: exploreSplat(locations) }}
+          className="hover:underline"
+        >
+          {lastLocation.name}
+        </Link>
+      </dd>
+    </div>
+  )
 }
 
 export default function QuickFacts({
@@ -30,6 +56,7 @@ export default function QuickFacts({
   } else if (closeHour !== null) {
     hours = `Closes at ${closeHour}`
   }
+  const lastLocationEl = getLastLocation(locations)
 
   return (
     <div className="bg-white rounded-2xl p-5 flex flex-col gap-3">
@@ -50,20 +77,7 @@ export default function QuickFacts({
             </dd>
           </div>
         )}
-        {locations.length == 2 && (
-          <div className="flex justify-between items-center">
-            <dt className="text-xs text-bark">Area</dt>
-            <dd className="text-xs font-semibold text-forest m-0">
-              <Link
-                to={`/explore/$`}
-                params={{ _splat: exploreSplat(locations) }}
-                className="hover:underline"
-              >
-                {locations[1].name}
-              </Link>
-            </dd>
-          </div>
-        )}
+        {lastLocationEl}
         {tags.length > 0 && (
           <div className="flex justify-between items-start gap-2">
             <dt className="text-xs text-bark">Tags</dt>
@@ -113,7 +127,7 @@ export default function QuickFacts({
         )}
       </dl>
       {!instagram &&
-        locations.length !== 2 &&
+        lastLocationEl === null &&
         tags.length === 0 &&
         hours === '' && (
           <div className="flex justify-center items-center h-16">

@@ -16,6 +16,10 @@ export default function CafeCard({
   } else if (cafe.price_range) {
     formattedRemark = cafe.price_range
   }
+  let description = cafe.description
+  if (cafe.area) {
+    description = cafe.area + ', Bandung'
+  }
   return (
     <Link
       to="/cafe/$cafeId"
@@ -39,9 +43,7 @@ export default function CafeCard({
           <h3 className="font-semibold text-forest line-clamp-1 m-0">
             {cafe.name}
           </h3>
-          {cafe.area && (
-            <span className="text-sm text-bark">{cafe.area}, Bandung</span>
-          )}
+          <span className="text-sm text-bark line-clamp-1">{description}</span>
         </div>
         {formattedRemark && (
           <span className="text-xs text-bark line-clamp-1">

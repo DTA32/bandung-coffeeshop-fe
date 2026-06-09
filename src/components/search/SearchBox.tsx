@@ -3,19 +3,13 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
 import type { QuickSearchItem } from '@/lib/api/search'
 import { quickSearch } from '@/lib/api/search'
+import { LOCATION_SHORT_LABELS } from '@/lib/constants'
 import { exploreSplat, locationTypeDepth } from '@/lib/explore'
 import type { Location } from '@/lib/type'
 
 interface SearchBoxProps {
   variant?: 'hero' | 'srp'
   initialQuery?: string
-}
-
-const TYPE_LABELS: Record<string, string> = {
-  cafe: 'Cafe',
-  poi: 'POI',
-  area: 'Area',
-  district: 'District',
 }
 
 const TYPE_ICONS: Record<string, React.ReactNode> = {
@@ -164,7 +158,7 @@ export default function SearchBox({
     },
     {},
   )
-  const groupOrder = Object.keys(TYPE_LABELS)
+  const groupOrder = Object.keys(LOCATION_SHORT_LABELS)
 
   const dropdown = isOpen && results.length > 0 && (
     <div
@@ -177,7 +171,7 @@ export default function SearchBox({
           grouped[type] && (
             <div key={type}>
               <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
-                {TYPE_LABELS[type]}
+                {LOCATION_SHORT_LABELS[type]}
               </div>
               {grouped[type].map((item) => (
                 <ResultLink key={item.id} item={item} onSelect={dismiss}>

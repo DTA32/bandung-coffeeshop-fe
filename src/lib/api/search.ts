@@ -15,6 +15,7 @@ export interface QuickSearchItem {
 export interface CafeListing {
   id: string
   name: string
+  description: string
   thumbnail: string | null
   area: string | null
   price_range: string | null
