@@ -14,6 +14,7 @@ type Props = {
   results: SearchCafesData
   onPlace: (lat: number, lng: number, opts?: { replace?: boolean }) => void
   onHideMap: () => void
+  onExpandMap: () => void
 }
 
 export default function ExplorePanel({
@@ -24,6 +25,7 @@ export default function ExplorePanel({
   results,
   onPlace,
   onHideMap,
+  onExpandMap,
 }: Props) {
   if (mapView) {
     const polygon = location?.polygon ? location.polygon : null
@@ -38,6 +40,7 @@ export default function ExplorePanel({
           onHideMap={onHideMap}
           isMobile={isMobile}
           polygon={polygon}
+          showMap={location?.show_map ?? false}
         />
         {polygon && (
           <div className="flex gap-2 px-4 text-xs text-moss-dark">
@@ -57,7 +60,12 @@ export default function ExplorePanel({
   if (location && location.type !== 'poi') {
     return (
       <aside className={isMobile ? 'w-full h-fit' : 'w-full max-w-2xl h-fit'}>
-        <LocationDetail location={location} isMobile={isMobile} />
+        <LocationDetail
+          location={location}
+          isMobile={isMobile}
+          searchResult={results}
+          onExpandMap={onExpandMap}
+        />
       </aside>
     )
   }

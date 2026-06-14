@@ -127,15 +127,19 @@ export default function ExplorePage({
     const toggleBtnClass = (active: boolean) =>
       `${toggleBtnBase} ${active ? 'bg-forest text-cream' : 'bg-transparent text-forest hover:bg-grove-light'}`
 
+    const showMapToggle = location?.show_map
+      ? mobile && mapView
+      : mobile || !mapView
+
     return (
       <div
         className={
           mobile
-            ? 'flex items-center gap-2 w-full bg-white justify-between flex-row-reverse px-4 py-2 border-b border-grove-light/50'
+            ? `flex items-center gap-2 w-full bg-white justify-between ${showMapToggle && 'flex-row-reverse'} px-4 py-2 border-b border-grove-light/50`
             : 'flex items-center gap-2'
         }
       >
-        {(mobile || !mapView) && (
+        {showMapToggle && (
           <button
             onClick={() =>
               goTo({
@@ -197,6 +201,7 @@ export default function ExplorePage({
           results={data}
           onPlace={placeMarker}
           onHideMap={() => goTo({ map_view: undefined, view: undefined })}
+          onExpandMap={() => goTo({ map_view: true, view: 'list' })}
         />
       )}
 
@@ -210,6 +215,7 @@ export default function ExplorePage({
             results={data}
             onPlace={placeMarker}
             onHideMap={() => goTo({ map_view: undefined, view: undefined })}
+            onExpandMap={() => goTo({ map_view: true, view: 'list' })}
           />
         )}
         <div className="flex flex-col w-full max-w-screen-2xl">

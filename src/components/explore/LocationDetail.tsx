@@ -2,6 +2,9 @@ import type { LocationData } from '@/lib/api/location'
 import { Link } from '@tanstack/react-router'
 import type { Location } from '@/lib/type'
 import { exploreSplat } from '@/lib/explore'
+import LocationHero from '@/components/explore/LocationHero'
+import WelcomeHeading from '@/components/explore/WelcomeHeading'
+import type { SearchCafesData } from '@/lib/api/search'
 
 const locationTypeMapping: Record<string, string> = {
   area: 'Area',
@@ -11,9 +14,13 @@ const locationTypeMapping: Record<string, string> = {
 export default function LocationDetail({
   location,
   isMobile,
+  searchResult,
+  onExpandMap,
 }: {
   location: LocationData
   isMobile: boolean
+  searchResult: SearchCafesData | null
+  onExpandMap: () => void
 }) {
   const descendantName =
     location.descendants &&
@@ -30,44 +37,14 @@ export default function LocationDetail({
   const refs = [...location.ancestors, currentLocation]
   return (
     <div className="flex flex-col gap-4">
-      <div
-        className={`${isMobile ? `h-50` : `h-60`} overflow-scroll flex gap-2 w-full bg-grove-light relative`}
-      >
-        {location.images?.map((img, index) => {
-          return (
-            <figure key={index} className={`flex-shrink-0 relative w-full`}>
-              <img
-                key={index}
-                src={img.url}
-                alt={img.description}
-                className="w-full h-full object-cover"
-              />
-              {img.description && (
-                <figcaption className="absolute bottom-0 left-0 py-1 m-2 z-5 bg-black/50 text-white text-xs px-1 rounded select-none">
-                  {img.description}
-                </figcaption>
-              )}
-            </figure>
-          )
-        })}
-        {isMobile && (
-          <div className="absolute left-0 bottom-0 text-xl font-bold text-white bg-linear-to-t from-black/70 to-transparent w-full min-h-32 flex items-end px-6 py-3">
-            <h1 className="">
-              {location.show_welcome_text && (
-                <span className="font-normal">Welcome to&nbsp;</span>
-              )}
-              {location.name}
-            </h1>
-          </div>
-        )}
-      </div>
+      <LocationHero
+        location={location}
+        isMobile={isMobile}
+        searchResult={searchResult}
+        onExpandMap={onExpandMap}
+      />
       {!isMobile && (
-        <h1 className="text-2xl font-bold">
-          {location.show_welcome_text && (
-            <span className="font-normal">Welcome to&nbsp;</span>
-          )}
-          {location.name}
-        </h1>
+        <WelcomeHeading location={location} className="text-2xl font-bold" />
       )}
       {location.description && (
         <div className={`${isMobile && `px-6 bg-white text-sm py-4`}`}>

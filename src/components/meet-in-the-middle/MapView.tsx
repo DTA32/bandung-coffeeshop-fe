@@ -40,8 +40,8 @@ type Props = {
   midpoint: LatLngExpression | null
   results: SearchCafesData | null
   resultsRadiusKm: number
-  onAddMarker: (lat: number, lng: number) => void
-  onMoveMarker: (id: string, lat: number, lng: number) => void
+  onAddMarker?: (lat: number, lng: number) => void
+  onMoveMarker?: (id: string, lat: number, lng: number) => void
   zoomControlPosition?: ControlPosition
   center?: LatLngExpression
   zoom?: number
@@ -53,6 +53,9 @@ type Props = {
   // Imperatively recenters the map when this changes.
   focusCenter?: LatLngExpression | null
   polygon?: any | null
+  // When false, disables all map interactions (pan/zoom/click) — used to render
+  // a static preview that an overlay turns into a single click target.
+  interactive?: boolean
 }
 
 export default function MapView({
@@ -70,6 +73,7 @@ export default function MapView({
   circleRadiusM,
   focusCenter = null,
   polygon = null,
+  interactive = true,
 }: Props) {
   const navigate = useNavigate()
   const router = useRouter()
@@ -86,28 +90,35 @@ export default function MapView({
       center={center}
       zoom={zoom}
       zoomControl={false}
+      dragging={interactive}
+      scrollWheelZoom={interactive}
+      doubleClickZoom={interactive}
+      touchZoom={interactive}
+      boxZoom={interactive}
+      keyboard={interactive}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {zoomControlPosition && <ZoomControl position={zoomControlPosition} />}
-      <ClickHandler onAdd={onAddMarker} />
+      {interactive && onAddMarker && <ClickHandler onAdd={onAddMarker} />}
       <MapController center={focusCenter} />
-      {markers.map((m) => (
-        <Marker
-          key={m.id}
-          position={[m.lat, m.lng]}
-          icon={markerIcon ? markerIcon(m) : userIcon(m.color, m.name)}
-          draggable
-          eventHandlers={{
-            dragend: (e) => {
-              const ll = e.target.getLatLng()
-              onMoveMarker(m.id, ll.lat, ll.lng)
-            },
-          }}
-        />
-      ))}
+      {onMoveMarker &&
+        markers.map((m) => (
+          <Marker
+            key={m.id}
+            position={[m.lat, m.lng]}
+            icon={markerIcon ? markerIcon(m) : userIcon(m.color, m.name)}
+            draggable
+            eventHandlers={{
+              dragend: (e) => {
+                const ll = e.target.getLatLng()
+                onMoveMarker(m.id, ll.lat, ll.lng)
+              },
+            }}
+          />
+        ))}
       {midpoint && <Marker position={midpoint} icon={midpointIcon} />}
       {circleAt && (
         <Circle

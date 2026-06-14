@@ -19,6 +19,9 @@ type Props = {
   onHideMap: () => void
   isMobile: boolean
   polygon?: any | null
+  // When the location renders a minimized map preview, hiding returns to that
+  // preview rather than removing the map — so the control reads "Minimize Map".
+  showMap?: boolean
 }
 
 export default function ExploreMapView({
@@ -28,6 +31,7 @@ export default function ExploreMapView({
   onHideMap,
   isMobile,
   polygon = null,
+  showMap = false,
 }: Props) {
   const [focusCenter, setFocusCenter] = useState<LatLngExpression | null>(null)
   const [alert, setAlert] = useState<string>('')
@@ -112,13 +116,13 @@ export default function ExploreMapView({
             className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-forest px-3.5 py-2 text-sm text-cream shadow-md transition-colors hover:bg-moss w-fit"
           >
             <Map size={14} />
-            Hide Map
+            {showMap ? 'Minimize' : 'Hide Map'}
           </button>
         )}
 
         <button
           onClick={findNearby}
-          className="flex cursor-pointer items-center gap-2 rounded-lg bg-white px-2 py-2 text-sm text-bark shadow-md transition-colors hover:bg-white/80"
+          className="flex cursor-pointer items-center gap-2 rounded-lg bg-white px-2 py-2 text-sm text-bark shadow-md transition-colors hover:bg-white/80 w-fit"
         >
           <Locate size={14} />
           Find Nearby
