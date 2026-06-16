@@ -134,8 +134,7 @@ function About() {
                 href={'https://maps.app.goo.gl/jtm8g1GSRova8rKQA'}
               >
                 for hangout
-              </a>
-              , which are the source of the reviews and ratings on this website.
+              </a>.
               So unlike other websites that just copy-paste reviews from Google
               Maps or taking it illegally from someone else&apos;s pay-to-view
               database 👀, I actually visited the cafes and wrote the reviews
@@ -146,7 +145,7 @@ function About() {
                 src="https://bdgcafe-dev-assets.dta32.my.id/collage.jpeg"
                 alt="Collage of my experiences in cafes"
                 width={240}
-                className="rounded-lg border border-grove-light shadow-md"
+                className="rounded-lg border border-grove-light shadow-md mt-2"
               />
               <figcaption className="text-sm text-center text-bark w-96">
                 A collage of my experiences in cafés around Bandung. From quiet
@@ -164,10 +163,10 @@ function About() {
             a café that deserves a spot, or noticed something wrong? I&apos;d
             love to hear from you at{' '}
             <a
-              href="mailto:contact@mraditya.my.id"
+              href="mailto:contact@bdgcafe.com"
               className="font-medium underline underline-offset-2"
             >
-              contact@mraditya.my.id
+              contact@bdgcafe.com
             </a>
             &nbsp;or leave me a message on&nbsp;
             <a
