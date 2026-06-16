@@ -8,8 +8,7 @@ import 'leaflet/dist/leaflet.css'
 import type { SearchCafesData } from '@/lib/api/search'
 import MapView from '@/components/meet-in-the-middle/MapView'
 import { queryMarkerIcon } from '@/components/meet-in-the-middle/mapIcons'
-
-const RADIUS_M = 1500
+import type { GeoJsonObject } from 'geojson'
 
 type MapMarker = { lat: number; lng: number }
 
@@ -19,7 +18,7 @@ type Props = {
   onPlace: (lat: number, lng: number, opts?: { replace?: boolean }) => void
   onHideMap: () => void
   isMobile: boolean
-  polygon?: any | null
+  polygon?: GeoJsonObject | null
   // When the location renders a minimized map preview, hiding returns to that
   // preview rather than removing the map — so the control reads "Minimize Map".
   showMap?: boolean
@@ -53,16 +52,21 @@ export default function ExploreMapView({
     )
   }
 
-  const polygonCenterLatLng = polygon
-    ? L.geoJson(polygon).getBounds().getCenter()
-    : null
-  const polygonCenter: LatLngExpression | null = polygonCenterLatLng
-    ? ([polygonCenterLatLng.lat, polygonCenterLatLng.lng] as LatLngExpression)
+  // A POI search returns a Point geometry; an area search returns a polygon.
+  const isPointPolygon = polygon?.type === 'Point'
+
+  const geoCenter = polygon ? L.geoJson(polygon).getBounds().getCenter() : null
+  const polygonCenter: LatLngExpression | null = geoCenter
+    ? [geoCenter.lat, geoCenter.lng]
     : null
 
   const position: LatLngExpression | null = marker
     ? [marker.lat, marker.lng]
-    : null
+    : isPointPolygon
+      ? polygonCenter
+      : null
+
+  const radiusM = marker ? 1500 : position ? 2000 : 0
 
   return (
     <div
@@ -101,12 +105,12 @@ export default function ExploreMapView({
           onMoveMarker={(_id, lat, lng) => onPlace(lat, lng, { replace: true })}
           zoomControlPosition="topright"
           zoom={14}
-          center={polygonCenter ? polygonCenter : (position ?? undefined)}
+          center={polygonCenter ?? position ?? undefined}
           markerIcon={() => queryMarkerIcon}
           circleCenter={position}
-          circleRadiusM={RADIUS_M}
+          circleRadiusM={radiusM}
           focusCenter={focusCenter}
-          polygon={polygon}
+          polygon={polygon && !isPointPolygon ? polygon : undefined}
         />
       </ClientOnly>
       <div className="flex flex-col absolute left-4 top-4 z-1000 gap-2">
