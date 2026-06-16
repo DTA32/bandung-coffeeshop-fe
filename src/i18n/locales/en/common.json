@@ -27,7 +27,8 @@
     "heroSubtitle": "With honest reviews and real scores, BDGCafé helps you seek your next stop for working, relaxing, hangout, and everything in between.",
     "featuredCafes": "Featured Cafes",
     "noFeaturedCafes": "No featured cafes at the moment.",
-    "exploreByDistrict": "Explore by district"
+    "exploreByDistrict": "Explore by district",
+    "districtUnavailable": "District is unavailable at the moment. Please check back later."
   },
   "search": {
     "placeholder": "Search cafes by name or area",
