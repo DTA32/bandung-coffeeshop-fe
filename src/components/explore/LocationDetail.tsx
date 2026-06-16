@@ -67,7 +67,7 @@ export default function LocationDetail({
               return (
                 <LocaleLink
                   key={desc.id}
-                  className="flex flex-col h-fit w-full max-w-40 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0"
+                  className="flex flex-col h-fit min-w-40 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0"
                   to="/{-$locale}/explore/$"
                   params={{ _splat: exploreSplat(splats) }}
                 >
