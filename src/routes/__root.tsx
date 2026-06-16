@@ -64,8 +64,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               ]}
             />
           )}
-          <Footer />
           <Navbar />
+          <Footer />
         </I18nextProvider>
         <Scripts />
       </body>

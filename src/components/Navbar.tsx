@@ -8,7 +8,7 @@ export default function Navbar() {
   const { t } = useTranslation()
   if (!ua.isMobile) return null
   return (
-    <div className="fixed w-full bottom-5 z-1000 h-16">
+    <div className="sticky mb-5 w-full bottom-5 z-1000 h-16">
       <nav className="flex bg-white border h-full border-grove-light rounded-full mx-6 items-stretch font-medium text-xs text-bark no-underline text-center *:px-4 *:w-full *:flex *:flex-col *:items-center *:justify-center *:mx-2 *:my-1.5 *:rounded-full">
         <LocaleLink
           to="/{-$locale}"
