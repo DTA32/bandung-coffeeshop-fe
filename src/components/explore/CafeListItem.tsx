@@ -1,4 +1,5 @@
-import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
+import LocaleLink from '@/components/LocaleLink'
 import type { CafeListing } from '@/lib/api/search'
 
 export default function CafeListItem({
@@ -12,6 +13,7 @@ export default function CafeListItem({
   withBorder?: boolean
   openNewTab?: boolean
 }) {
+  const { t } = useTranslation()
   let formattedRemark = cafe.remark
   let distanceStr = ''
   if (cafe.distance) {
@@ -33,8 +35,8 @@ export default function CafeListItem({
     description = cafe.area + ', Bandung'
   }
   return (
-    <Link
-      to="/cafe/$cafeId"
+    <LocaleLink
+      to="/{-$locale}/cafe/$cafeId"
       target={openNewTab ? '_blank' : undefined}
       params={{ cafeId: cafe.id }}
       className={`flex gap-4 rounded-xl ${smallVersion ? `h-20` : `h-25`} bg-white no-underline transition hover:bg-grove-light/20 ${withBorder ? 'border border-grove-light' : ''}`}
@@ -60,7 +62,7 @@ export default function CafeListItem({
           <span
             className={`${smallVersion ? 'text-xs' : `text-sm`} text-grove`}
           >
-            {distanceStr} away
+            {t('explore.distanceAway', { distance: distanceStr })}
           </span>
         )}
         {!distanceStr && description && (
@@ -78,6 +80,6 @@ export default function CafeListItem({
           </span>
         )}
       </div>
-    </Link>
+    </LocaleLink>
   )
 }

@@ -1,4 +1,5 @@
 import { ArrowUpDown, Search } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { LatLng, LatLngExpression } from 'leaflet'
 import CafeListItem from '@/components/explore/CafeListItem'
 import type { SearchCafesData } from '@/lib/api/search'
@@ -50,6 +51,7 @@ export default function DesktopLayout({
   alert,
   onSearch,
 }: Props) {
+  const { t } = useTranslation()
   return (
     <main className="w-screen h-[95vh] relative">
       {alert && (
@@ -70,18 +72,13 @@ export default function DesktopLayout({
         <div className="flex flex-col rounded-t-2xl border border-grove-light bg-white/90 shadow-lg p-5 w-full gap-4">
           <div className="flex flex-col pt-2 px-2 mb-4">
             <h1 className="text-2xl font-bold text-forest">
-              Meet in the Middle
+              {t('mitm.title')}
             </h1>
-            <h2 className="text-moss-dark">
-              Drop markers for each person, find the middle, discover cafes
-              nearby.
-            </h2>
+            <h2 className="text-moss-dark">{t('mitm.subtitle')}</h2>
           </div>
           <div className="flex flex-col">
-            <p className="text-forest font-semibold">Your markers</p>
-            <p className="text-bark text-sm">
-              Click anywhere on the map to drop a pin
-            </p>
+            <p className="text-forest font-semibold">{t('mitm.yourMarkers')}</p>
+            <p className="text-bark text-sm">{t('mitm.dropHint')}</p>
           </div>
           <div className="flex flex-col gap-3 max-h-60 overflow-y-auto">
             {markers.map((m) => (
@@ -98,7 +95,7 @@ export default function DesktopLayout({
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex w-full justify-between text-forest font-semibold">
-              <p>Search Radius</p>
+              <p>{t('mitm.searchRadius')}</p>
               <span>{radiusKm.toFixed(1)} km</span>
             </div>
             <input
@@ -121,7 +118,7 @@ export default function DesktopLayout({
                 <span className="w-3 h-3 rounded-full shrink-0 bg-forest" />
                 <div className="flex flex-col text-sm">
                   <span className="font-semibold text-forest">
-                    Midpoint calculated
+                    {t('mitm.midpointCalculated')}
                   </span>
                   <span className="text-bark text-xs">
                     {midpoint.lat.toFixed(4)}, {midpoint.lng.toFixed(4)}
@@ -137,26 +134,30 @@ export default function DesktopLayout({
           className="flex items-center justify-center gap-2 font-semibold w-full bg-forest text-cream py-3 rounded-b-lg hover:bg-moss cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Search size={16} />
-          <span>{loading ? 'Searching...' : 'Find Meeting Spots'}</span>
+          <span>
+            {loading ? t('mitm.searching') : t('mitm.findMeetingSpots')}
+          </span>
         </button>
       </div>
       {results && (
         <div className="absolute top-10 right-8 flex flex-col z-1000 max-w-sm border border-grove-light rounded-2xl bg-white/90 shadow-lg w-sm">
           {results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 h-48 p-4 text-center">
-              <p className="text-forest font-semibold">No cafes found</p>
-              <p className="text-sm text-moss-dark">
-                Try increasing the search radius or adjusting the midpoint.
+              <p className="text-forest font-semibold">
+                {t('mitm.noCafesFound')}
               </p>
+              <p className="text-sm text-moss-dark">{t('mitm.tryAdjust')}</p>
             </div>
           ) : (
             <div className="flex flex-col p-5 w-full gap-4">
               <div className="flex flex-col">
                 <p className="font-bold text-forest">
-                  {results.total} Cafes found
+                  {t('mitm.cafesFound', { count: results.total })}
                 </p>
                 <p className="text-sm text-moss-dark">
-                  within {resultsRadiusKm.toFixed(1)}km of midpoint
+                  {t('mitm.withinMidpoint', {
+                    km: resultsRadiusKm.toFixed(1),
+                  })}
                 </p>
               </div>
               <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
@@ -167,7 +168,7 @@ export default function DesktopLayout({
               <div className="flex gap-2 justify-center items-center w-full">
                 <ArrowUpDown size={16} className="text-bark" />
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-bark">Sort by:</span>
+                  <span className="text-sm text-bark">{t('mitm.sortBy')}</span>
                   <SortSelect
                     value={sort}
                     onChange={onChangeSort}

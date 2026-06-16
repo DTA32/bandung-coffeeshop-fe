@@ -1,6 +1,7 @@
 import type { LocationData } from '@/lib/api/location'
 import { exploreSplat } from '@/lib/explore'
-import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
+import LocaleLink from '@/components/LocaleLink'
 import type { Location } from '@/lib/type'
 
 export default function DistrictList({
@@ -8,9 +9,12 @@ export default function DistrictList({
 }: {
   districts: LocationData[]
 }) {
+  const { t } = useTranslation()
   return (
     <section className="flex flex-1 flex-col gap-6 bg-cream px-6 md:px-20 w-full h-fit">
-      <h2 className="text-2xl font-bold text-forest">Explore by district</h2>
+      <h2 className="text-2xl font-bold text-forest">
+        {t('home.exploreByDistrict')}
+      </h2>
       <div className="flex gap-4 overflow-scroll w-full pb-1 h-full items-stretch">
         {districts.map((district) => {
           const districtLocation: Location = {
@@ -20,10 +24,10 @@ export default function DistrictList({
             thumbnail: null,
           }
           return (
-            <Link
+            <LocaleLink
               key={district.id}
               className="flex flex-col gap-1 w-full max-w-60 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0 bg-white"
-              to={`/explore/$`}
+              to="/{-$locale}/explore/$"
               params={{ _splat: exploreSplat([districtLocation]) }}
             >
               <div className="h-24 w-full bg-grove-light rounded-t-lg">
@@ -50,7 +54,7 @@ export default function DistrictList({
                     ))}
                 </div>
               </div>
-            </Link>
+            </LocaleLink>
           )
         })}
       </div>

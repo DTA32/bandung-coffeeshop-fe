@@ -1,5 +1,6 @@
 import type { LocationData } from '@/lib/api/location'
 import { ClientOnly } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { LatLngExpression } from 'leaflet'
@@ -18,6 +19,7 @@ export default function LocationHero({
   searchResult: SearchCafesData | null
   onExpandMap: () => void
 }) {
+  const { t } = useTranslation()
   const polygonCenterLatLng = location.polygon
     ? L.geoJson(location.polygon).getBounds().getCenter()
     : null
@@ -34,7 +36,7 @@ export default function LocationHero({
           <ClientOnly
             fallback={
               <div className="flex h-full w-full items-center justify-center bg-grove-light/30 text-forest">
-                Loading map...
+                {t('mitm.loadingMap')}
               </div>
             }
           >
@@ -52,7 +54,7 @@ export default function LocationHero({
           <button
             type="button"
             onClick={onExpandMap}
-            aria-label={`Expand map of ${location.name}`}
+            aria-label={t('explore.expandMapOf', { name: location.name })}
             className="absolute inset-0 z-1000 cursor-pointer"
           />
         </>

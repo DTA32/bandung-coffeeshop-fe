@@ -4,6 +4,8 @@ import {
   useRouteContext,
 } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useLocale } from '@/lib/locale'
 import L from 'leaflet'
 import type { LatLngTuple } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -20,31 +22,36 @@ import type { SearchCafesData } from '@/lib/api/search'
 
 type MarkerSearch = { m?: string[] }
 
-export const Route = createFileRoute('/meet-in-the-middle')({
+export const Route = createFileRoute('/{-$locale}/meet-in-the-middle')({
   validateSearch: (search: Record<string, unknown>): MarkerSearch => {
     const raw = search.m
     const arr = Array.isArray(raw) ? raw : raw != null ? [raw] : undefined
     return arr ? { m: arr.map(String) } : {}
   },
-  component: () => {
-    return (
-      <ClientOnly
-        fallback={
-          <div className="flex flex-1 items-center justify-center text-lg text-forest">
-            Loading map...
-          </div>
-        }
-      >
-        <MeetInTheMiddle />
-      </ClientOnly>
-    )
-  },
+  component: MeetInTheMiddleRoute,
 })
+
+function MeetInTheMiddleRoute() {
+  const { t } = useTranslation()
+  return (
+    <ClientOnly
+      fallback={
+        <div className="flex flex-1 items-center justify-center text-lg text-forest">
+          {t('mitm.loadingMap')}
+        </div>
+      }
+    >
+      <MeetInTheMiddle />
+    </ClientOnly>
+  )
+}
 
 function MeetInTheMiddle() {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
   const { ua } = useRouteContext({ from: '__root__' })
+  const { t } = useTranslation()
+  const locale = useLocale()
 
   const markers: UserMarker[] = useMemo(() => {
     if (!search.m) return []
@@ -87,7 +94,7 @@ function MeetInTheMiddle() {
         id: `m-${markers.length}`,
         lat,
         lng,
-        name: `Marker ${markers.length + 1}`,
+        name: t('mitm.marker', { number: markers.length + 1 }),
         color: randomGreenHex(),
       },
     ])
@@ -120,18 +127,21 @@ function MeetInTheMiddle() {
     if (!midpoint) return
     setLoading(true)
     try {
-      const data = await searchCafes({
-        sort: sortValue,
-        size: 200,
-        page: 1,
-        query_coords: `${midpoint.lat},${midpoint.lng}`,
-        radius_max: radiusKm * 1000,
-      })
+      const data = await searchCafes(
+        {
+          sort: sortValue,
+          size: 200,
+          page: 1,
+          query_coords: `${midpoint.lat},${midpoint.lng}`,
+          radius_max: radiusKm * 1000,
+        },
+        locale,
+      )
       setResults(data)
       setResultsRadiusKm(radiusKm)
     } catch (e) {
       console.log(e)
-      setAlert('Failed to fetch cafes. Please try again.')
+      setAlert(t('mitm.fetchFailed'))
       setTimeout(() => setAlert(''), 3000)
     } finally {
       setLoading(false)

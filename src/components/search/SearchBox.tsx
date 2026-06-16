@@ -1,10 +1,13 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { QuickSearchItem } from '@/lib/api/search'
 import { quickSearch } from '@/lib/api/search'
 import { LOCATION_SHORT_LABELS } from '@/lib/constants'
 import { exploreSplat, locationTypeDepth } from '@/lib/explore'
+import { useLocale, localeParam } from '@/lib/locale'
+import LocaleLink from '@/components/LocaleLink'
 import type { Location } from '@/lib/type'
 
 interface SearchBoxProps {
@@ -38,15 +41,15 @@ function ResultLink({
 }) {
   if (item.type === 'cafe') {
     return (
-      <Link
+      <LocaleLink
         role="option"
-        to="/cafe/$cafeId"
+        to="/{-$locale}/cafe/$cafeId"
         params={{ cafeId: item.id }}
         onClick={onSelect}
         className={RESULT_ITEM_CLASS}
       >
         {children}
-      </Link>
+      </LocaleLink>
     )
   }
 
@@ -54,28 +57,28 @@ function ResultLink({
   const refs = [...(item.ancestors ?? []), itemLocation]
   if (refs.length === locationTypeDepth(item.type)) {
     return (
-      <Link
+      <LocaleLink
         role="option"
-        to="/explore/$"
+        to="/{-$locale}/explore/$"
         params={{ _splat: exploreSplat(refs) }}
         onClick={onSelect}
         className={RESULT_ITEM_CLASS}
       >
         {children}
-      </Link>
+      </LocaleLink>
     )
   }
 
   return (
-    <Link
+    <LocaleLink
       role="option"
-      to="/explore"
+      to="/{-$locale}/explore"
       search={{ query_id: item.id, query_type: item.type }}
       onClick={onSelect}
       className={RESULT_ITEM_CLASS}
     >
       {children}
-    </Link>
+    </LocaleLink>
   )
 }
 
@@ -84,6 +87,8 @@ export default function SearchBox({
   initialQuery = '',
 }: SearchBoxProps) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
+  const locale = useLocale()
   const listboxId = useId()
   const [query, setQuery] = useState(initialQuery)
   const [results, setResults] = useState<QuickSearchItem[]>([])
@@ -119,7 +124,7 @@ export default function SearchBox({
     }
     if (query != initialQuery) {
       timerRef.current = setTimeout(async () => {
-        const items = await quickSearch(query)
+        const items = await quickSearch(query, locale)
         if (cancelledRef.current) return
         setResults(items)
         setIsOpen(items.length > 0)
@@ -143,7 +148,11 @@ export default function SearchBox({
 
   function handleSearch() {
     dismiss()
-    navigate({ to: '/explore', search: {} })
+    navigate({
+      to: '/{-$locale}/explore',
+      params: { locale: localeParam(locale) },
+      search: {},
+    })
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -171,7 +180,7 @@ export default function SearchBox({
           grouped[type] && (
             <div key={type}>
               <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
-                {LOCATION_SHORT_LABELS[type]}
+                {t(`explore.locationTypes.${type}`)}
               </div>
               {grouped[type].map((item) => (
                 <ResultLink key={item.id} item={item} onSelect={dismiss}>
@@ -201,12 +210,12 @@ export default function SearchBox({
             onChange={(e) => handleChange(e.target.value)}
             onKeyDown={handleKeyDown}
             role="combobox"
-            aria-label="Search cafes by name or area"
+            aria-label={t('search.placeholder')}
             aria-expanded={isOpen}
             aria-controls={listboxId}
             aria-autocomplete="list"
             className="flex-1 bg-transparent text-sm text-forest focus:outline-none py-3"
-            placeholder="Search cafe name or area..."
+            placeholder={t('search.placeholderShort')}
           />
           {dropdown}
         </div>
@@ -215,7 +224,7 @@ export default function SearchBox({
           className="flex shrink-0 cursor-not-allowed items-center gap-1.5 rounded-md bg-forest px-4 py-2 text-sm font-medium text-cream opacity-40"
         >
           <SlidersHorizontal size={14} aria-hidden="true" />
-          Filters
+          {t('search.filters')}
         </button>
       </div>
     )
@@ -232,18 +241,18 @@ export default function SearchBox({
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
         role="combobox"
-        aria-label="Search cafes by name or area"
+        aria-label={t('search.placeholder')}
         aria-expanded={isOpen}
         aria-controls={listboxId}
         aria-autocomplete="list"
         className="flex-1 rounded-lg p-2 text-sm text-forest focus:outline-none"
-        placeholder="Search cafe name or area..."
+        placeholder={t('search.placeholderShort')}
       />
       <button
         onClick={handleSearch}
         className="shrink-0 cursor-pointer rounded-lg border-none bg-forest px-4 py-2 text-sm font-semibold text-cream"
       >
-        Search
+        {t('search.search')}
       </button>
       {dropdown}
     </div>

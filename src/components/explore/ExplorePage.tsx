@@ -1,35 +1,35 @@
 import {
-  Link,
   useNavigate,
   useRouteContext,
   useRouterState,
 } from '@tanstack/react-router'
 import { LayoutGrid, List, Map } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/search/SearchBox'
 import CafeCard from '@/components/explore/CafeCard'
 import CafeListItem from '@/components/explore/CafeListItem'
 import ExplorePanel from '@/components/explore/ExplorePanel'
 import Pagination from '@/components/explore/Pagination'
+import LocaleLink from '@/components/LocaleLink'
 import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
 import { SORT_OPTIONS } from '@/lib/constants'
+import { useLocale, localeParam } from '@/lib/locale'
 import type { LocationData } from '@/lib/api/location'
 
 // Shared error UI for both explore routes.
 export function ExploreError() {
+  const { t } = useTranslation()
   return (
     <main className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
-      <p>Failed to load cafes.</p>
-      <p className="text-lg">
-        Uh oh, something went wrong while fetching the cafes. Please try again
-        later.
-      </p>
-      <Link
-        to="/"
+      <p>{t('errors.exploreLoadFailedTitle')}</p>
+      <p className="text-lg">{t('errors.exploreLoadFailedBody')}</p>
+      <LocaleLink
+        to="/{-$locale}"
         className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
       >
-        Back to home
-      </Link>
+        {t('errors.backToHome')}
+      </LocaleLink>
     </main>
   )
 }
@@ -37,19 +37,17 @@ export function ExploreError() {
 // Shown when the focused location doesn't exist (unknown slug, or an invalid
 // path depth) — distinct from a generic fetch failure.
 export function ExploreNotFound() {
+  const { t } = useTranslation()
   return (
     <main className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
-      <p>Not found.</p>
-      <p className="text-lg">
-        We couldn&apos;t find what you've requested. Try searching for a cafe,
-        area, or district.
-      </p>
-      <Link
-        to="/explore"
+      <p>{t('errors.notFoundTitle')}</p>
+      <p className="text-lg">{t('errors.notFoundBody')}</p>
+      <LocaleLink
+        to="/{-$locale}/explore"
         className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
       >
-        Browse all cafes
-      </Link>
+        {t('explore.browseAllCafes')}
+      </LocaleLink>
     </main>
   )
 }
@@ -64,6 +62,8 @@ export default function ExplorePage({
   location?: LocationData
 }) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
+  const locale = useLocale()
   const isLoading = useRouterState({ select: (s) => s.isLoading })
   const { ua } = useRouteContext({ from: '__root__' })
   const isMobile = ua.isMobile
@@ -94,7 +94,8 @@ export default function ExplorePage({
   // (drops any location path; coordinate search has no natural path).
   function placeMarker(lat: number, lng: number, opts?: { replace?: boolean }) {
     navigate({
-      to: '/explore',
+      to: '/{-$locale}/explore',
+      params: { locale: localeParam(locale) },
       search: cleanExploreSearch({
         ...search,
         // Coordinate search is mutually exclusive with a location focus.
@@ -112,7 +113,7 @@ export default function ExplorePage({
 
   const sortOptions =
     search.query_coords !== undefined
-      ? [...SORT_OPTIONS, { value: 'distance', label: 'Distance' }]
+      ? [...SORT_OPTIONS, { value: 'distance', label: 'distance' }]
       : SORT_OPTIONS
 
   const activeSort = sortOptions.some((o) => o.value === sort)
@@ -155,7 +156,7 @@ export default function ExplorePage({
             }`}
           >
             <Map size={14} aria-hidden="true" />
-            {mobile ? 'Map' : 'Show Map'}
+            {mobile ? t('explore.map') : t('explore.showMap')}
           </button>
         )}
         <div
@@ -171,7 +172,7 @@ export default function ExplorePage({
             className={toggleBtnClass(view === 'grid')}
           >
             <LayoutGrid size={14} aria-hidden="true" />
-            Grid
+            {t('explore.grid')}
           </button>
           <button
             onClick={() => goTo({ view: 'list' })}
@@ -179,7 +180,7 @@ export default function ExplorePage({
             className={toggleBtnClass(view === 'list')}
           >
             <List size={14} aria-hidden="true" />
-            List
+            {t('explore.list')}
           </button>
         </div>
       </div>
@@ -223,7 +224,7 @@ export default function ExplorePage({
             {!isMobile && viewControls(isMobile)}
 
             <h2 className="text-sm text-bark">
-              {data.total} {data.total === 1 ? 'cafe' : 'cafes'} found
+              {t('explore.cafesFound', { count: data.total })}
               <span className="font-bold">
                 {data.formatted_location_name
                   ? ` ${data.formatted_location_name}`
@@ -233,7 +234,7 @@ export default function ExplorePage({
 
             <div className="flex items-center gap-2 shrink-0">
               <label htmlFor="sort-select" className="text-sm text-bark">
-                Sort by:
+                {t('explore.sortBy')}
               </label>
               <select
                 id="sort-select"
@@ -243,7 +244,7 @@ export default function ExplorePage({
               >
                 {sortOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
-                    {opt.label}
+                    {t(`explore.sortOptions.${opt.value}`)}
                   </option>
                 ))}
               </select>
@@ -253,7 +254,7 @@ export default function ExplorePage({
           <div>
             {data.cafes.length === 0 ? (
               <div className="flex h-128 items-center justify-center text-lg text-bark">
-                No cafes found.
+                {t('explore.noCafesFound')}
               </div>
             ) : view === 'grid' ? (
               <div

@@ -24,10 +24,12 @@
     "@tanstack/react-start": "1.167.42",
     "@tanstack/router-plugin": "1.167.22",
     "@uidotdev/usehooks": "2.4.1",
+    "i18next": "^25",
     "leaflet": "1.9.4",
     "lucide-react": "0.545.0",
     "react": "19.2.5",
     "react-dom": "19.2.5",
+    "react-i18next": "^16",
     "react-leaflet": "5.0.0-rc.2",
     "tailwindcss": "4.2.2"
   },

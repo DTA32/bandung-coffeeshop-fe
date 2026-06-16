@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ClientOnly } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import L from 'leaflet'
 import type { LatLngExpression } from 'leaflet'
 import { Info, Locate, Map } from 'lucide-react'
@@ -33,6 +34,7 @@ export default function ExploreMapView({
   polygon = null,
   showMap = false,
 }: Props) {
+  const { t } = useTranslation()
   const [focusCenter, setFocusCenter] = useState<LatLngExpression | null>(null)
   const [alert, setAlert] = useState<string>('')
 
@@ -45,9 +47,7 @@ export default function ExploreMapView({
       },
       (err) => {
         console.error('Geolocation error:', err)
-        setAlert(
-          'Unable to access your location. Please allow location access and try again.',
-        )
+        setAlert(t('explore.geolocationError'))
         setTimeout(() => setAlert(''), 3000)
       },
     )
@@ -71,7 +71,7 @@ export default function ExploreMapView({
       <ClientOnly
         fallback={
           <div className="flex h-full items-center justify-center bg-grove-light/30 text-lg text-forest">
-            Loading map...
+            {t('mitm.loadingMap')}
           </div>
         }
       >
@@ -116,7 +116,7 @@ export default function ExploreMapView({
             className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-forest px-3.5 py-2 text-sm text-cream shadow-md transition-colors hover:bg-moss w-fit"
           >
             <Map size={14} />
-            {showMap ? 'Minimize' : 'Hide Map'}
+            {showMap ? t('explore.minimize') : t('explore.hideMap')}
           </button>
         )}
 
@@ -125,13 +125,13 @@ export default function ExploreMapView({
           className="flex cursor-pointer items-center gap-2 rounded-lg bg-white px-2 py-2 text-sm text-bark shadow-md transition-colors hover:bg-white/80 w-fit"
         >
           <Locate size={14} />
-          Find Nearby
+          {t('explore.findNearby')}
         </button>
       </div>
       {!marker && (
         <div className="absolute bottom-2 left-2 z-1000 flex items-center gap-1.5 rounded-xl bg-white/80 px-2 py-1 text-[11px] text-moss-dark shadow-sm">
           <Info size={12} />
-          Click anywhere to find cafe near that spot
+          {t('explore.clickToFindNearby')}
         </div>
       )}
     </div>

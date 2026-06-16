@@ -1,6 +1,8 @@
 import { Share2 } from 'lucide-react'
 import { useState } from 'react'
 import { ClientOnly, useRouteContext } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
+import { useLocale, localePrefix } from '@/lib/locale'
 
 function ShareButtonInternal({
   id,
@@ -10,11 +12,14 @@ function ShareButtonInternal({
   hideOnMobile: boolean
 }) {
   const { ua } = useRouteContext({ from: '__root__' })
+  const { t } = useTranslation()
+  const locale = useLocale()
   const isMobile = ua.isMobile
   const [showAlert, setShowAlert] = useState(false)
 
   function shareCafe({ cafeId }: { cafeId: string }) {
-    const url = window.location.origin + '/cafe/' + cafeId
+    const url =
+      window.location.origin + localePrefix(locale) + '/cafe/' + cafeId
     navigator.clipboard
       .writeText(url)
       .then(() => {
@@ -33,7 +38,7 @@ function ShareButtonInternal({
     <>
       {showAlert && (
         <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-moss text-sm font-semibold px-4 py-2 rounded-md shadow-md z-50 transition-opacity duration-300">
-          URL copied to clipboard!
+          {t('cafe.urlCopied')}
         </div>
       )}
       <button
@@ -41,7 +46,9 @@ function ShareButtonInternal({
         onClick={() => shareCafe({ cafeId: id })}
       >
         <div className="flex items-center gap-1 bg-grove-light rounded-md px-3 py-1.5">
-          <span className="text-xs font-semibold text-moss">Share</span>
+          <span className="text-xs font-semibold text-moss">
+            {t('cafe.share')}
+          </span>
           <Share2 size={12} className="shrink-0 text-moss" />
         </div>
       </button>

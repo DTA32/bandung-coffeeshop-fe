@@ -1,6 +1,8 @@
 import { Info } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 export default function Disclaimer() {
+  const { t } = useTranslation()
   return (
     <div
       role="note"
@@ -8,8 +10,7 @@ export default function Disclaimer() {
     >
       <Info size={18} className="text-bark shrink-0 pt-1" aria-hidden="true" />
       <p className="text-xs text-bark leading-relaxed m-0">
-        Rating is subjective and not accurate. All scores reflect a single visit
-        and personal preference. Your experience may vary.
+        {t('cafe.disclaimer')}
       </p>
     </div>
   )
