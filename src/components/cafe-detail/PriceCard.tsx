@@ -1,13 +1,19 @@
 import { Tag } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import type { CafePrice } from '@/lib/api/cafe'
 
-function fmtPrice(min: number | null, max: number | null): string | null {
+function fmtPrice(
+  t: TFunction,
+  min: number | null,
+  max: number | null,
+): string | null {
   if (min !== null && max !== null) {
     return `Rp ${Math.floor(min / 1000)}k – ${Math.floor(max / 1000)}k`
   } else if (min !== null) {
-    return `Starting from Rp ${Math.floor(min / 1000)}k`
+    return `${t('price.startingFrom')} Rp ${Math.floor(min / 1000)}k`
   } else if (max !== null) {
-    return `Up to Rp ${Math.floor(max / 1000)}k`
+    return `${t('price.upTo')} Rp ${Math.floor(max / 1000)}k`
   } else {
     return null
   }
@@ -18,18 +24,19 @@ interface PriceCardProps {
 }
 
 export default function PriceCard({ price }: PriceCardProps) {
+  const { t } = useTranslation()
   const rows = [
     {
-      label: 'Coffee',
-      value: fmtPrice(price.coffee_price_min, price.coffee_price_max),
+      label: t('price.coffee'),
+      value: fmtPrice(t, price.coffee_price_min, price.coffee_price_max),
     },
     {
-      label: 'Snacks',
-      value: fmtPrice(price.snack_price_min, price.snack_price_max),
+      label: t('price.snacks'),
+      value: fmtPrice(t, price.snack_price_min, price.snack_price_max),
     },
     {
-      label: 'Food',
-      value: fmtPrice(price.food_price_min, price.food_price_max),
+      label: t('price.food'),
+      value: fmtPrice(t, price.food_price_min, price.food_price_max),
     },
   ]
   const PRICE_RANK_COLORS: Record<number, string> = {
@@ -42,14 +49,16 @@ export default function PriceCard({ price }: PriceCardProps) {
     <div className="bg-white rounded-2xl p-5 flex flex-col gap-3.5">
       <div className="flex justify-between items-end">
         <div className="flex items-end gap-1">
-          <h2 className="text-base font-bold text-forest m-0">Price Range</h2>
+          <h2 className="text-base font-bold text-forest m-0">
+            {t('price.priceRange')}
+          </h2>
           {price.price_range_min || price.price_range_max ? (
-            <span className="text-xs text-bark">(exc. Food)</span>
+            <span className="text-xs text-bark">{t('price.excFood')}</span>
           ) : null}
         </div>
         {price.price_range_min || price.price_range_max ? (
           <span className="text-sm font-bold text-forest">
-            {fmtPrice(price.price_range_min, price.price_range_max)}
+            {fmtPrice(t, price.price_range_min, price.price_range_max)}
           </span>
         ) : null}
       </div>
@@ -70,8 +79,7 @@ export default function PriceCard({ price }: PriceCardProps) {
       {rows.every(({ value }) => value === null) && (
         <div className="flex justify-center items-center h-16 w-full">
           <p className="text-sm leading-[1.7] m-0 text-bark">
-            {' '}
-            No price information available yet.{' '}
+            {t('price.noPriceInfo')}
           </p>
         </div>
       )}

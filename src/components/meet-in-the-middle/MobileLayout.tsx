@@ -1,4 +1,5 @@
 import { ArrowUpDown, Search } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { LatLngExpression } from 'leaflet'
 import CafeListItem from '@/components/explore/CafeListItem'
 import type { SearchCafesData } from '@/lib/api/search'
@@ -54,6 +55,7 @@ export default function MobileLayout({
   alert,
   onSearch,
 }: Props) {
+  const { t } = useTranslation()
   return (
     <main className="flex flex-col bg-cream min-h-screen pb-28">
       {alert && (
@@ -62,17 +64,15 @@ export default function MobileLayout({
         </div>
       )}
       <div className="bg-forest text-cream px-5 py-4">
-        <h1 className="text-lg font-bold">Meet in the Middle</h1>
-        <p className="text-xs text-cream/80">
-          Drop markers for each person, find the middle, discover cafes nearby.
-        </p>
+        <h1 className="text-lg font-bold">{t('mitm.title')}</h1>
+        <p className="text-xs text-cream/80">{t('mitm.subtitle')}</p>
       </div>
       <div className="flex flex-col bg-white border-b border-grove-light p-4 gap-3">
         <div className="flex flex-col">
-          <p className="text-forest font-semibold text-sm">Your markers</p>
-          <p className="text-bark text-xs">
-            Tap anywhere on the map to drop a pin
+          <p className="text-forest font-semibold text-sm">
+            {t('mitm.yourMarkers')}
           </p>
+          <p className="text-bark text-xs">{t('mitm.dropHintMobile')}</p>
         </div>
         {markers.length > 0 && (
           <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
@@ -91,7 +91,9 @@ export default function MobileLayout({
           </div>
         )}
         <div className="flex items-center justify-between gap-3">
-          <p className="text-forest font-semibold text-sm">Search radius</p>
+          <p className="text-forest font-semibold text-sm">
+            {t('mitm.searchRadius')}
+          </p>
           <div className="flex items-center gap-1.5">
             {RADIUS_PRESETS.map((opt) => {
               const active = radiusKm === opt.val
@@ -128,26 +130,30 @@ export default function MobileLayout({
         className="flex items-center justify-center gap-2 font-semibold w-full bg-forest text-cream py-4 cursor-pointer hover:bg-moss transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Search size={16} />
-        <span>{loading ? 'Searching...' : 'Find Meeting Spots'}</span>
+        <span>
+          {loading ? t('mitm.searching') : t('mitm.findMeetingSpots')}
+        </span>
       </button>
       {results && (
         <div className="flex flex-col bg-cream px-4 py-4 gap-3">
           {results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
-              <p className="text-forest font-semibold">No cafes found</p>
-              <p className="text-sm text-moss-dark">
-                Try increasing the search radius or adjusting the midpoint.
+              <p className="text-forest font-semibold">
+                {t('mitm.noCafesFound')}
               </p>
+              <p className="text-sm text-moss-dark">{t('mitm.tryAdjust')}</p>
             </div>
           ) : (
             <>
               <div className="flex w-full items-center justify-between">
                 <div className="flex flex-col">
                   <p className="font-bold text-forest">
-                    {results.total} Cafes found
+                    {t('mitm.cafesFound', { count: results.total })}
                   </p>
                   <p className="text-xs text-moss-dark">
-                    within {resultsRadiusKm.toFixed(1)}km of midpoint
+                    {t('mitm.withinMidpoint', {
+                      km: resultsRadiusKm.toFixed(1),
+                    })}
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5">

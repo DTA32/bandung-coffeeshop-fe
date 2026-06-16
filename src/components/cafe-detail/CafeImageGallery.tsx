@@ -3,6 +3,7 @@ import type { TouchEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { ClientOnly } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import type { LocationImage } from '@/lib/type'
 
 interface CafeImageGalleryProps {
@@ -18,6 +19,7 @@ function CafeImageGalleryInternal({
   startIndex,
   onClose,
 }: CafeImageGalleryProps) {
+  const { t } = useTranslation()
   const [index, setIndex] = useState(startIndex)
   const touchStartX = useRef<number | null>(null)
   const hasMultiple = images.length > 1
@@ -61,7 +63,7 @@ function CafeImageGalleryInternal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Image gallery"
+      aria-label={t('cafe.imageGallery')}
       className="fixed inset-0 z-[3000] flex flex-col bg-black/90"
       onClick={onClose}
     >
@@ -70,7 +72,7 @@ function CafeImageGalleryInternal({
           {index + 1} / {images.length}
         </span>
         <button
-          aria-label="Close"
+          aria-label={t('cafe.closeGallery')}
           onClick={onClose}
           className="cursor-pointer rounded-full p-1 hover:bg-white/10"
         >
@@ -86,7 +88,7 @@ function CafeImageGalleryInternal({
       >
         {hasMultiple && (
           <button
-            aria-label="Previous image"
+            aria-label={t('cafe.previousImage')}
             onClick={prev}
             className="absolute left-2 z-10 cursor-pointer rounded-full bg-black/40 p-2 text-white hover:bg-black/60"
           >
@@ -109,7 +111,7 @@ function CafeImageGalleryInternal({
 
         {hasMultiple && (
           <button
-            aria-label="Next image"
+            aria-label={t('cafe.nextImage')}
             onClick={next}
             className="absolute right-2 z-10 cursor-pointer rounded-full bg-black/40 p-2 text-white hover:bg-black/60"
           >

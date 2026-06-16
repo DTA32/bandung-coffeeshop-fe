@@ -1,6 +1,5 @@
 import {
   createFileRoute,
-  Link,
   notFound,
   useRouteContext,
 } from '@tanstack/react-router'
@@ -16,52 +15,64 @@ import ScoreCard from '@/components/cafe-detail/ScoreCard'
 import PriceCard from '@/components/cafe-detail/PriceCard'
 import UpdatedAt from '@/components/cafe-detail/UpdatedAt'
 import NearbyCafe from '@/components/cafe-detail/NearbyCafe'
+import LocaleLink from '@/components/LocaleLink'
 import { TriangleAlert } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { JSX } from 'react'
+import { normalizeLocale } from '@/i18n'
 
-export const Route = createFileRoute('/cafe/$cafeId')({
+export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
   loader: async ({ params }) => {
+    const lang = normalizeLocale(params.locale)
     let cafe: Awaited<ReturnType<typeof getCafe>>
     try {
-      cafe = await getCafe(params.cafeId)
+      cafe = await getCafe(params.cafeId, lang)
     } catch (e: any) {
       if (e.message === '404') throw notFound()
       throw e
     }
-    const review = await getCafeReview(params.cafeId)
-    const nearbyCafes = await getNearbyCafes(params.cafeId)
+    const [review, nearbyCafes] = await Promise.all([
+      getCafeReview(params.cafeId, lang),
+      getNearbyCafes(params.cafeId, lang),
+    ])
     return { cafe, review, nearbyCafes }
   },
-  errorComponent: () => (
-    <main className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
-      <p>Failed to load cafe detail.</p>
-      <p className="text-lg">
-        Uh oh, something went wrong. Please try again later.
-      </p>
-      <Link
-        to="/"
-        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
-      >
-        Back to home
-      </Link>
-    </main>
-  ),
-  notFoundComponent: () => (
-    <main className="flex flex-1 flex-col items-center justify-center gap-4 py-32 text-forest">
-      <p className="text-2xl font-semibold">Cafe not found</p>
-      <p className="mt-2 text-bark">
-        This cafe doesn't exist or already deleted.
-      </p>
-      <Link
-        to="/"
-        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
-      >
-        Back to home
-      </Link>
-    </main>
-  ),
+  errorComponent: CafeErrorComponent,
+  notFoundComponent: CafeNotFoundComponent,
   component: CafeDetailPage,
 })
+
+function CafeErrorComponent() {
+  const { t } = useTranslation()
+  return (
+    <main className="flex flex-1 flex-col items-center gap-4 justify-center text-xl text-moss-dark text-center">
+      <p>{t('errors.cafeLoadFailedTitle')}</p>
+      <p className="text-lg">{t('errors.cafeLoadFailedBody')}</p>
+      <LocaleLink
+        to="/{-$locale}"
+        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
+      >
+        {t('errors.backToHome')}
+      </LocaleLink>
+    </main>
+  )
+}
+
+function CafeNotFoundComponent() {
+  const { t } = useTranslation()
+  return (
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 py-32 text-forest">
+      <p className="text-2xl font-semibold">{t('errors.cafeNotFoundTitle')}</p>
+      <p className="mt-2 text-bark">{t('errors.cafeNotFoundBody')}</p>
+      <LocaleLink
+        to="/{-$locale}"
+        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
+      >
+        {t('errors.backToHome')}
+      </LocaleLink>
+    </main>
+  )
+}
 
 function Widgets(): JSX.Element {
   const { cafe, review, nearbyCafes } = Route.useLoaderData()
@@ -141,6 +152,7 @@ function Widgets(): JSX.Element {
 
 function CafeDetailPage() {
   const { cafe, review } = Route.useLoaderData()
+  const { t } = useTranslation()
 
   return (
     <main className="flex flex-col bg-cream min-h-screen">
@@ -163,8 +175,10 @@ function CafeDetailPage() {
               />
             </div>
             <div className="flex flex-col ml-3 text-red-800">
-              <p className="font-medium">This cafe is {cafe.status}.</p>
-              <p className="text-sm">Explore other cafes nearby below</p>
+              <p className="font-medium">
+                {t('cafe.statusBannerTitle', { status: cafe.status })}
+              </p>
+              <p className="text-sm">{t('cafe.statusBannerBody')}</p>
             </div>
           </div>
         </div>

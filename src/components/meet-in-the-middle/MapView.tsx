@@ -10,6 +10,7 @@ import {
 } from 'react-leaflet'
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
+import { useLocale, localeParam } from '@/lib/locale'
 import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
 import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
@@ -77,6 +78,7 @@ export default function MapView({
 }: Props) {
   const navigate = useNavigate()
   const router = useRouter()
+  const locale = useLocale()
   const circleAt =
     circleCenter !== undefined
       ? circleCenter
@@ -142,13 +144,13 @@ export default function MapView({
             eventHandlers={{
               mouseover: () =>
                 router.preloadRoute({
-                  to: '/cafe/$cafeId',
-                  params: { cafeId: c.id },
+                  to: '/{-$locale}/cafe/$cafeId',
+                  params: { cafeId: c.id, locale: localeParam(locale) },
                 }),
               click: () =>
                 navigate({
-                  to: '/cafe/$cafeId',
-                  params: { cafeId: c.id },
+                  to: '/{-$locale}/cafe/$cafeId',
+                  params: { cafeId: c.id, locale: localeParam(locale) },
                 }),
             }}
           >

@@ -1,14 +1,15 @@
 import type { LocationData } from '@/lib/api/location'
-import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
+import LocaleLink from '@/components/LocaleLink'
 import type { Location } from '@/lib/type'
 import { exploreSplat } from '@/lib/explore'
 import LocationHero from '@/components/explore/LocationHero'
 import WelcomeHeading from '@/components/explore/WelcomeHeading'
 import type { SearchCafesData } from '@/lib/api/search'
 
-const locationTypeMapping: Record<string, string> = {
-  area: 'Area',
-  poi: 'Point of Interest',
+const locationTypeHeadingKeys: Record<string, string> = {
+  area: 'explore.areaHeading',
+  poi: 'explore.poiHeading',
 }
 
 export default function LocationDetail({
@@ -22,12 +23,13 @@ export default function LocationDetail({
   searchResult: SearchCafesData | null
   onExpandMap: () => void
 }) {
+  const { t } = useTranslation()
   const descendantName =
     location.descendants &&
     location.descendants.length > 0 &&
-    location.descendants[0].type in locationTypeMapping
-      ? locationTypeMapping[location.descendants[0].type]
-      : 'Related locations'
+    location.descendants[0].type in locationTypeHeadingKeys
+      ? t(locationTypeHeadingKeys[location.descendants[0].type])
+      : t('explore.relatedLocations')
   const currentLocation: Location = {
     id: location.id,
     name: location.name,
@@ -48,7 +50,7 @@ export default function LocationDetail({
       )}
       {location.description && (
         <div className={`${isMobile && `px-6 bg-white text-sm py-4`}`}>
-          <h2 className="text-base font-semibold mb-2">About</h2>
+          <h2 className="text-base font-semibold mb-2">{t('explore.about')}</h2>
           <p className="text-gray-600 whitespace-pre-line">
             {location.description}
           </p>
@@ -63,10 +65,10 @@ export default function LocationDetail({
             {location.descendants.map((desc) => {
               const splats = [...refs, desc]
               return (
-                <Link
+                <LocaleLink
                   key={desc.id}
                   className="flex flex-col h-fit min-w-40 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0"
-                  to={`/explore/$`}
+                  to="/{-$locale}/explore/$"
                   params={{ _splat: exploreSplat(splats) }}
                 >
                   <div className="h-20 w-full bg-grove-light rounded-t-lg">
@@ -79,7 +81,7 @@ export default function LocationDetail({
                     )}
                   </div>
                   <h3 className="text-sm font-medium p-2">{desc.name}</h3>
-                </Link>
+                </LocaleLink>
               )
             })}
           </div>

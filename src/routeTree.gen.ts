@@ -9,159 +9,200 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MeetInTheMiddleRouteImport } from './routes/meet-in-the-middle'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ExploreIndexRouteImport } from './routes/explore.index'
-import { Route as ExploreSplatRouteImport } from './routes/explore.$'
-import { Route as CafeCafeIdRouteImport } from './routes/cafe.$cafeId'
+import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route'
+import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}/index'
+import { Route as Char123LocaleChar125MeetInTheMiddleRouteImport } from './routes/{-$locale}/meet-in-the-middle'
+import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}/about'
+import { Route as Char123LocaleChar125ExploreIndexRouteImport } from './routes/{-$locale}/explore.index'
+import { Route as Char123LocaleChar125ExploreSplatRouteImport } from './routes/{-$locale}/explore.$'
+import { Route as Char123LocaleChar125CafeCafeIdRouteImport } from './routes/{-$locale}/cafe.$cafeId'
 
-const MeetInTheMiddleRoute = MeetInTheMiddleRouteImport.update({
-  id: '/meet-in-the-middle',
-  path: '/meet-in-the-middle',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExploreIndexRoute = ExploreIndexRouteImport.update({
-  id: '/explore/',
-  path: '/explore/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExploreSplatRoute = ExploreSplatRouteImport.update({
-  id: '/explore/$',
-  path: '/explore/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CafeCafeIdRoute = CafeCafeIdRouteImport.update({
-  id: '/cafe/$cafeId',
-  path: '/cafe/$cafeId',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const Char123LocaleChar125RouteRoute =
+  Char123LocaleChar125RouteRouteImport.update({
+    id: '/{-$locale}',
+    path: '/{-$locale}',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char123LocaleChar125IndexRoute =
+  Char123LocaleChar125IndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125MeetInTheMiddleRoute =
+  Char123LocaleChar125MeetInTheMiddleRouteImport.update({
+    id: '/meet-in-the-middle',
+    path: '/meet-in-the-middle',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125AboutRoute =
+  Char123LocaleChar125AboutRouteImport.update({
+    id: '/about',
+    path: '/about',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125ExploreIndexRoute =
+  Char123LocaleChar125ExploreIndexRouteImport.update({
+    id: '/explore/',
+    path: '/explore/',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125ExploreSplatRoute =
+  Char123LocaleChar125ExploreSplatRouteImport.update({
+    id: '/explore/$',
+    path: '/explore/$',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125CafeCafeIdRoute =
+  Char123LocaleChar125CafeCafeIdRouteImport.update({
+    id: '/cafe/$cafeId',
+    path: '/cafe/$cafeId',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/meet-in-the-middle': typeof MeetInTheMiddleRoute
-  '/cafe/$cafeId': typeof CafeCafeIdRoute
-  '/explore/$': typeof ExploreSplatRoute
-  '/explore/': typeof ExploreIndexRoute
+  '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
+  '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
+  '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
+  '/{-$locale}/cafe/$cafeId': typeof Char123LocaleChar125CafeCafeIdRoute
+  '/{-$locale}/explore/$': typeof Char123LocaleChar125ExploreSplatRoute
+  '/{-$locale}/explore/': typeof Char123LocaleChar125ExploreIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/meet-in-the-middle': typeof MeetInTheMiddleRoute
-  '/cafe/$cafeId': typeof CafeCafeIdRoute
-  '/explore/$': typeof ExploreSplatRoute
-  '/explore': typeof ExploreIndexRoute
+  '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
+  '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
+  '/{-$locale}': typeof Char123LocaleChar125IndexRoute
+  '/{-$locale}/cafe/$cafeId': typeof Char123LocaleChar125CafeCafeIdRoute
+  '/{-$locale}/explore/$': typeof Char123LocaleChar125ExploreSplatRoute
+  '/{-$locale}/explore': typeof Char123LocaleChar125ExploreIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/meet-in-the-middle': typeof MeetInTheMiddleRoute
-  '/cafe/$cafeId': typeof CafeCafeIdRoute
-  '/explore/$': typeof ExploreSplatRoute
-  '/explore/': typeof ExploreIndexRoute
+  '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
+  '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
+  '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
+  '/{-$locale}/cafe/$cafeId': typeof Char123LocaleChar125CafeCafeIdRoute
+  '/{-$locale}/explore/$': typeof Char123LocaleChar125ExploreSplatRoute
+  '/{-$locale}/explore/': typeof Char123LocaleChar125ExploreIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/about'
-    | '/meet-in-the-middle'
-    | '/cafe/$cafeId'
-    | '/explore/$'
-    | '/explore/'
+    | '/{-$locale}'
+    | '/{-$locale}/about'
+    | '/{-$locale}/meet-in-the-middle'
+    | '/{-$locale}/'
+    | '/{-$locale}/cafe/$cafeId'
+    | '/{-$locale}/explore/$'
+    | '/{-$locale}/explore/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/about'
-    | '/meet-in-the-middle'
-    | '/cafe/$cafeId'
-    | '/explore/$'
-    | '/explore'
+    | '/{-$locale}/about'
+    | '/{-$locale}/meet-in-the-middle'
+    | '/{-$locale}'
+    | '/{-$locale}/cafe/$cafeId'
+    | '/{-$locale}/explore/$'
+    | '/{-$locale}/explore'
   id:
     | '__root__'
-    | '/'
-    | '/about'
-    | '/meet-in-the-middle'
-    | '/cafe/$cafeId'
-    | '/explore/$'
-    | '/explore/'
+    | '/{-$locale}'
+    | '/{-$locale}/about'
+    | '/{-$locale}/meet-in-the-middle'
+    | '/{-$locale}/'
+    | '/{-$locale}/cafe/$cafeId'
+    | '/{-$locale}/explore/$'
+    | '/{-$locale}/explore/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  MeetInTheMiddleRoute: typeof MeetInTheMiddleRoute
-  CafeCafeIdRoute: typeof CafeCafeIdRoute
-  ExploreSplatRoute: typeof ExploreSplatRoute
-  ExploreIndexRoute: typeof ExploreIndexRoute
+  Char123LocaleChar125RouteRoute: typeof Char123LocaleChar125RouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/meet-in-the-middle': {
-      id: '/meet-in-the-middle'
-      path: '/meet-in-the-middle'
-      fullPath: '/meet-in-the-middle'
-      preLoaderRoute: typeof MeetInTheMiddleRouteImport
+    '/{-$locale}': {
+      id: '/{-$locale}'
+      path: '/{-$locale}'
+      fullPath: '/{-$locale}'
+      preLoaderRoute: typeof Char123LocaleChar125RouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/{-$locale}/': {
+      id: '/{-$locale}/'
       path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/'
+      preLoaderRoute: typeof Char123LocaleChar125IndexRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/explore/': {
-      id: '/explore/'
+    '/{-$locale}/meet-in-the-middle': {
+      id: '/{-$locale}/meet-in-the-middle'
+      path: '/meet-in-the-middle'
+      fullPath: '/{-$locale}/meet-in-the-middle'
+      preLoaderRoute: typeof Char123LocaleChar125MeetInTheMiddleRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
+    }
+    '/{-$locale}/about': {
+      id: '/{-$locale}/about'
+      path: '/about'
+      fullPath: '/{-$locale}/about'
+      preLoaderRoute: typeof Char123LocaleChar125AboutRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
+    }
+    '/{-$locale}/explore/': {
+      id: '/{-$locale}/explore/'
       path: '/explore'
-      fullPath: '/explore/'
-      preLoaderRoute: typeof ExploreIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/explore/'
+      preLoaderRoute: typeof Char123LocaleChar125ExploreIndexRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/explore/$': {
-      id: '/explore/$'
+    '/{-$locale}/explore/$': {
+      id: '/{-$locale}/explore/$'
       path: '/explore/$'
-      fullPath: '/explore/$'
-      preLoaderRoute: typeof ExploreSplatRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/explore/$'
+      preLoaderRoute: typeof Char123LocaleChar125ExploreSplatRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/cafe/$cafeId': {
-      id: '/cafe/$cafeId'
+    '/{-$locale}/cafe/$cafeId': {
+      id: '/{-$locale}/cafe/$cafeId'
       path: '/cafe/$cafeId'
-      fullPath: '/cafe/$cafeId'
-      preLoaderRoute: typeof CafeCafeIdRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}/cafe/$cafeId'
+      preLoaderRoute: typeof Char123LocaleChar125CafeCafeIdRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
   }
 }
 
+interface Char123LocaleChar125RouteRouteChildren {
+  Char123LocaleChar125AboutRoute: typeof Char123LocaleChar125AboutRoute
+  Char123LocaleChar125MeetInTheMiddleRoute: typeof Char123LocaleChar125MeetInTheMiddleRoute
+  Char123LocaleChar125IndexRoute: typeof Char123LocaleChar125IndexRoute
+  Char123LocaleChar125CafeCafeIdRoute: typeof Char123LocaleChar125CafeCafeIdRoute
+  Char123LocaleChar125ExploreSplatRoute: typeof Char123LocaleChar125ExploreSplatRoute
+  Char123LocaleChar125ExploreIndexRoute: typeof Char123LocaleChar125ExploreIndexRoute
+}
+
+const Char123LocaleChar125RouteRouteChildren: Char123LocaleChar125RouteRouteChildren =
+  {
+    Char123LocaleChar125AboutRoute: Char123LocaleChar125AboutRoute,
+    Char123LocaleChar125MeetInTheMiddleRoute:
+      Char123LocaleChar125MeetInTheMiddleRoute,
+    Char123LocaleChar125IndexRoute: Char123LocaleChar125IndexRoute,
+    Char123LocaleChar125CafeCafeIdRoute: Char123LocaleChar125CafeCafeIdRoute,
+    Char123LocaleChar125ExploreSplatRoute:
+      Char123LocaleChar125ExploreSplatRoute,
+    Char123LocaleChar125ExploreIndexRoute:
+      Char123LocaleChar125ExploreIndexRoute,
+  }
+
+const Char123LocaleChar125RouteRouteWithChildren =
+  Char123LocaleChar125RouteRoute._addFileChildren(
+    Char123LocaleChar125RouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  MeetInTheMiddleRoute: MeetInTheMiddleRoute,
-  CafeCafeIdRoute: CafeCafeIdRoute,
-  ExploreSplatRoute: ExploreSplatRoute,
-  ExploreIndexRoute: ExploreIndexRoute,
+  Char123LocaleChar125RouteRoute: Char123LocaleChar125RouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

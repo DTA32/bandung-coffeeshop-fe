@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import type { ExploreSearch } from '@/lib/api/search'
 
 interface PaginationProps {
@@ -12,6 +13,7 @@ export default function Pagination({
   totalPages,
   searchForPage,
 }: PaginationProps) {
+  const { t } = useTranslation()
   if (totalPages <= 1) return null
 
   const pages: (number | '...')[] = []
@@ -37,7 +39,7 @@ export default function Pagination({
 
   return (
     <nav
-      aria-label="Pagination"
+      aria-label={t('explore.pagination')}
       className="flex items-center justify-center gap-1 py-8"
     >
       {page > 1 ? (
@@ -47,10 +49,10 @@ export default function Pagination({
           preload="intent"
           className={`${linkCls} text-forest hover:bg-grove-light shrink-0`}
         >
-          ← Prev
+          ← {t('explore.prev')}
         </Link>
       ) : (
-        <span className={disabledCls}>← Prev</span>
+        <span className={disabledCls}>{t('explore.prev')}</span>
       )}
 
       {pages.map((p, i) =>
@@ -87,10 +89,10 @@ export default function Pagination({
           preload="intent"
           className={`${linkCls} text-forest hover:bg-grove-light shrink-0`}
         >
-          Next →
+          {t('explore.next')} →
         </Link>
       ) : (
-        <span className={disabledCls}>Next →</span>
+        <span className={disabledCls}>{t('explore.next')}</span>
       )}
     </nav>
   )

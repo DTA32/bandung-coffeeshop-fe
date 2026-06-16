@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { LocationImage } from '@/lib/type'
 import MapPreview from '@/components/cafe-detail/MapPreview'
 import CafeImageGallery from '@/components/cafe-detail/CafeImageGallery'
@@ -23,6 +24,7 @@ function WithImage({
   name: string
   gmapsId: string | null
 }) {
+  const { t } = useTranslation()
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
@@ -35,14 +37,14 @@ function WithImage({
               key={index}
               type="button"
               onClick={() => setOpenIndex(index)}
-              aria-label={`View photos of ${name}`}
+              aria-label={t('cafe.viewPhotosOf', { name })}
               className="flex-shrink-0 block cursor-pointer border-none bg-transparent p-0"
               style={{ width: imageWidth + '%' }}
             >
               <figure className="relative m-0 h-full w-full">
                 <img
                   src={img.url}
-                  alt={img.description || `Photo of ${name}`}
+                  alt={img.description || t('cafe.photoOf', { name })}
                   className="w-full h-full object-cover"
                 />
                 {img.description && (
@@ -84,6 +86,7 @@ function WithoutImage({
   CafeHeroProps,
   'id' | 'name' | 'address' | 'isSubjective' | 'gmapsId'
 >) {
+  const { t } = useTranslation()
   return (
     <div className="h-fit md:h-75 w-full flex flex-col md:flex-row px-6 md:px-16 mt-8 md:mt-0 gap-8">
       <div className="flex flex-col md:flex-row items-center gap-2 h-full w-full">
@@ -94,7 +97,7 @@ function WithoutImage({
             {isSubjective && (
               <div className="flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-md shrink-0">
                 <Info size={13} aria-hidden="true" />
-                <span>Highly subjective review</span>
+                <span>{t('cafe.highlySubjective')}</span>
               </div>
             )}
             <ShareButton id={id} hideOnMobile={false} />

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { SORT_OPTIONS } from '@/lib/constants'
 
 type Props = {
@@ -7,9 +8,10 @@ type Props = {
 }
 
 export default function SortSelect({ value, onChange, className }: Props) {
+  const { t } = useTranslation()
   const sortOptions = [
     ...SORT_OPTIONS,
-    { value: 'distance', label: 'Distance' },
+    { value: 'distance', label: 'distance' },
   ]
   return (
     <select
@@ -22,7 +24,7 @@ export default function SortSelect({ value, onChange, className }: Props) {
     >
       {sortOptions.map((opt) => (
         <option key={opt.value} value={opt.value}>
-          {opt.label}
+          {t(`explore.sortOptions.${opt.value}`)}
         </option>
       ))}
     </select>

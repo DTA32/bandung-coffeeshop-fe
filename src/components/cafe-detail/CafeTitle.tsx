@@ -1,4 +1,5 @@
 import { Info } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import ShareButton from '@/components/cafe-detail/ShareButton'
 
 interface CafeTitleProps {
@@ -14,6 +15,7 @@ export default function CafeTitle({
   address,
   isSubjective,
 }: CafeTitleProps) {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col lg:flex-row items-start gap-2">
       <div className="flex w-full flex-col gap-1">
@@ -27,7 +29,7 @@ export default function CafeTitle({
         {isSubjective && (
           <div className="flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-md shrink-0">
             <Info size={13} aria-hidden="true" />
-            <span>Highly subjective review</span>
+            <span>{t('cafe.highlySubjective')}</span>
           </div>
         )}
         <ShareButton id={id} hideOnMobile={true} />

@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import LocaleLink from '@/components/LocaleLink'
 import type { CafeListing } from '@/lib/api/search'
 
 export default function CafeCard({
@@ -21,8 +21,8 @@ export default function CafeCard({
     description = cafe.area + ', Bandung'
   }
   return (
-    <Link
-      to="/cafe/$cafeId"
+    <LocaleLink
+      to="/{-$locale}/cafe/$cafeId"
       params={{ cafeId: cafe.id }}
       className={`flex flex-col overflow-hidden rounded-xl bg-white no-underline transition hover:shadow-md w-full shrink-0
       ${showBorder && `border-[0.5px] border-grove-light`}
@@ -51,6 +51,6 @@ export default function CafeCard({
           </span>
         )}
       </div>
-    </Link>
+    </LocaleLink>
   )
 }

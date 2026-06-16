@@ -4,12 +4,14 @@ import Hero from '@/components/Hero'
 import FeaturedCafes from '@/components/FeaturedCafes'
 import DistrictList from '@/components/DistrictList'
 import { getLocation } from '@/lib/api/location'
+import { normalizeLocale } from '@/i18n'
 
-export const Route = createFileRoute('/')({
-  loader: async () => {
+export const Route = createFileRoute('/{-$locale}/')({
+  loader: async ({ params }) => {
+    const lang = normalizeLocale(params.locale)
     const [featuredCafes, districts] = await Promise.all([
-      getFeaturedCafes().catch(() => ({ cafes: [] })),
-      getLocation().catch(() => []),
+      getFeaturedCafes(lang).catch(() => ({ cafes: [] })),
+      getLocation(undefined, lang).catch(() => []),
     ])
     return { featuredCafes, districts }
   },

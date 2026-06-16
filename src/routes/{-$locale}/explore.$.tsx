@@ -10,21 +10,23 @@ import {
   validateExploreSearch,
 } from '@/lib/explore'
 import { getLocation } from '@/lib/api/location'
+import { normalizeLocale } from '@/i18n'
 
 // Nested location paths:
 //   /explore/<district>             → district
 //   /explore/<district>/<area>      → area
 //   /explore/<district>/<area>/<poi>→ poi
 // Depth derives the type; the leaf segment is the API query_id.
-export const Route = createFileRoute('/explore/$')({
+export const Route = createFileRoute('/{-$locale}/explore/$')({
   validateSearch: validateExploreSearch,
   loaderDeps: ({ search }) => exploreLoaderDeps(search),
   loader: async ({ params, deps }) => {
+    const lang = normalizeLocale(params.locale)
     const focus = parseExploreSplat(params._splat)
     if (!focus) throw notFound()
     const [searchData, locationData] = await Promise.all([
-      searchCafes({ ...deps, ...focus }),
-      getLocation(focus.query_id),
+      searchCafes({ ...deps, ...focus }, lang),
+      getLocation(focus.query_id, lang),
     ])
     if (Array.isArray(locationData)) {
       throw new Error(`Expected single location, got array`)

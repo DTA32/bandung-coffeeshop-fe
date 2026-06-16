@@ -3,6 +3,7 @@ import type { SearchCafesData } from '@/lib/api/search'
 import ExploreMapView from '@/components/explore/ExploreMapView'
 import LocationDetail from '@/components/explore/LocationDetail'
 import { TriangleAlert } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 type MapMarker = { lat: number; lng: number }
 
@@ -27,6 +28,7 @@ export default function ExplorePanel({
   onHideMap,
   onExpandMap,
 }: Props) {
+  const { t } = useTranslation()
   if (mapView) {
     const polygon = location?.polygon ? location.polygon : null
     return (
@@ -47,10 +49,7 @@ export default function ExplorePanel({
             <div className="flex items-center">
               <TriangleAlert size={14} className="w-min" />
             </div>
-            <p>
-              Highlighted area is based on personal preference and not accurate.
-              Please use it as a general guide, not an exact boundary.
-            </p>
+            <p>{t('explore.mapPolygonDisclaimer')}</p>
           </div>
         )}
       </aside>
