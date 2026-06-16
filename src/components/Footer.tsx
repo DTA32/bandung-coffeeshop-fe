@@ -9,9 +9,7 @@ export default function Footer() {
       <div className="w-full flex flex-col md:flex-row gap-4">
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex flex-col gap-0">
-            <LocaleLink to="/{-$locale}" className="text-lg font-bold">
-              {t('brand')}
-            </LocaleLink>
+            <p className="text-lg font-bold">{t('brand')}</p>
             <p className="text-bark">{t('footer.tagline')}</p>
           </div>
           <LanguageToggle text={t('footer.changeLanguage')} />

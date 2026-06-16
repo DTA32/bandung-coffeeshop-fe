@@ -134,11 +134,11 @@ function About() {
                 href={'https://maps.app.goo.gl/jtm8g1GSRova8rKQA'}
               >
                 for hangout
-              </a>.
-              So unlike other websites that just copy-paste reviews from Google
-              Maps or taking it illegally from someone else&apos;s pay-to-view
-              database 👀, I actually visited the cafes and wrote the reviews
-              based on my experience.
+              </a>
+              . So unlike other websites that just copy-paste reviews from
+              Google Maps or taking it illegally from someone else&apos;s
+              pay-to-view database 👀, I actually visited the cafes and wrote
+              the reviews based on my experience.
             </p>
             <figure className="flex flex-col items-center gap-2">
               <img

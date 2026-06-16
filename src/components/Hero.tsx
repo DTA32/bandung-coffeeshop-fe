@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import SearchBox from '@/components/search/SearchBox'
+import SearchBox from '@/components/SearchBox'
 
 export default function Hero() {
   const { t } = useTranslation()

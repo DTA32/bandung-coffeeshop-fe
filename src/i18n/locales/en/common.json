@@ -74,7 +74,27 @@
       "area": "Area",
       "district": "District"
     },
-    "mapPolygonDisclaimer": "Highlighted area is based on personal preference and not accurate. Please use it as a general guide, not an exact boundary."
+    "mapPolygonDisclaimer": "Highlighted area is based on personal preference and not accurate. Please use it as a general guide, not an exact boundary.",
+    "filters": {
+      "button": "Filters",
+      "dialogLabel": "Filters",
+      "close": "Close filters",
+      "openTitle": "Open hours",
+      "openNow": "Open now",
+      "atTime": "At a time",
+      "openNowCaption": "Showing cafes that open right now",
+      "openAt": "Open at",
+      "priceTitle": "Price",
+      "priceTiers": "Tiers",
+      "priceRange": "Range",
+      "tagsTitle": "Tags",
+      "ratingsTitle": "Vibe & amenities",
+      "apply": "Apply",
+      "reset": "Reset",
+      "loading": "Loading filters…",
+      "loadError": "Couldn't load filters.",
+      "retry": "Retry"
+    }
   },
   "cafe": {
     "review": "Review",

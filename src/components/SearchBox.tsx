@@ -2,17 +2,25 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { QuickSearchItem } from '@/lib/api/search'
+import type { ExploreSearch, QuickSearchItem } from '@/lib/api/search'
 import { quickSearch } from '@/lib/api/search'
 import { LOCATION_SHORT_LABELS } from '@/lib/constants'
-import { exploreSplat, locationTypeDepth } from '@/lib/explore'
+import {
+  exploreSplat,
+  locationTypeDepth,
+  parseRatingIds,
+  parseTags,
+} from '@/lib/explore'
 import { useLocale, localeParam } from '@/lib/locale'
 import LocaleLink from '@/components/LocaleLink'
+import FilterModal from '@/components/explore/FilterModal'
 import type { Location } from '@/lib/type'
 
 interface SearchBoxProps {
   variant?: 'hero' | 'srp'
   initialQuery?: string
+  search?: ExploreSearch
+  onApplyFilters?: (update: ExploreSearch) => void
 }
 
 const TYPE_ICONS: Record<string, React.ReactNode> = {
@@ -34,6 +42,7 @@ function ResultLink({
   optionRef,
   onSelect,
   children,
+  search,
 }: {
   item: QuickSearchItem
   id: string
@@ -41,6 +50,7 @@ function ResultLink({
   optionRef: (el: HTMLAnchorElement | null) => void
   onSelect: () => void
   children: React.ReactNode
+  search?: ExploreSearch
 }) {
   const className = `flex gap-4 w-full cursor-pointer items-center border-none px-6 py-3 text-left 
                     hover:bg-cream ${isActive ? 'bg-cream' : 'bg-transparent'}`
@@ -73,6 +83,7 @@ function ResultLink({
         aria-selected={isActive}
         to="/{-$locale}/explore/$"
         params={{ _splat: exploreSplat(refs) }}
+        search={{ ...search }}
         onClick={onSelect}
         className={className}
       >
@@ -100,6 +111,8 @@ function ResultLink({
 export default function SearchBox({
   variant = 'hero',
   initialQuery = '',
+  search,
+  onApplyFilters,
 }: SearchBoxProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -108,7 +121,15 @@ export default function SearchBox({
   const [query, setQuery] = useState(initialQuery)
   const [results, setResults] = useState<QuickSearchItem[]>([])
   const [isOpen, setIsOpen] = useState(false)
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
+
+  const activeFilterCount = search
+    ? parseTags(search.tags).length +
+      parseRatingIds(search.ratings).length +
+      (search.open_hour ? 1 : 0) +
+      (search.price_min != null || search.price_max != null ? 1 : 0)
+    : 0
   const containerRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const itemRefs = useRef<Array<HTMLAnchorElement | null>>([])
@@ -256,6 +277,7 @@ export default function SearchBox({
                       itemRefs.current[index] = el
                     }}
                     onSelect={dismiss}
+                    search={search}
                   >
                     {TYPE_ICONS[item.type]}
                     <span className="text-sm font-medium text-forest">
@@ -272,36 +294,57 @@ export default function SearchBox({
 
   if (variant === 'srp') {
     return (
-      <div className="flex items-center justify-between gap-4 border-b border-grove-light/50 bg-white px-6 md:px-16 py-5">
-        <div
-          ref={containerRef}
-          className="relative flex gap-3 border border-grove-light bg-cream w-full px-4 items-center rounded-lg"
-        >
-          <Search size={18} className="shrink-0 text-bark" aria-hidden="true" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => handleChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-            role="combobox"
-            aria-label={t('search.placeholder')}
-            aria-expanded={isOpen}
-            aria-controls={listboxId}
-            aria-autocomplete="list"
-            aria-activedescendant={activeOptionId}
-            className="flex-1 bg-transparent text-sm text-forest focus:outline-none py-3"
-            placeholder={t('search.placeholderShort')}
-          />
-          {dropdown}
+      <>
+        <div className="flex items-center justify-between gap-4 border-b border-grove-light/50 bg-white px-6 md:px-16 py-5">
+          <div
+            ref={containerRef}
+            className="relative flex gap-3 border border-grove-light bg-cream w-full px-4 items-center rounded-lg"
+          >
+            <Search
+              size={18}
+              className="shrink-0 text-bark"
+              aria-hidden="true"
+            />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => handleChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              role="combobox"
+              aria-label={t('search.placeholder')}
+              aria-expanded={isOpen}
+              aria-controls={listboxId}
+              aria-autocomplete="list"
+              aria-activedescendant={activeOptionId}
+              className="flex-1 bg-transparent text-sm text-forest focus:outline-none py-3"
+              placeholder={t('search.placeholderShort')}
+            />
+            {dropdown}
+          </div>
+          <div className="relative h-full">
+            <button
+              type="button"
+              onClick={() => setFiltersOpen(true)}
+              className="relative flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-forest px-3 py-2 text-sm text-cream"
+            >
+              <SlidersHorizontal size={14} />
+              {t('explore.filters.button')}
+            </button>
+            {activeFilterCount > 0 && (
+              <span className="absolute -top-2 -right-2 px-1.5 py-0.5 items-center justify-center rounded-full bg-moss text-[10px] font-semibold text-cream">
+                {activeFilterCount}
+              </span>
+            )}
+          </div>
         </div>
-        <button
-          disabled
-          className="flex shrink-0 cursor-not-allowed items-center gap-1.5 rounded-md bg-forest px-4 py-2 text-sm font-medium text-cream opacity-40"
-        >
-          <SlidersHorizontal size={14} aria-hidden="true" />
-          {t('search.filters')}
-        </button>
-      </div>
+        {filtersOpen && search && onApplyFilters && (
+          <FilterModal
+            search={search}
+            onApply={onApplyFilters}
+            onClose={() => setFiltersOpen(false)}
+          />
+        )}
+      </>
     )
   }
 
