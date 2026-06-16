@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-router'
 import { LayoutGrid, List, Map } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import SearchBox from '@/components/search/SearchBox'
+import SearchBox from '@/components/SearchBox'
 import CafeCard from '@/components/explore/CafeCard'
 import CafeListItem from '@/components/explore/CafeListItem'
 import ExplorePanel from '@/components/explore/ExplorePanel'
@@ -191,7 +191,12 @@ export default function ExplorePage({
     <main
       className={`flex flex-col bg-cream flex-1 transition-opacity ${isLoading ? 'opacity-50' : 'opacity-100'}`}
     >
-      <SearchBox variant="srp" initialQuery={data.location_name ?? ''} />
+      <SearchBox
+        variant="srp"
+        initialQuery={data.location_name ?? ''}
+        search={search}
+        onApplyFilters={goTo}
+      />
       {isMobile && viewControls(isMobile)}
       {isMobile && (
         <ExplorePanel

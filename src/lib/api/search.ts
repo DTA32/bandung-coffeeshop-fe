@@ -37,6 +37,7 @@ export interface SearchCafesData {
 }
 
 export interface SearchCafesParams {
+  // See ExploreSearch for documentation
   query_id?: string
   query_type?: string
   query_coords?: string
@@ -44,10 +45,11 @@ export interface SearchCafesParams {
   sort?: string
   page?: number
   size?: number
-  // Filters (backend-supported) — forwarded as query params when present.
-  tag?: string
-  rating_category_type?: string
-  rating_category_id?: string
+  open_hour?: string
+  tags?: string
+  price_min?: number
+  price_max?: number
+  ratings?: string
   is_featured?: boolean
   order?: string
 }
@@ -63,17 +65,22 @@ export interface ExploreSearch {
   query_type?: string
   query_coords?: string
   radius_max?: number
+  // Filters — URL-addressable, set by the filter modal. See explore.ts for the
+  // tags/ratings (de)serialization helpers.
+  open_hour?: string // "now" or "HH:MM"
+  tags?: string // comma-separated tag slugs
+  price_min?: number
+  price_max?: number
+  ratings?: string // comma-separated rating_category bucket ids
+  is_featured?: boolean
+  // Sorting/pagination
   sort?: string // absent / undefined → 'default'
   page?: number // absent / undefined → 1
   size?: number // absent / undefined → 8
+  order?: 'asc' | 'desc'
+  // View state
   view?: 'grid' | 'list' // absent / undefined → 'grid'
   map_view?: boolean // absent / undefined → false
-  // Reserved filters — URL-addressable now, UI to follow. See exploreLoaderDeps/searchCafes.
-  tag?: string
-  rating_category_type?: string
-  rating_category_id?: string
-  is_featured?: boolean
-  order?: 'asc' | 'desc'
 }
 
 // Returns a copy with default-valued fields removed so they don't pollute the URL
@@ -88,13 +95,12 @@ export function cleanExploreSearch(s: ExploreSearch): ExploreSearch {
     ...(s.size !== undefined && s.size !== 8 && { size: s.size }),
     ...(s.view !== undefined && s.view !== 'grid' && { view: s.view }),
     ...(s.map_view ? { map_view: true } : {}),
-    ...(s.tag !== undefined && { tag: s.tag }),
-    ...(s.rating_category_type !== undefined && {
-      rating_category_type: s.rating_category_type,
-    }),
-    ...(s.rating_category_id !== undefined && {
-      rating_category_id: s.rating_category_id,
-    }),
+    ...(s.open_hour !== undefined &&
+      s.open_hour !== '' && { open_hour: s.open_hour }),
+    ...(s.tags !== undefined && s.tags !== '' && { tags: s.tags }),
+    ...(s.price_min !== undefined && { price_min: s.price_min }),
+    ...(s.price_max !== undefined && { price_max: s.price_max }),
+    ...(s.ratings !== undefined && s.ratings !== '' && { ratings: s.ratings }),
     ...(s.is_featured ? { is_featured: true } : {}),
     ...(s.order !== undefined && { order: s.order }),
   }
@@ -127,16 +133,18 @@ export async function searchCafes(
     url.searchParams.set('radius_max', String(params.radius_max))
   if (params.page != null) url.searchParams.set('page', String(params.page))
   if (params.size != null) url.searchParams.set('size', String(params.size))
-  if (params.tag) url.searchParams.set('tag', params.tag)
-  if (params.rating_category_type)
-    url.searchParams.set('rating_category_type', params.rating_category_type)
-  if (params.rating_category_id)
-    url.searchParams.set('rating_category_id', params.rating_category_id)
+  if (params.open_hour) url.searchParams.set('open_hour', params.open_hour)
+  if (params.tags) url.searchParams.set('tags', params.tags)
+  if (params.price_min != null)
+    url.searchParams.set('price_min', String(params.price_min))
+  if (params.price_max != null)
+    url.searchParams.set('price_max', String(params.price_max))
+  if (params.ratings) url.searchParams.set('ratings', params.ratings)
   if (params.is_featured != null)
     url.searchParams.set('is_featured', String(params.is_featured))
   if (params.order) url.searchParams.set('order', params.order)
   const res = await fetch(url.toString(), { headers: langHeaders(lang) })
-  // 404 = the focused location (district/area/poi slug) doesn't exist →
+  // 404 = specified location or filters doesn't exist →
   // render the route's notFoundComponent. Other failures → errorComponent.
   if (res.status === 404) throw notFound()
   if (!res.ok) throw new Error('Failed to fetch cafes')

@@ -2,6 +2,37 @@ import type { ExploreSearch, SearchCafesParams } from '@/lib/api/search'
 
 import type { Location, LocationType } from '@/lib/type'
 
+// --- Filter (de)serialization ------------------------------------------------
+// Single source of truth for the tags/ratings wire formats. If the backend
+// param shape ever changes, only these helpers and searchCafes need updating;
+// the components always speak string[] / number[].
+
+export function parseTags(raw: string | undefined): string[] {
+  if (!raw) return []
+  return raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+}
+
+export function serializeTags(tags: string[]): string | undefined {
+  const cleaned = tags.map((s) => s.trim()).filter(Boolean)
+  return cleaned.length > 0 ? cleaned.join(',') : undefined
+}
+
+export function parseRatingIds(raw: string | undefined): number[] {
+  if (!raw) return []
+  return raw
+    .split(',')
+    .map((s) => Number(s.trim()))
+    .filter((n) => Number.isInteger(n))
+}
+
+export function serializeRatingIds(ids: number[]): string | undefined {
+  const cleaned = ids.filter((n) => Number.isInteger(n))
+  return cleaned.length > 0 ? cleaned.join(',') : undefined
+}
+
 // Path depth → location type. Index 0 = first path segment.
 //   /explore/<district>             → depth 1 → district
 //   /explore/<district>/<area>      → depth 2 → area
@@ -61,9 +92,19 @@ export function validateExploreSearch(
           : undefined,
     map_view:
       search.map_view === true || search.map_view === 'true' ? true : undefined,
-    tag: search.tag as string | undefined,
-    rating_category_type: search.rating_category_type as string | undefined,
-    rating_category_id: search.rating_category_id as string | undefined,
+    open_hour: search.open_hour as string | undefined,
+    tags: search.tags as string | undefined,
+    price_min:
+      search.price_min !== undefined &&
+      Number.isFinite(Number(search.price_min))
+        ? Number(search.price_min)
+        : undefined,
+    price_max:
+      search.price_max !== undefined &&
+      Number.isFinite(Number(search.price_max))
+        ? Number(search.price_max)
+        : undefined,
+    ratings: search.ratings as string | undefined,
     is_featured:
       search.is_featured === true || search.is_featured === 'true'
         ? true
@@ -89,9 +130,11 @@ export function exploreLoaderDeps(search: ExploreSearch): SearchCafesParams {
     sort: search.sort ?? 'default',
     page: search.page ?? 1,
     size: search.size ?? 8,
-    tag: search.tag,
-    rating_category_type: search.rating_category_type,
-    rating_category_id: search.rating_category_id,
+    open_hour: search.open_hour,
+    tags: search.tags,
+    price_min: search.price_min,
+    price_max: search.price_max,
+    ratings: search.ratings,
     is_featured: search.is_featured,
     order: search.order,
   }

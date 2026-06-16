@@ -68,7 +68,27 @@
       "area": "Area",
       "district": "Distrik"
     },
-    "mapPolygonDisclaimer": "Area yang ditampilkan berdasarkan pada preferensi pribadi dan tidak akurat. Harap gunakan sebagai panduan umum, bukan batasan yang tepat."
+    "mapPolygonDisclaimer": "Area yang ditampilkan berdasarkan pada preferensi pribadi dan tidak akurat. Harap gunakan sebagai panduan umum, bukan batasan yang tepat.",
+    "filters": {
+      "button": "Filter",
+      "dialogLabel": "Filter",
+      "close": "Tutup filter",
+      "openTitle": "Jam buka",
+      "openNow": "Buka sekarang",
+      "atTime": "Pada jam",
+      "openNowCaption": "Menampilkan kafe yang buka sekarang",
+      "openAt": "Buka pukul",
+      "priceTitle": "Harga",
+      "priceTiers": "Peringkat",
+      "priceRange": "Rentang",
+      "tagsTitle": "Tag",
+      "ratingsTitle": "Suasana & fasilitas",
+      "apply": "Terapkan",
+      "reset": "Atur ulang",
+      "loading": "Memuat filter…",
+      "loadError": "Gagal memuat filter.",
+      "retry": "Coba lagi"
+    }
   },
   "cafe": {
     "review": "Ulasan",
