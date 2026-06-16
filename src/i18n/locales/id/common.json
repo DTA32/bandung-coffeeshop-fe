@@ -24,7 +24,8 @@
     "heroSubtitle": "Dengan ulasan jujur dan skor nyata, BDGCafé membantumu mencari tempat berikutnya untuk bekerja, bersantai, nongkrong, dan segala hal di antaranya.",
     "featuredCafes": "Kafe Pilihan",
     "noFeaturedCafes": "Belum ada kafe pilihan saat ini.",
-    "exploreByDistrict": "Eksplor berdasarkan distrik"
+    "exploreByDistrict": "Eksplor berdasarkan distrik",
+    "districtUnavailable": "Distrik tidak tersedia saat ini. Silakan cek kembali nanti."
   },
   "search": {
     "placeholder": "Cari kafe berdasarkan nama atau area",

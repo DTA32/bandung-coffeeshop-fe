@@ -61,10 +61,10 @@ export default function Footer() {
           <p className="text-bark">
             {t('footer.email')}{' '}
             <a
-              href="mailto:contact@mraditya.my.id"
+              href="mailto:contact@bdgcafe.com"
               className="text-moss hover:underline"
             >
-              contact@mraditya.my.id
+              contact@bdgcafe.com
             </a>
           </p>
         </div>

@@ -30,9 +30,6 @@ const TYPE_ICONS: Record<string, React.ReactNode> = {
   district: <Map size={14} className="text-forest" />,
 }
 
-const RESULT_ITEM_CLASS =
-  'flex gap-4 w-full cursor-pointer items-center border-none bg-transparent px-6 py-3 text-left hover:bg-cream'
-
 // Renders a quicksearch result as a Link to its destination:
 //   cafe → detail page; district / area / poi → SEO explore path built from the
 //   item's ancestors + itself. When ancestors are missing/incomplete the depth
@@ -40,23 +37,35 @@ const RESULT_ITEM_CLASS =
 //   query_id/query_type search params (search still works, URL just isn't canonical).
 function ResultLink({
   item,
+  id,
+  isActive,
+  optionRef,
   onSelect,
   children,
   search,
 }: {
   item: QuickSearchItem
+  id: string
+  isActive: boolean
+  optionRef: (el: HTMLAnchorElement | null) => void
   onSelect: () => void
   children: React.ReactNode
   search?: ExploreSearch
 }) {
+  const className = `flex gap-4 w-full cursor-pointer items-center border-none px-6 py-3 text-left 
+                    hover:bg-cream ${isActive ? 'bg-cream' : 'bg-transparent'}`
+
   if (item.type === 'cafe') {
     return (
       <LocaleLink
+        ref={optionRef}
+        id={id}
         role="option"
+        aria-selected={isActive}
         to="/{-$locale}/cafe/$cafeId"
         params={{ cafeId: item.id }}
         onClick={onSelect}
-        className={RESULT_ITEM_CLASS}
+        className={className}
       >
         {children}
       </LocaleLink>
@@ -68,12 +77,15 @@ function ResultLink({
   if (refs.length === locationTypeDepth(item.type)) {
     return (
       <LocaleLink
+        ref={optionRef}
+        id={id}
         role="option"
+        aria-selected={isActive}
         to="/{-$locale}/explore/$"
         params={{ _splat: exploreSplat(refs) }}
         search={{ ...search }}
         onClick={onSelect}
-        className={RESULT_ITEM_CLASS}
+        className={className}
       >
         {children}
       </LocaleLink>
@@ -82,11 +94,14 @@ function ResultLink({
 
   return (
     <LocaleLink
+      ref={optionRef}
+      id={id}
       role="option"
+      aria-selected={isActive}
       to="/{-$locale}/explore"
       search={{ query_id: item.id, query_type: item.type }}
       onClick={onSelect}
-      className={RESULT_ITEM_CLASS}
+      className={className}
     >
       {children}
     </LocaleLink>
@@ -107,6 +122,7 @@ export default function SearchBox({
   const [results, setResults] = useState<QuickSearchItem[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
 
   const activeFilterCount = search
     ? parseTags(search.tags).length +
@@ -116,6 +132,7 @@ export default function SearchBox({
     : 0
   const containerRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const itemRefs = useRef<Array<HTMLAnchorElement | null>>([])
   // Start true: only user typing should enable searches, not external/initial sync
   const cancelledRef = useRef(true)
 
@@ -124,6 +141,7 @@ export default function SearchBox({
     clearTimeout(timerRef.current)
     setIsOpen(false)
     setResults([])
+    setActiveIndex(-1)
   }
 
   function handleChange(value: string) {
@@ -141,6 +159,7 @@ export default function SearchBox({
     if (query.length < 2) {
       setResults([])
       setIsOpen(false)
+      setActiveIndex(-1)
       return
     }
     if (query != initialQuery) {
@@ -149,10 +168,17 @@ export default function SearchBox({
         if (cancelledRef.current) return
         setResults(items)
         setIsOpen(items.length > 0)
+        setActiveIndex(-1)
       }, 300)
     }
     return () => clearTimeout(timerRef.current)
   }, [query])
+
+  useEffect(() => {
+    if (activeIndex >= 0) {
+      itemRefs.current[activeIndex]?.scrollIntoView({ block: 'nearest' })
+    }
+  }, [activeIndex])
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -177,8 +203,30 @@ export default function SearchBox({
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Enter') handleSearch()
-    if (e.key === 'Escape') setIsOpen(false)
+    const hasOptions = isOpen && flatResults.length > 0
+
+    if (hasOptions && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      e.preventDefault()
+      const lastIndex = flatResults.length - 1
+      setActiveIndex((prev) => {
+        if (e.key === 'ArrowDown') return prev >= lastIndex ? 0 : prev + 1
+        return prev <= 0 ? lastIndex : prev - 1
+      })
+      return
+    }
+    if (e.key === 'Enter') {
+      if (hasOptions && activeIndex >= 0) {
+        e.preventDefault()
+        itemRefs.current[activeIndex]?.click()
+        return
+      }
+      handleSearch()
+      return
+    }
+    if (e.key === 'Escape') {
+      setIsOpen(false)
+      setActiveIndex(-1)
+    }
   }
 
   const grouped = results.reduce<Record<string, QuickSearchItem[]>>(
@@ -189,6 +237,20 @@ export default function SearchBox({
     {},
   )
   const groupOrder = Object.keys(LOCATION_SHORT_LABELS)
+  const flatResults = groupOrder.flatMap((type) => grouped[type] ?? [])
+  const optionIndexById = flatResults.reduce<Record<string, number>>(
+    (acc, item, index) => {
+      acc[item.id] = index
+      return acc
+    },
+    {},
+  )
+  const activeItem = activeIndex >= 0 ? flatResults[activeIndex] : undefined
+  const activeOptionId = activeItem
+    ? `${listboxId}-option-${activeItem.id}`
+    : undefined
+
+  itemRefs.current = []
 
   const dropdown = isOpen && results.length > 0 && (
     <div
@@ -203,14 +265,27 @@ export default function SearchBox({
               <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
                 {t(`explore.locationTypes.${type}`)}
               </div>
-              {grouped[type].map((item) => (
-                <ResultLink key={item.id} item={item} onSelect={dismiss} search={search}>
-                  {TYPE_ICONS[item.type]}
-                  <span className="text-sm font-medium text-forest">
-                    {item.name}
-                  </span>
-                </ResultLink>
-              ))}
+              {grouped[type].map((item) => {
+                const index = optionIndexById[item.id]
+                return (
+                  <ResultLink
+                    key={item.id}
+                    item={item}
+                    id={`${listboxId}-option-${item.id}`}
+                    isActive={index === activeIndex}
+                    optionRef={(el) => {
+                      itemRefs.current[index] = el
+                    }}
+                    onSelect={dismiss}
+                    search={search}
+                  >
+                    {TYPE_ICONS[item.type]}
+                    <span className="text-sm font-medium text-forest">
+                      {item.name}
+                    </span>
+                  </ResultLink>
+                )
+              })}
             </div>
           ),
       )}
@@ -240,6 +315,7 @@ export default function SearchBox({
               aria-expanded={isOpen}
               aria-controls={listboxId}
               aria-autocomplete="list"
+              aria-activedescendant={activeOptionId}
               className="flex-1 bg-transparent text-sm text-forest focus:outline-none py-3"
               placeholder={t('search.placeholderShort')}
             />
@@ -287,6 +363,7 @@ export default function SearchBox({
         aria-expanded={isOpen}
         aria-controls={listboxId}
         aria-autocomplete="list"
+        aria-activedescendant={activeOptionId}
         className="flex-1 rounded-lg p-2 text-sm text-forest focus:outline-none"
         placeholder={t('search.placeholderShort')}
       />

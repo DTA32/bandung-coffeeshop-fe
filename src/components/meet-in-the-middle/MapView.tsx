@@ -15,6 +15,7 @@ import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
 import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
 import { GeoJSON } from 'react-leaflet/GeoJSON'
+import type { GeoJsonObject } from 'geojson'
 
 const DEFAULT_CENTER: LatLngExpression = [-6.901557664008111, 107.6177579567244]
 
@@ -53,7 +54,7 @@ type Props = {
   circleRadiusM?: number
   // Imperatively recenters the map when this changes.
   focusCenter?: LatLngExpression | null
-  polygon?: any | null
+  polygon?: GeoJsonObject
   // When false, disables all map interactions (pan/zoom/click) — used to render
   // a static preview that an overlay turns into a single click target.
   interactive?: boolean
@@ -73,7 +74,7 @@ export default function MapView({
   circleCenter,
   circleRadiusM,
   focusCenter = null,
-  polygon = null,
+  polygon,
   interactive = true,
 }: Props) {
   const navigate = useNavigate()
@@ -123,16 +124,19 @@ export default function MapView({
         ))}
       {midpoint && <Marker position={midpoint} icon={midpointIcon} />}
       {circleAt && (
-        <Circle
-          center={circleAt}
-          radius={circleR}
-          pathOptions={{
-            color: '#2A3D22',
-            fillColor: '#2A3D22',
-            fillOpacity: 0.05,
-            weight: 1,
-          }}
-        />
+        <>
+          <Circle
+            center={circleAt}
+            radius={circleR}
+            pathOptions={{
+              color: '#2A3D22',
+              fillColor: '#2A3D22',
+              fillOpacity: 0.05,
+              weight: 1,
+            }}
+          />
+          <Marker position={circleAt} icon={midpointIcon} />
+        </>
       )}
       {results?.cafes
         .filter((c) => c.coordinates)

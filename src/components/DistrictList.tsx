@@ -26,7 +26,7 @@ export default function DistrictList({
           return (
             <LocaleLink
               key={district.id}
-              className="flex flex-col gap-1 w-full max-w-60 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0 bg-white"
+              className="flex flex-col w-full max-w-60 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0 bg-white"
               to="/{-$locale}/explore/$"
               params={{ _splat: exploreSplat([districtLocation]) }}
             >
@@ -39,7 +39,7 @@ export default function DistrictList({
                   />
                 )}
               </div>
-              <div className="flex flex-col gap-1 py-2 px-4">
+              <div className="flex flex-col gap-1 pt-2 pb-4 px-4">
                 <h3 className="font-medium">{district.name}</h3>
                 <div className="flex gap-y-1 flex-wrap">
                   {district.descendants &&
@@ -57,6 +57,13 @@ export default function DistrictList({
             </LocaleLink>
           )
         })}
+        {districts.length === 0 && (
+          <div className="flex justify-center items-center h-48 w-full">
+            <p className="text-md leading-[1.7] m-0 text-bark">
+              {t('home.districtUnavailable')}
+            </p>
+          </div>
+        )}
       </div>
     </section>
   )

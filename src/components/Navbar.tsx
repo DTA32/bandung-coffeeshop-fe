@@ -12,6 +12,7 @@ export default function Navbar() {
       <nav className="flex bg-white border h-full border-grove-light rounded-full mx-6 items-stretch font-medium text-xs text-bark no-underline text-center *:px-4 *:w-full *:flex *:flex-col *:items-center *:justify-center *:mx-2 *:my-1.5 *:rounded-full">
         <LocaleLink
           to="/{-$locale}"
+          activeOptions={{ exact: true }}
           activeProps={{
             className: 'bg-forest text-cream justify-center',
           }}
