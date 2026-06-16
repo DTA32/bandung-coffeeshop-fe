@@ -33,7 +33,9 @@ export default function SegmentedControl({
             >
               {seg.label}
             </button>
-            {i < segments.length - 1 && <div key={seg.value + i} className="w-px bg-grove-light" />}
+            {i < segments.length - 1 && (
+              <div key={seg.value + i} className="w-px bg-grove-light" />
+            )}
           </>
         )
       })}
