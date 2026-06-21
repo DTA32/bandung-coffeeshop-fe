@@ -28,8 +28,8 @@
     "districtUnavailable": "Distrik tidak tersedia saat ini. Silakan cek kembali nanti."
   },
   "search": {
-    "placeholder": "Cari kafe berdasarkan nama atau area",
-    "placeholderShort": "Cari nama kafe atau area...",
+    "placeholder": "Cari berdasarkan nama kafe, area, fasilitas, suasana, dan lainnya...",
+    "placeholderShort": "Cari berdasarkan nama kafe, area, fasilitas, suasana, dan lainnya...",
     "search": "Cari",
     "filters": "Filter"
   },
@@ -67,7 +67,8 @@
       "cafe": "Kafe",
       "poi": "Tempat",
       "area": "Area",
-      "district": "Distrik"
+      "district": "Distrik",
+      "filter": "Filter"
     },
     "mapPolygonDisclaimer": "Area yang ditampilkan berdasarkan pada preferensi pribadi dan tidak akurat. Harap gunakan sebagai panduan umum, bukan batasan yang tepat.",
     "exploreMore": "Eksplor kafe lainnya",

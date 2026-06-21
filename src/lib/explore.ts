@@ -1,6 +1,6 @@
 import type { ExploreSearch, SearchCafesParams } from '@/lib/api/search'
 
-import type { Location, LocationType } from '@/lib/type'
+import type { Location } from '@/lib/type'
 
 // --- Filter (de)serialization ------------------------------------------------
 // Single source of truth for the tags/ratings wire formats. If the backend
@@ -38,26 +38,6 @@ export function serializeRatingIds(ids: number[]): string | undefined {
 //   /explore/<district>/<area>      → depth 2 → area
 //   /explore/<district>/<area>/<poi>→ depth 3 → poi
 export const LOCATION_DEPTH = ['district', 'area', 'poi'] as const
-type DepthType = (typeof LOCATION_DEPTH)[number]
-
-// Parse the splat ("<district>/<area>/<poi>") into the leaf's API query.
-// TODO support other type (tag, featured, etc.) once we have explore routes for those.
-export function parseExploreSplat(
-  splat: string | undefined,
-): { query_id: string; query_type: DepthType } | null {
-  const segments = (splat ?? '').split('/').filter(Boolean)
-  if (segments.length < 1 || segments.length > LOCATION_DEPTH.length)
-    return null
-  return {
-    query_id: segments[segments.length - 1],
-    query_type: LOCATION_DEPTH[segments.length - 1],
-  }
-}
-
-// Expected number of path segments for a location type (cafe → 0, not path-routed).
-export function locationTypeDepth(type: LocationType): number {
-  return LOCATION_DEPTH.indexOf(type as DepthType) + 1
-}
 
 // Build the splat ("<district>/<area>/<poi>") from a location's ancestor chain
 // + itself. Used to navigate to the nested explore route.

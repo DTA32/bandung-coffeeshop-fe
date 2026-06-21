@@ -6,11 +6,13 @@ import type { Locale } from '@/i18n'
 export interface QuickSearchItem {
   id: string
   name: string
-  type: LocationType
-  // Outermost → innermost ancestors, excluding the item itself.
-  // area → [district]; poi → [district, area]; district/cafe → [].
-  // Populated by the backend; may be absent until that ships.
-  ancestors?: Location[]
+  type: LocationType | 'filter'
+  // Ready-to-use navigation target, built by the backend:
+  //   location → the canonical /explore splat (ancestor ids + self); absent when
+  //              the chain can't be resolved → fall back to query_id/query_type.
+  //   filter   → the SRP filter slug, reached at /explore/<slug>.
+  //   cafe     → absent (routed by id to /cafe/<id>).
+  slug?: string
 }
 
 export interface CafeListing {

@@ -237,7 +237,7 @@ export default function ExplorePage({
     >
       <SearchBox
         variant="srp"
-        initialQuery={data.location_name ?? ''}
+        initialQuery={data.location_name}
         search={effectiveSearch}
         onApplyFilters={applyFilters}
         filterOptions={filterOptions}

@@ -1,21 +1,22 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { Coffee, MapPinned, Map, Search, SlidersHorizontal } from 'lucide-react'
+import {
+  Coffee,
+  MapPinned,
+  Map,
+  Search,
+  SlidersHorizontal,
+  Tag,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { ExploreSearch, QuickSearchItem } from '@/lib/api/search'
 import { quickSearch } from '@/lib/api/search'
 import { LOCATION_SHORT_LABELS } from '@/lib/constants'
-import {
-  exploreSplat,
-  locationTypeDepth,
-  parseRatingIds,
-  parseTags,
-} from '@/lib/explore'
+import { parseRatingIds, parseTags } from '@/lib/explore'
 import { useLocale, localeParam } from '@/lib/locale'
 import LocaleLink from '@/components/LocaleLink'
 import FilterModal from '@/components/explore/FilterModal'
 import type { FilterOptions } from '@/lib/api/filters'
-import type { Location } from '@/lib/type'
 
 interface SearchBoxProps {
   variant?: 'hero' | 'srp'
@@ -30,13 +31,21 @@ const TYPE_ICONS: Record<string, React.ReactNode> = {
   poi: <MapPinned size={14} className="text-forest" />,
   area: <Map size={14} className="text-forest" />,
   district: <Map size={14} className="text-forest" />,
+  filter: <Tag size={14} className="text-forest" />,
 }
 
-// Renders a quicksearch result as a Link to its destination:
-//   cafe → detail page; district / area / poi → SEO explore path built from the
-//   item's ancestors + itself. When ancestors are missing/incomplete the depth
-//   won't match, so we fall back to the base /explore route with the legacy
-//   query_id/query_type search params (search still works, URL just isn't canonical).
+// A result's stable key, namespaced by type so a filter slug can't collide with
+// a location id (both spaces are flat).
+const optionKey = (item: QuickSearchItem) => `${item.type}-${item.id}`
+
+// Renders a quicksearch result as a Link to its destination. The backend hands
+// us a ready-made `slug` navigation target:
+//   cafe       → detail page (by id).
+//   has slug   → the canonical SEO explore path /explore/<slug>: locations use
+//                their ancestor-chain splat, filters use their SRP filter slug.
+//   otherwise  → a location whose canonical path couldn't be resolved; fall back
+//                to the base /explore route with the legacy query_id/query_type
+//                params (search still works, the URL just isn't canonical).
 function ResultLink({
   item,
   id,
@@ -54,7 +63,7 @@ function ResultLink({
   children: React.ReactNode
   search?: ExploreSearch
 }) {
-  const className = `flex gap-4 w-full cursor-pointer items-center border-none px-6 py-3 text-left 
+  const className = `flex gap-4 w-full cursor-pointer items-center border-none px-6 py-3 text-left
                     hover:bg-cream ${isActive ? 'bg-cream' : 'bg-transparent'}`
 
   if (item.type === 'cafe') {
@@ -74,9 +83,7 @@ function ResultLink({
     )
   }
 
-  const itemLocation = item as Location
-  const refs = [...(item.ancestors ?? []), itemLocation]
-  if (refs.length === locationTypeDepth(item.type)) {
+  if (item.slug) {
     return (
       <LocaleLink
         ref={optionRef}
@@ -84,7 +91,7 @@ function ResultLink({
         role="option"
         aria-selected={isActive}
         to="/{-$locale}/explore/$"
-        params={{ _splat: exploreSplat(refs) }}
+        params={{ _splat: item.slug }}
         search={{ ...search }}
         onClick={onSelect}
         className={className}
@@ -232,25 +239,28 @@ export default function SearchBox({
     }
   }
 
-  const grouped = results.reduce<Record<string, QuickSearchItem[]>>(
+  // Partial: a group key only exists once a result of that type shows up, so
+  // indexing yields `undefined` for the (common) absent groups.
+  const grouped = results.reduce<Partial<Record<string, QuickSearchItem[]>>>(
     (acc, item) => {
       ;(acc[item.type] ??= []).push(item)
       return acc
     },
     {},
   )
-  const groupOrder = Object.keys(LOCATION_SHORT_LABELS)
+  // Location groups first, then the filter group.
+  const groupOrder = [...Object.keys(LOCATION_SHORT_LABELS), 'filter']
   const flatResults = groupOrder.flatMap((type) => grouped[type] ?? [])
-  const optionIndexById = flatResults.reduce<Record<string, number>>(
+  const optionIndexByKey = flatResults.reduce<Record<string, number>>(
     (acc, item, index) => {
-      acc[item.id] = index
+      acc[optionKey(item)] = index
       return acc
     },
     {},
   )
   const activeItem = activeIndex >= 0 ? flatResults[activeIndex] : undefined
   const activeOptionId = activeItem
-    ? `${listboxId}-option-${activeItem.id}`
+    ? `${listboxId}-option-${optionKey(activeItem)}`
     : undefined
 
   itemRefs.current = []
@@ -261,37 +271,38 @@ export default function SearchBox({
       role="listbox"
       className="absolute left-0 right-0 top-full z-2000 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg"
     >
-      {groupOrder.map(
-        (type) =>
-          grouped[type] && (
-            <div key={type}>
-              <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
-                {t(`explore.locationTypes.${type}`)}
-              </div>
-              {grouped[type].map((item) => {
-                const index = optionIndexById[item.id]
-                return (
-                  <ResultLink
-                    key={item.id}
-                    item={item}
-                    id={`${listboxId}-option-${item.id}`}
-                    isActive={index === activeIndex}
-                    optionRef={(el) => {
-                      itemRefs.current[index] = el
-                    }}
-                    onSelect={dismiss}
-                    search={search}
-                  >
-                    {TYPE_ICONS[item.type]}
-                    <span className="text-sm font-medium text-forest">
-                      {item.name}
-                    </span>
-                  </ResultLink>
-                )
-              })}
+      {groupOrder.map((type) => {
+        const items = grouped[type]
+        if (!items) return null
+        return (
+          <div key={type}>
+            <div className="px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-bark">
+              {t(`explore.locationTypes.${type}`)}
             </div>
-          ),
-      )}
+            {items.map((item) => {
+              const index = optionIndexByKey[optionKey(item)]
+              return (
+                <ResultLink
+                  key={optionKey(item)}
+                  item={item}
+                  id={`${listboxId}-option-${optionKey(item)}`}
+                  isActive={index === activeIndex}
+                  optionRef={(el) => {
+                    itemRefs.current[index] = el
+                  }}
+                  onSelect={dismiss}
+                  search={search}
+                >
+                  {TYPE_ICONS[item.type]}
+                  <span className="text-sm font-medium text-forest">
+                    {item.name}
+                  </span>
+                </ResultLink>
+              )
+            })}
+          </div>
+        )
+      })}
     </div>
   )
 

@@ -31,8 +31,8 @@
     "districtUnavailable": "District is unavailable at the moment. Please check back later."
   },
   "search": {
-    "placeholder": "Search cafes by name or area",
-    "placeholderShort": "Search cafe name or area...",
+    "placeholder": "Search by cafe name, area, facility, vibe, and others...",
+    "placeholderShort": "Search by cafe name, area, facility, vibe, and others...",
     "search": "Search",
     "filters": "Filters"
   },
@@ -72,7 +72,8 @@
       "cafe": "Cafe",
       "poi": "POI",
       "area": "Area",
-      "district": "District"
+      "district": "District",
+      "filter": "Filters"
     },
     "mapPolygonDisclaimer": "Highlighted area is based on personal preference and not accurate. Please use it as a general guide, not an exact boundary.",
     "exploreMore": "Explore more cafes",
