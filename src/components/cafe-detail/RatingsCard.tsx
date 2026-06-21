@@ -23,10 +23,7 @@ export default function RatingsCard({ ratings }: RatingsCardProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 xl:gap-x-16 divide-y-[0.5px] divide-grove-light">
         {Object.entries(ratings).map(([key, entry]) => (
           <div key={key} className="flex flex-col">
-            <RatingSlider
-              label={t(`cafe.ratingLabels.${key}`, key)}
-              rating={entry}
-            />
+            <RatingSlider label={entry.display_name || key} rating={entry} />
           </div>
         ))}
       </div>

@@ -5,7 +5,7 @@ import { breadcrumbJsonLd, cafeItemListJsonLd, localizedPath } from '@/lib/seo'
 import type { Crumb, SeoMeta } from '@/lib/seo'
 
 type TFn = (key: string) => string
-type Labelable = { name: string; type: string }
+type Labelable = { name: string; type: string; typeLabel?: string }
 
 // "dago" → "Dago". Title-cases location slugs and rating type suffixes.
 export function prettifySlug(slug: string): string {
@@ -38,9 +38,10 @@ export function formatSrpLabel(
     case 'tag':
       return item.name
     default: {
-      // A rating category type (vibe / noise / …) → its localized label.
-      const translatedType = t(`cafe.ratingLabels.${item.type}`)
-      const formattedType = translatedType || prettifySlug(item.type)
+      // A rating category type (vibe / noise / …) → its localized label, served
+      // by the backend (display_name) and threaded through as typeLabel. Falls
+      // back to the prettified slug when the filter metadata was unavailable.
+      const formattedType = item.typeLabel || prettifySlug(item.type)
       return locale === 'id'
         ? `${formattedType} ${item.name}`
         : `${item.name} ${formattedType}`

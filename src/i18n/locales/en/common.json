@@ -161,16 +161,7 @@
     "nextImage": "Next image",
     "disclaimer": "Rating is subjective and not accurate. All scores reflect a single visit and personal preference. Your experience may vary.",
     "statusBannerTitle": "This cafe is {{status}}.",
-    "statusBannerBody": "Explore other cafes nearby below",
-    "ratingLabels": {
-      "price-rank": "Price Rank",
-      "vibe": "Vibe",
-      "noise": "Noise Level",
-      "wifi": "Wifi Speed",
-      "meals": "Meals Generosity",
-      "atmosphere": "Atmosphere",
-      "parking": "Parking"
-    }
+    "statusBannerBody": "Explore other cafes nearby below"
   },
   "price": {
     "priceRange": "Price Range",

@@ -156,16 +156,7 @@
     "nextImage": "Foto berikutnya",
     "disclaimer": "Penilaian bersifat subjektif dan tidak akurat. Semua skor mencerminkan satu kali kunjungan dan preferensi pribadi. Pengalamanmu bisa berbeda.",
     "statusBannerTitle": "Kafe ini {{status}}.",
-    "statusBannerBody": "Eksplor kafe lain di sekitarnya di bawah ini",
-    "ratingLabels": {
-      "price-rank": "Peringkat Harga",
-      "vibe": "Suasana",
-      "noise": "Tingkat Kebisingan",
-      "wifi": "Kecepatan Wifi",
-      "meals": "Porsi Makanan",
-      "atmosphere": "Atmosfer",
-      "parking": "Parkir"
-    }
+    "statusBannerBody": "Eksplor kafe lain di sekitarnya di bawah ini"
   },
   "price": {
     "priceRange": "Kisaran Harga",

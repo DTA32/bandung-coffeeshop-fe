@@ -207,10 +207,14 @@ export function srpVariants(
 //   - type: 'tag' | 'price' | 'location' | 'explore' | a rating category type
 //           (e.g. 'noise') — the discriminator the component formats on
 //   - url:  the splat (path after /explore); '' = the explore index
+//   - typeLabel: for rating items, the backend's localized type label
+//           (display_name, e.g. 'Noise Level'); the component composes the
+//           anchor text from it. Absent for non-rating axes.
 export interface SrpItem {
   name: string
   type: string
   url: string
+  typeLabel?: string
 }
 
 // A descriptive blurb for one of the page's active filters (its long copy):
@@ -237,7 +241,10 @@ export function buildSrpContent(
   segments: string[],
   options?: FilterOptions,
 ): SrpContent {
-  const meta = new Map<string, { name: string; type: string }>()
+  const meta = new Map<
+    string,
+    { name: string; type: string; typeLabel?: string }
+  >()
   const descBySlug = new Map<string, string>() // slug → long copy (enriched only)
   if (options) {
     for (const tag of options.tags) {
@@ -254,7 +261,11 @@ export function buildSrpContent(
     for (const cat of options.rating_categories)
       for (const opt of cat.options)
         if (opt.slug) {
-          meta.set(opt.slug, { name: opt.name, type: cat.type })
+          meta.set(opt.slug, {
+            name: opt.name,
+            type: cat.type,
+            typeLabel: cat.display_name,
+          })
           if (opt.long_description)
             descBySlug.set(opt.slug, opt.long_description)
         }
@@ -267,6 +278,7 @@ export function buildSrpContent(
           name: m?.name ?? v.slug,
           type: m?.type ?? v.axis,
           url: v.splat,
+          typeLabel: m?.typeLabel,
         }
       })
     : []
@@ -279,6 +291,7 @@ export function buildSrpContent(
       name: m?.name ?? seg,
       type: m?.type ?? 'location',
       url: segments.slice(0, i + 1).join('/'),
+      typeLabel: m?.typeLabel,
     })
   })
 

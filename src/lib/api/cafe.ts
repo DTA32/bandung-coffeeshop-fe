@@ -41,6 +41,7 @@ export interface RatingRange {
 }
 
 export interface RatingEntry {
+  display_name: string
   range: RatingRange[]
   score: number
   description: string
