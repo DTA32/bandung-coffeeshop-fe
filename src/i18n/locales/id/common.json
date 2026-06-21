@@ -25,7 +25,8 @@
     "featuredCafes": "Kafe Pilihan",
     "noFeaturedCafes": "Belum ada kafe pilihan saat ini.",
     "exploreByDistrict": "Eksplor berdasarkan distrik",
-    "districtUnavailable": "Distrik tidak tersedia saat ini. Silakan cek kembali nanti."
+    "districtUnavailable": "Distrik tidak tersedia saat ini. Silakan cek kembali nanti.",
+    "districtLinkTitleDescriber": "terdiri dari"
   },
   "search": {
     "placeholder": "Cari berdasarkan nama kafe, area, fasilitas, suasana, dan lainnya...",

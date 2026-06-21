@@ -20,6 +20,7 @@ export default function CafeCard({
   if (cafe.area) {
     description = cafe.area + ', Bandung'
   }
+  const linkTitle = `${cafe.name} • ${description} ${formattedRemark ? `• ${formattedRemark}` : ''}`
   return (
     <LocaleLink
       to="/{-$locale}/cafe/$cafeId"
@@ -28,6 +29,7 @@ export default function CafeCard({
       ${showBorder && `border-[0.5px] border-grove-light`}
       ${small && `max-w-xs`}
       `}
+      title={linkTitle}
     >
       <div className="aspect-video w-full overflow-hidden bg-grove-light">
         {cafe.thumbnail && (

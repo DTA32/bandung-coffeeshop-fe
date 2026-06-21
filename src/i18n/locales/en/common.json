@@ -28,7 +28,8 @@
     "featuredCafes": "Featured Cafes",
     "noFeaturedCafes": "No featured cafes at the moment.",
     "exploreByDistrict": "Explore by district",
-    "districtUnavailable": "District is unavailable at the moment. Please check back later."
+    "districtUnavailable": "District is unavailable at the moment. Please check back later.",
+    "districtLinkTitleDescriber": "consists of"
   },
   "search": {
     "placeholder": "Search by cafe name, area, facility, vibe, and others...",

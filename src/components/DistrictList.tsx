@@ -23,12 +23,16 @@ export default function DistrictList({
             type: district.type,
             thumbnail: null,
           }
+          const linkTitle = `${district.name} ${district.descendants && `${t('home.districtLinkTitleDescriber')} ${
+            district.descendants.map((d) => d.name).join(', ')
+          }`}`
           return (
             <LocaleLink
               key={district.id}
               className="flex flex-col w-full max-w-60 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0 bg-white"
               to="/{-$locale}/explore/$"
               params={{ _splat: exploreSplat([districtLocation]) }}
+              title={linkTitle}
             >
               <div className="h-24 w-full bg-grove-light rounded-t-lg">
                 {district.images && district.images.length > 0 && (
