@@ -7,6 +7,7 @@ import type { LatLngExpression } from 'leaflet'
 import type { SearchCafesData } from '@/lib/api/search'
 import MapView from '@/components/meet-in-the-middle/MapView'
 import WelcomeHeading from '@/components/explore/WelcomeHeading'
+import Image from '@/components/Image'
 
 export default function LocationHero({
   location,
@@ -61,9 +62,11 @@ export default function LocationHero({
       ) : (
         location.images?.map((img, index) => (
           <figure key={index} className={`flex-shrink-0 relative w-full`}>
-            <img
+            <Image
               src={img.url}
               alt={img.description}
+              layout="fullWidth"
+              priority={index < 3}
               className="w-full h-full object-cover"
             />
             {img.description && (

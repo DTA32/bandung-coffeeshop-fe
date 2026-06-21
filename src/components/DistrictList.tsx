@@ -2,6 +2,7 @@ import type { LocationData } from '@/lib/api/location'
 import { exploreSplat } from '@/lib/explore'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
+import Image from '@/components/Image'
 import type { Location } from '@/lib/type'
 
 export default function DistrictList({
@@ -36,9 +37,12 @@ export default function DistrictList({
             >
               <div className="h-24 w-full bg-grove-light rounded-t-lg">
                 {district.images && district.images.length > 0 && (
-                  <img
+                  <Image
                     src={district.images[0].url}
                     alt={district.name}
+                    layout="constrained"
+                    width={240}
+                    aspectRatio={240 / 96}
                     className="w-full h-full object-cover object-center rounded-t-lg"
                   />
                 )}

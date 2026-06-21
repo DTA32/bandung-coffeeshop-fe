@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { ClientOnly } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import Image from '@/components/Image'
 import type { LocationImage } from '@/lib/type'
 
 interface CafeImageGalleryProps {
@@ -97,9 +98,10 @@ function CafeImageGalleryInternal({
         )}
 
         <figure className="flex h-full max-h-full flex-col items-center justify-center">
-          <img
+          <Image
             src={images[index].url}
             alt={images[index].description}
+            layout="fullWidth"
             className="h-[95%] max-w-full object-contain"
           />
           {images[index].description && (
@@ -136,9 +138,12 @@ function CafeImageGalleryInternal({
                   : 'opacity-60 hover:opacity-100'
               }`}
             >
-              <img
+              <Image
                 src={img.url}
                 alt={img.description}
+                layout="fixed"
+                width={80}
+                height={64}
                 className="h-full w-full object-cover"
               />
             </button>

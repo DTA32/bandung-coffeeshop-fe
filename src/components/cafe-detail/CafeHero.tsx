@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { LocationImage } from '@/lib/type'
 import MapPreview from '@/components/cafe-detail/MapPreview'
 import CafeImageGallery from '@/components/cafe-detail/CafeImageGallery'
+import Image from '@/components/Image'
 import { Info } from 'lucide-react'
 import ShareButton from '@/components/cafe-detail/ShareButton'
 
@@ -42,9 +43,12 @@ function WithImage({
               style={{ width: imageWidth + '%' }}
             >
               <figure className="relative m-0 h-full w-full">
-                <img
+                <Image
                   src={img.url}
                   alt={img.description || t('cafe.photoOf', { name })}
+                  layout="fullWidth"
+                  priority={index === 0}
+                  sizes={`${imageWidth}vw`}
                   className="w-full h-full object-cover"
                 />
                 {img.description && (

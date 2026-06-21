@@ -1,4 +1,5 @@
 import LocaleLink from '@/components/LocaleLink'
+import Image from '@/components/Image'
 import type { CafeListing } from '@/lib/api/search'
 
 export default function CafeCard({
@@ -33,9 +34,12 @@ export default function CafeCard({
     >
       <div className="aspect-video w-full overflow-hidden bg-grove-light">
         {cafe.thumbnail && (
-          <img
+          <Image
             src={cafe.thumbnail}
             alt={cafe.name}
+            layout="constrained"
+            width={320}
+            aspectRatio={16 / 9}
             className="h-full w-full object-cover"
           />
         )}

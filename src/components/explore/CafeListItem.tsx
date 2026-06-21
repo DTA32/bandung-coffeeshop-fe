@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
+import Image from '@/components/Image'
 import type { CafeListing } from '@/lib/api/search'
 
 export default function CafeListItem({
@@ -47,9 +48,12 @@ export default function CafeListItem({
         className={`${smallVersion ? `w-20 h-20` : `w-35`} shrink-0 overflow-hidden rounded-l-lg bg-grove-light`}
       >
         {cafe.thumbnail && (
-          <img
+          <Image
             src={cafe.thumbnail}
             alt={cafe.name}
+            layout="fixed"
+            width={smallVersion ? 80 : 140}
+            height={smallVersion ? 80 : 100}
             className="h-full w-full object-cover"
           />
         )}

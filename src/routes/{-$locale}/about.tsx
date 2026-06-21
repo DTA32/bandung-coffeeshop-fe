@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import Breadcrumb from '@/components/Breadcrumb'
+import Image from '@/components/Image'
 import { useLocale } from '@/lib/locale'
 import {
   seoHead,
@@ -168,11 +169,13 @@ function About() {
               the reviews based on my experience.
             </p>
             <figure className="flex flex-col items-center gap-2">
-              <img
-                src="https://bdgcafe-dev-assets.dta32.my.id/collage.jpeg"
+              <Image
+                src="https://image.bdgcafe.com/collage.jpeg"
                 alt="Collage of my experiences in cafes"
+                layout="constrained"
                 width={240}
-                className="rounded-lg border border-grove-light shadow-md mt-2"
+                aspectRatio={665 / 1182}
+                className="w-60 h-auto rounded-lg border border-grove-light shadow-md mt-2"
               />
               <figcaption className="text-sm text-center text-bark w-96">
                 A collage of my experiences in cafés around Bandung. From quiet

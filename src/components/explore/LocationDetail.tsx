@@ -1,6 +1,7 @@
 import type { LocationData } from '@/lib/api/location'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
+import Image from '@/components/Image'
 import type { Location } from '@/lib/type'
 import { exploreSplat } from '@/lib/explore'
 import LocationHero from '@/components/explore/LocationHero'
@@ -73,9 +74,12 @@ export default function LocationDetail({
                 >
                   <div className="h-20 w-full bg-grove-light rounded-t-lg">
                     {desc.thumbnail && (
-                      <img
+                      <Image
                         src={desc.thumbnail}
                         alt={desc.name}
+                        layout="constrained"
+                        width={200}
+                        aspectRatio={200 / 80}
                         className="w-full h-full object-cover object-center rounded-t-lg"
                       />
                     )}
