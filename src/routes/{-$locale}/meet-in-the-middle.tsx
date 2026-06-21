@@ -19,6 +19,15 @@ import {
 import type { UserMarker } from '@/components/meet-in-the-middle/markers'
 import { searchCafes } from '@/lib/api/search'
 import type { SearchCafesData } from '@/lib/api/search'
+import {
+  seoHead,
+  localizedPath,
+  mitmCrumbs,
+  breadcrumbJsonLd,
+  webApplicationJsonLd,
+} from '@/lib/seo'
+import type { SeoMeta } from '@/lib/seo'
+import { createI18n, normalizeLocale } from '@/i18n'
 
 type MarkerSearch = { m?: string[] }
 
@@ -27,6 +36,21 @@ export const Route = createFileRoute('/{-$locale}/meet-in-the-middle')({
     const raw = search.m
     const arr = Array.isArray(raw) ? raw : raw != null ? [raw] : undefined
     return arr ? { m: arr.map(String) } : {}
+  },
+  head: (ctx: any) => {
+    const locale = normalizeLocale(ctx.params.locale)
+    const i18n = createI18n(locale)
+    const path = localizedPath(locale, '/meet-in-the-middle')
+    const seo: SeoMeta = {
+      title: i18n.t('seo.mitmTitle'),
+      description: i18n.t('seo.mitmDesc'),
+      canonicalPath: path,
+      jsonLd: [
+        breadcrumbJsonLd(mitmCrumbs((k) => i18n.t(k), locale)),
+        webApplicationJsonLd(i18n.t('mitm.title'), path),
+      ],
+    }
+    return seoHead(seo)
   },
   component: MeetInTheMiddleRoute,
 })

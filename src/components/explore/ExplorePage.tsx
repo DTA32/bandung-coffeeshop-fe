@@ -9,7 +9,11 @@ import SearchBox from '@/components/SearchBox'
 import CafeCard from '@/components/explore/CafeCard'
 import CafeListItem from '@/components/explore/CafeListItem'
 import ExplorePanel from '@/components/explore/ExplorePanel'
+import ExploreContent from '@/components/explore/ExploreContent'
 import Pagination from '@/components/explore/Pagination'
+import type { SrpContent } from '@/lib/srp'
+import type { FilterOptions } from '@/lib/api/filters'
+import { buildExploreH1, srpLocationClause } from '@/lib/seoTemplate'
 import LocaleLink from '@/components/LocaleLink'
 import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
@@ -56,10 +60,18 @@ export default function ExplorePage({
   data,
   search,
   location,
+  appliedFilters,
+  srpContent,
+  locationSplat,
+  filterOptions,
 }: {
   data: SearchCafesData
   search: ExploreSearch
   location?: LocationData
+  appliedFilters?: Partial<ExploreSearch>
+  srpContent?: SrpContent
+  locationSplat?: string
+  filterOptions?: FilterOptions
 }) {
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -82,12 +94,44 @@ export default function ExplorePage({
     return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null
   })()
 
+  // Path-encoded filters (pretty URL) merged onto the query-string search. Used
+  // ONLY for display: the filter button's count and the modal's pre-selection.
+  // Relative navigation (goTo/Pagination) must keep using the raw `search`, or
+  // path filters would double up as query params under the unchanged path.
+  const effectiveSearch: ExploreSearch = { ...search, ...appliedFilters }
+
+  const locationClause = srpLocationClause(data.formatted_location_name, t)
+  const h1 = buildExploreH1(srpContent?.crumbs ?? [], locationClause, t, locale)
+
   // Search-only update → stay on the current location path (relative nav).
   function goTo(update: ExploreSearch) {
     navigate({
       to: '.',
       search: cleanExploreSearch({ ...search, ...update }),
     })
+  }
+
+  // Applying filters lifts them OUT of the pretty path and into the query
+  // string: navigate to the location-only path (or base /explore when
+  // unfocused), never a /explore/<…filters> URL. The modal's update carries the
+  // complete filter set, so the location stays pretty while the filters live in
+  // the query. On the index/location routes (no filter path) this resolves to
+  // the same destination as goTo.
+  function applyFilters(update: ExploreSearch) {
+    const next = cleanExploreSearch({ ...search, ...update })
+    if (locationSplat) {
+      navigate({
+        to: '/{-$locale}/explore/$',
+        params: { locale: localeParam(locale), _splat: locationSplat },
+        search: next,
+      })
+    } else {
+      navigate({
+        to: '/{-$locale}/explore',
+        params: { locale: localeParam(locale) },
+        search: next,
+      })
+    }
   }
 
   // Placing a marker switches to coordinate search → the base /explore route
@@ -194,8 +238,9 @@ export default function ExplorePage({
       <SearchBox
         variant="srp"
         initialQuery={data.location_name ?? ''}
-        search={search}
-        onApplyFilters={goTo}
+        search={effectiveSearch}
+        onApplyFilters={applyFilters}
+        filterOptions={filterOptions}
       />
       {isMobile && viewControls(isMobile)}
       {isMobile && (
@@ -211,7 +256,7 @@ export default function ExplorePage({
         />
       )}
 
-      <div className="mx-auto flex-1 w-full px-6 md:px-16 py-6 flex gap-6 md:justify-center flex-col lg:flex-row min-h-[85vh]">
+      <div className="mx-auto flex-1 w-full px-6 md:px-16 py-6 flex gap-6 md:justify-center flex-col md:flex-row min-h-[85vh]">
         {!isMobile && (
           <ExplorePanel
             mapView={mapView}
@@ -225,16 +270,12 @@ export default function ExplorePage({
           />
         )}
         <div className="flex flex-col w-full max-w-screen-2xl">
+          <h1 className="text-bark mb-4 font-medium">{h1}</h1>
           <div className="mb-6 flex items-center justify-between gap-2 md:text-center">
             {!isMobile && viewControls(isMobile)}
 
             <h2 className="text-sm text-bark">
               {t('explore.cafesFound', { count: data.total })}
-              <span className="font-bold">
-                {data.formatted_location_name
-                  ? ` ${data.formatted_location_name}`
-                  : ''}
-              </span>
             </h2>
 
             <div className="flex items-center gap-2 shrink-0">
@@ -288,6 +329,8 @@ export default function ExplorePage({
           </div>
         </div>
       </div>
+
+      {srpContent && <ExploreContent content={srpContent} locale={locale} />}
     </main>
   )
 }

@@ -14,6 +14,7 @@ import {
 import { useLocale, localeParam } from '@/lib/locale'
 import LocaleLink from '@/components/LocaleLink'
 import FilterModal from '@/components/explore/FilterModal'
+import type { FilterOptions } from '@/lib/api/filters'
 import type { Location } from '@/lib/type'
 
 interface SearchBoxProps {
@@ -21,6 +22,7 @@ interface SearchBoxProps {
   initialQuery?: string
   search?: ExploreSearch
   onApplyFilters?: (update: ExploreSearch) => void
+  filterOptions?: FilterOptions
 }
 
 const TYPE_ICONS: Record<string, React.ReactNode> = {
@@ -113,6 +115,7 @@ export default function SearchBox({
   initialQuery = '',
   search,
   onApplyFilters,
+  filterOptions,
 }: SearchBoxProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -342,6 +345,7 @@ export default function SearchBox({
             search={search}
             onApply={onApplyFilters}
             onClose={() => setFiltersOpen(false)}
+            filterOptions={filterOptions}
           />
         )}
       </>

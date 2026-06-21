@@ -1,6 +1,9 @@
 import { ArrowUpDown, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { LatLngExpression } from 'leaflet'
+import Breadcrumb from '@/components/Breadcrumb'
+import { useLocale } from '@/lib/locale'
+import { mitmCrumbs } from '@/lib/seo'
 import CafeListItem from '@/components/explore/CafeListItem'
 import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
@@ -56,8 +59,9 @@ export default function MobileLayout({
   onSearch,
 }: Props) {
   const { t } = useTranslation()
+  const locale = useLocale()
   return (
-    <main className="flex flex-col bg-cream min-h-screen pb-28">
+    <main className="flex flex-col bg-cream min-h-screen mb-8">
       {alert && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-amber-800 text-sm font-semibold px-4 py-2 rounded-md shadow-md z-1000 transition-opacity duration-300 text-center">
           {alert}
@@ -134,7 +138,7 @@ export default function MobileLayout({
           {loading ? t('mitm.searching') : t('mitm.findMeetingSpots')}
         </span>
       </button>
-      {results && (
+      {results ? (
         <div className="flex flex-col bg-cream px-4 py-4 gap-3">
           {results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
@@ -169,7 +173,13 @@ export default function MobileLayout({
             </>
           )}
         </div>
+      ) : (
+        <div className="flex-1" />
       )}
+      <Breadcrumb
+        items={mitmCrumbs(t, locale)}
+        className="px-5 pt-4 justify-self-end"
+      />
     </main>
   )
 }

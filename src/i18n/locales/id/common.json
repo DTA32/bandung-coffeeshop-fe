@@ -70,6 +70,14 @@
       "district": "Distrik"
     },
     "mapPolygonDisclaimer": "Area yang ditampilkan berdasarkan pada preferensi pribadi dan tidak akurat. Harap gunakan sebagai panduan umum, bukan batasan yang tepat.",
+    "exploreMore": "Eksplor kafe lainnya",
+    "priceCheap": "Murah",
+    "breadcrumb": {
+      "label": "Breadcrumbs",
+      "home": "Beranda",
+      "explore": "Eksplor"
+    },
+    "funFacts": "Fakta menarik",
     "filters": {
       "button": "Filter",
       "dialogLabel": "Filter",
@@ -89,7 +97,28 @@
       "loading": "Memuat filter…",
       "loadError": "Gagal memuat filter.",
       "retry": "Coba lagi"
+    },
+    "in": "di",
+    "near": "dekat",
+    "h1": {
+      "cafe": "Cafe",
+      "with": "dengan"
+    },
+    "meta": {
+      "cafes": "cafe",
+      "descLead": "Eksplor",
+      "descTail": "Ulasan jujur dan skor nyata di BDGCafé membantumu menemukan tempat ngopi terbaik."
     }
+  },
+  "seo": {
+    "homeTitle": "BDGCafe - Ulasan Jujur & Rekomendasi Kafe Bandung",
+    "homeDesc": "Temukan coffee shop terbaik di Bandung. Ulasan jujur soal wifi, suasana, harga, kebisingan & lainnya untuk menemukan kafe atau tempat kerja idealmu.",
+    "cafeTitle": "{{name}} - Ulasan, Suasana, Wifi & Harga | BDGCafe",
+    "cafeDesc": "{{name}} di {{location}}: ulasan jujur kami soal wifi, suasana, kebisingan, harga & menu. Lihat rincian lengkap dan kafe terdekat di BDGCafe.",
+    "aboutTitle": "Tentang BDGCafe - Ulasan Coffee Shop Bandung",
+    "aboutDesc": "BDGCafe adalah panduan personal untuk coffee shop di Bandung - ulasan jujur dan discovery untuk menemukan kafe idealmu.",
+    "mitmTitle": "Meet in the Middle - Cari Kafe di antara beberapa titik lokasi | BDGCafe",
+    "mitmDesc": "Pilih titik-titik lokasi di Bandung dan temukan coffee shop terbaik di antaranya - pas untuk janjian dengan teman di tengah jalan. Sebuah alat dari BDGCafe."
   },
   "cafe": {
     "review": "Ulasan",

@@ -16,12 +16,27 @@ import PriceCard from '@/components/cafe-detail/PriceCard'
 import UpdatedAt from '@/components/cafe-detail/UpdatedAt'
 import NearbyCafe from '@/components/cafe-detail/NearbyCafe'
 import LocaleLink from '@/components/LocaleLink'
+import Breadcrumb from '@/components/Breadcrumb'
 import { TriangleAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { JSX } from 'react'
-import { normalizeLocale } from '@/i18n'
+import { useLocale } from '@/lib/locale'
+import {
+  seoHead,
+  localizedPath,
+  cafeJsonLd,
+  cafeCrumbs,
+  breadcrumbJsonLd,
+} from '@/lib/seo'
+import type { SeoMeta } from '@/lib/seo'
+import { createI18n, normalizeLocale } from '@/i18n'
 
 export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
+  // ctx typed `any`: see explore.$ for the head↔loader inference caveat.
+  head: (ctx: any) => {
+    const loaderData = ctx.loaderData as { seo?: SeoMeta } | undefined
+    return loaderData?.seo ? seoHead(loaderData.seo) : {}
+  },
   loader: async ({ params }) => {
     const lang = normalizeLocale(params.locale)
     let cafe: Awaited<ReturnType<typeof getCafe>>
@@ -35,7 +50,23 @@ export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
       getCafeReview(params.cafeId, lang),
       getNearbyCafes(params.cafeId, lang),
     ])
-    return { cafe, review, nearbyCafes }
+
+    // SEO: title/description fold in the cafe name + its locality; og:image is the first cafe photo when present
+    const i18n = createI18n(lang)
+    const locality = cafe.locations.at(-1)?.name
+    const location = locality ? `${locality}, Bandung` : 'Bandung'
+    const canonicalPath = localizedPath(lang, `/cafe/${params.cafeId}`)
+    const seo: SeoMeta = {
+      title: i18n.t('seo.cafeTitle', { name: cafe.name }),
+      description: i18n.t('seo.cafeDesc', { name: cafe.name, location }),
+      canonicalPath,
+      ogImage: cafe.images[0]?.url,
+      jsonLd: [
+        cafeJsonLd(cafe, review, canonicalPath),
+        breadcrumbJsonLd(cafeCrumbs(cafe, (k) => i18n.t(k), lang)),
+      ],
+    }
+    return { cafe, review, nearbyCafes, seo }
   },
   errorComponent: CafeErrorComponent,
   notFoundComponent: CafeNotFoundComponent,
@@ -153,6 +184,7 @@ function Widgets(): JSX.Element {
 function CafeDetailPage() {
   const { cafe, review } = Route.useLoaderData()
   const { t } = useTranslation()
+  const locale = useLocale()
 
   return (
     <main className="flex flex-col bg-cream min-h-screen">
@@ -184,6 +216,10 @@ function CafeDetailPage() {
         </div>
       )}
       <Widgets />
+      <Breadcrumb
+        items={cafeCrumbs(cafe, t, locale)}
+        className="mx-6 md:mx-16 mb-4"
+      />
     </main>
   )
 }

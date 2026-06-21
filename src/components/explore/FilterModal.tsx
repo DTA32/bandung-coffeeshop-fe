@@ -22,13 +22,21 @@ interface FilterModalProps {
   search: ExploreSearch
   onApply: (update: ExploreSearch) => void
   onClose: () => void
+  filterOptions?: FilterOptions
 }
 
-function FilterModalInternal({ search, onApply, onClose }: FilterModalProps) {
+function FilterModalInternal({
+  search,
+  onApply,
+  onClose,
+  filterOptions,
+}: FilterModalProps) {
   const { t } = useTranslation()
   const locale = useLocale()
 
-  const [options, setOptions] = useState<FilterOptions | null>(null)
+  const [options, setOptions] = useState<FilterOptions | null>(
+    filterOptions ?? null,
+  )
   const [error, setError] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
 
@@ -49,10 +57,15 @@ function FilterModalInternal({ search, onApply, onClose }: FilterModalProps) {
     search.open_hour,
   )
 
-  // Filters lazy-loaded first time the modal mounts (and on locale
-  // change / retry). getFilterOptions memoizes per locale, so reopening hits
-  // the cache rather than the network.
+  // Prefer the options the route already loaded; otherwise lazy-load them the
+  // first time the modal mounts (and on locale change / retry). getFilterOptions
+  // memoizes per locale, so a fallback fetch still hits the cache when warm.
   useEffect(() => {
+    if (filterOptions) {
+      setOptions(filterOptions)
+      setError(false)
+      return
+    }
     let cancelled = false
     setError(false)
     setOptions(null)
@@ -66,7 +79,7 @@ function FilterModalInternal({ search, onApply, onClose }: FilterModalProps) {
     return () => {
       cancelled = true
     }
-  }, [locale, reloadKey])
+  }, [locale, reloadKey, filterOptions])
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {

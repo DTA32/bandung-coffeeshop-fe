@@ -75,6 +75,14 @@
       "district": "District"
     },
     "mapPolygonDisclaimer": "Highlighted area is based on personal preference and not accurate. Please use it as a general guide, not an exact boundary.",
+    "exploreMore": "Explore more cafes",
+    "priceCheap": "Cheap",
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "home": "Home",
+      "explore": "Explore"
+    },
+    "funFacts": "Fun facts",
     "filters": {
       "button": "Filters",
       "dialogLabel": "Filters",
@@ -94,7 +102,28 @@
       "loading": "Loading filters…",
       "loadError": "Couldn't load filters.",
       "retry": "Retry"
+    },
+    "in": "in",
+    "near": "near",
+    "h1": {
+      "cafe": "cafe",
+      "with": "with"
+    },
+    "meta": {
+      "cafes": "cafes",
+      "descLead": "Discover",
+      "descTail": "Honest reviews and real scores on BDGCafé help you find your perfect coffee spot."
     }
+  },
+  "seo": {
+    "homeTitle": "BDGCafe - Honest Bandung Coffee Shop Reviews & Discovery",
+    "homeDesc": "Discover the best coffee shops in Bandung. Honest reviews on wifi, vibe, price, noise & more to find your perfect café or work spot.",
+    "cafeTitle": "{{name}} - Review, Vibe, Wifi & Price | BDGCafe",
+    "cafeDesc": "{{name}} in {{location}}: our honest review of the wifi, vibe, noise, price & menu. See the full breakdown and nearby cafés on BDGCafe.",
+    "aboutTitle": "About BDGCafe - Bandung Coffee Shop Reviews",
+    "aboutDesc": "BDGCafe is a personal guide to Bandung's coffee shops - honest reviews and discovery for finding your perfect café.",
+    "mitmTitle": "Meet in the Middle - Find a Café Between Multiple Spots | BDGCafe",
+    "mitmDesc": "Pick multiple locations in Bandung and find great coffee shops in between - perfect for meeting friends halfway. A BDGCafe tool."
   },
   "cafe": {
     "review": "Review",

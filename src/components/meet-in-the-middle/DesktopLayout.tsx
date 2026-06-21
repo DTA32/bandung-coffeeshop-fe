@@ -1,6 +1,9 @@
 import { ArrowUpDown, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { LatLng, LatLngExpression } from 'leaflet'
+import Breadcrumb from '@/components/Breadcrumb'
+import { useLocale } from '@/lib/locale'
+import { mitmCrumbs } from '@/lib/seo'
 import CafeListItem from '@/components/explore/CafeListItem'
 import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
@@ -52,6 +55,7 @@ export default function DesktopLayout({
   onSearch,
 }: Props) {
   const { t } = useTranslation()
+  const locale = useLocale()
   return (
     <main className="w-screen h-[95vh] relative">
       {alert && (
@@ -71,6 +75,7 @@ export default function DesktopLayout({
       <div className="absolute top-10 left-8 flex flex-col z-1000 max-w-sm">
         <div className="flex flex-col rounded-t-2xl border border-grove-light bg-white/90 shadow-lg p-5 w-full gap-4">
           <div className="flex flex-col pt-2 px-2 mb-4">
+            <Breadcrumb items={mitmCrumbs(t, locale)} className="mb-1" />
             <h1 className="text-2xl font-bold text-forest">
               {t('mitm.title')}
             </h1>

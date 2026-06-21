@@ -4,9 +4,27 @@ import Hero from '@/components/Hero'
 import FeaturedCafes from '@/components/FeaturedCafes'
 import DistrictList from '@/components/DistrictList'
 import { getLocation } from '@/lib/api/location'
-import { normalizeLocale } from '@/i18n'
+import {
+  seoHead,
+  localizedPath,
+  websiteJsonLd,
+  organizationJsonLd,
+} from '@/lib/seo'
+import type { SeoMeta } from '@/lib/seo'
+import { createI18n, normalizeLocale } from '@/i18n'
 
 export const Route = createFileRoute('/{-$locale}/')({
+  head: (ctx: any) => {
+    const locale = normalizeLocale(ctx.params.locale)
+    const i18n = createI18n(locale)
+    const seo: SeoMeta = {
+      title: i18n.t('seo.homeTitle'),
+      description: i18n.t('seo.homeDesc'),
+      canonicalPath: localizedPath(locale, '/'),
+      jsonLd: [websiteJsonLd(locale), organizationJsonLd()],
+    }
+    return seoHead(seo)
+  },
   loader: async ({ params }) => {
     const lang = normalizeLocale(params.locale)
     const [featuredCafes, districts] = await Promise.all([

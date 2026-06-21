@@ -13,6 +13,16 @@ const config = defineConfig(({ mode }) => ({
           staticNodeEnv: true,
         },
       },
+      prerender: {
+        enabled: true,
+        crawlLinks: true,
+        failOnError: false,
+        concurrency: 5,
+      },
+      sitemap: {
+        enabled: true,
+        host: 'https://bdgcafe.com',
+      },
     }),
     tailwindcss(),
     mode !== 'production' ? devtools() : null,
