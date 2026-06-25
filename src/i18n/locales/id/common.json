@@ -158,7 +158,8 @@
     "nextImage": "Foto berikutnya",
     "disclaimer": "Penilaian bersifat subjektif dan tidak akurat. Semua skor mencerminkan satu kali kunjungan dan preferensi pribadi. Pengalamanmu bisa berbeda.",
     "statusBannerTitle": "Kafe ini {{status}}.",
-    "statusBannerBody": "Eksplor kafe lain di sekitarnya di bawah ini"
+    "statusBannerBody": "Eksplor kafe lain di sekitarnya di bawah ini",
+    "similarRating": "Eksplor kafe lain dengan {{type}} {{name}}"
   },
   "price": {
     "priceRange": "Kisaran Harga",

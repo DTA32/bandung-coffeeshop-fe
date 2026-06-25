@@ -1,4 +1,6 @@
 import type { RatingEntry } from '@/lib/api/cafe'
+import LocaleLink from '@/components/LocaleLink'
+import { useTranslation } from 'react-i18next'
 
 interface RatingSliderProps {
   label: string
@@ -6,6 +8,7 @@ interface RatingSliderProps {
 }
 
 export default function RatingSlider({ label, rating }: RatingSliderProps) {
+  const { t } = useTranslation()
   const { range, score, description } = rating
 
   const segmentWidth = 100 / range.length
@@ -57,18 +60,30 @@ export default function RatingSlider({ label, rating }: RatingSliderProps) {
 
       {/* Cap labels */}
       <div className="flex justify-between">
-        {range.map((r, i) => (
-          <span
-            key={r.name}
-            className={
-              i === activeCap
-                ? 'text-[10px] font-semibold text-forest'
-                : 'text-[10px] text-forest-light'
-            }
-          >
-            {r.name}
-          </span>
-        ))}
+        {range.map((r, i) => {
+          const className =
+            i === activeCap
+              ? 'text-[10px] font-semibold text-forest'
+              : 'text-[10px] text-forest-light'
+          if (r.slug) {
+            return (
+              <LocaleLink
+                key={r.name}
+                to="/{-$locale}/explore/$"
+                params={{ _splat: `${r.slug}` }}
+                className={`${className} underline underline-offset-2 hover:underline-offset-4 decoration-[0.5px]`}
+                title={`${t('cafe.similarRating', { type: label, name: r.name })}`}
+              >
+                {r.name}
+              </LocaleLink>
+            )
+          }
+          return (
+            <span key={r.name} className={className}>
+              {r.name}
+            </span>
+          )
+        })}
       </div>
 
       <p className="text-xs text-bark m-0">{formattedDescription}</p>

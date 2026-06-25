@@ -163,7 +163,8 @@
     "nextImage": "Next image",
     "disclaimer": "Rating is subjective and not accurate. All scores reflect a single visit and personal preference. Your experience may vary.",
     "statusBannerTitle": "This cafe is {{status}}.",
-    "statusBannerBody": "Explore other cafes nearby below"
+    "statusBannerBody": "Explore other cafes nearby below",
+    "similarRating": "Explore other cafe with {{name}} {{type}}"
   },
   "price": {
     "priceRange": "Price Range",
