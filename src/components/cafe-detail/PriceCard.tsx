@@ -48,7 +48,7 @@ export default function PriceCard({ price }: PriceCardProps) {
   return (
     <div className="bg-white rounded-2xl p-5 flex flex-col gap-3.5">
       <div className="flex justify-between items-end">
-        <div className="flex items-end gap-1">
+        <div className="flex flex-col lg:flex-row justify-center lg:items-end gap-1">
           <h2 className="text-base font-bold text-forest m-0">
             {t('price.priceRange')}
           </h2>
@@ -62,7 +62,9 @@ export default function PriceCard({ price }: PriceCardProps) {
           </span>
         ) : null}
       </div>
-      <hr className="border-t border-grove-light m-0" />
+      {rows.every(({ value }) => value !== null) && (
+        <hr className="border-t border-grove-light m-0" />
+      )}
       <dl className="flex flex-col gap-3.5 m-0">
         {rows.map(
           ({ label, value }) =>
@@ -76,7 +78,7 @@ export default function PriceCard({ price }: PriceCardProps) {
             ),
         )}
       </dl>
-      {rows.every(({ value }) => value === null) && (
+      {!price.price_range_min && !price.price_range_max && (
         <div className="flex justify-center items-center h-16 w-full">
           <p className="text-sm leading-[1.7] m-0 text-bark">
             {t('price.noPriceInfo')}
