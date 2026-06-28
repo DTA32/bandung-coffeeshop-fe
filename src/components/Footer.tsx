@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
-import LanguageToggle from '#/components/LanguageToggle.tsx'
 
 export default function Footer() {
   const { t } = useTranslation()
@@ -12,7 +11,6 @@ export default function Footer() {
             <p className="text-lg font-bold">{t('brand')}</p>
             <p className="text-bark">{t('footer.tagline')}</p>
           </div>
-          <LanguageToggle text={t('footer.changeLanguage')} />
         </div>
         <div className="flex-1 flex flex-col gap-2">
           <h2 className="font-semibold">{t('footer.quickLinks')}</h2>
