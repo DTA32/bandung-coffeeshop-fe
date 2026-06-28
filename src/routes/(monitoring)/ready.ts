@@ -8,7 +8,7 @@ function readinessTarget(): string {
   return process.env.READINESS_CHECK_URL ?? `${API_BASE}/health`
 }
 
-export const Route = createFileRoute('/ready')({
+export const Route = createFileRoute('/(monitoring)/ready')({
   server: {
     handlers: {
       GET: async () => {

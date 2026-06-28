@@ -14,7 +14,7 @@ export default function Footer() {
         </div>
         <div className="flex-1 flex flex-col gap-2">
           <h2 className="font-semibold">{t('footer.quickLinks')}</h2>
-          <ul className="text-bark">
+          <ul className="text-bark grid grid-flow-col grid-rows-3">
             <li>
               <LocaleLink
                 to="/{-$locale}/explore/$"
@@ -48,6 +48,14 @@ export default function Footer() {
                 className="text-moss hover:underline"
               >
                 {t('footer.aboutUs')}
+              </LocaleLink>
+            </li>
+            <li>
+              <LocaleLink
+                to="/{-$locale}/privacy-policy"
+                className="text-moss hover:underline"
+              >
+                {t('footer.privacy')}
               </LocaleLink>
             </li>
           </ul>

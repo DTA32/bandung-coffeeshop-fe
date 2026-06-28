@@ -9,7 +9,14 @@ import { normalizeRoute, recordHttp } from '@/lib/telemetry/metrics'
 
 // Infra paths polled frequently by load balancers / Prometheus. Still served,
 // but skipped for access logs + metrics so they don't drown the real signal.
-const SILENT_PATHS = new Set(['/health', '/ready', '/metrics', '/telemetry/vitals', '/telemetry/nav', '/telemetry/error'])
+const SILENT_PATHS = new Set([
+  '/health',
+  '/ready',
+  '/metrics',
+  '/telemetry/vitals',
+  '/telemetry/nav',
+  '/telemetry/error',
+])
 
 const requestLogger = createMiddleware().server(async ({ request, next }) => {
   const { pathname } = new URL(request.url)

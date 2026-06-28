@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { renderMetrics } from '@/lib/telemetry/metrics'
 
 // Prometheus scrape endpoint. Auth is on router-level
-export const Route = createFileRoute('/metrics')({
+export const Route = createFileRoute('/(monitoring)/metrics')({
   server: {
     handlers: {
       GET: async () => {

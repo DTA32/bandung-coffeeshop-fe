@@ -18,6 +18,7 @@
     "cafeInRiau": "Kafe di Riau",
     "cafeNearGedungSate": "Kafe dekat Gedung Sate",
     "aboutUs": "Tentang kami",
+    "privacy": "Kebijakan Privasi",
     "copyright": "© {{year}} DTA32. Hak cipta dilindungi."
   },
   "home": {
@@ -121,7 +122,9 @@
     "aboutTitle": "Tentang BDGCafe - Ulasan Coffee Shop Bandung",
     "aboutDesc": "BDGCafe adalah panduan personal untuk coffee shop di Bandung - ulasan jujur dan discovery untuk menemukan kafe idealmu.",
     "mitmTitle": "Meet in the Middle - Cari Kafe di antara beberapa titik lokasi | BDGCafe",
-    "mitmDesc": "Pilih titik-titik lokasi di Bandung dan temukan coffee shop terbaik di antaranya - pas untuk janjian dengan teman di tengah jalan. Sebuah alat dari BDGCafe."
+    "mitmDesc": "Pilih titik-titik lokasi di Bandung dan temukan coffee shop terbaik di antaranya - pas untuk janjian dengan teman di tengah jalan. Sebuah alat dari BDGCafe.",
+    "privacyTitle": "Kebijakan Privasi - BDGCafe",
+    "privacyDesc": "Bagaimana BDGCafé mengumpulkan dan menggunakan data: analitik, performa, diagnostik error, dan pilihan yang kamu miliki. Kami tidak menjual datamu atau menampilkan iklan."
   },
   "cafe": {
     "review": "Ulasan",

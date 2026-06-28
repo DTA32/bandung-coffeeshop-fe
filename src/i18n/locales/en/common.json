@@ -21,6 +21,7 @@
     "cafeInRiau": "Cafe in Riau",
     "cafeNearGedungSate": "Cafe near Gedung Sate",
     "aboutUs": "About us",
+    "privacy": "Privacy Policy",
     "copyright": "© {{year}} DTA32. All rights reserved."
   },
   "home": {
@@ -126,7 +127,9 @@
     "aboutTitle": "About BDGCafe - Bandung Coffee Shop Reviews",
     "aboutDesc": "BDGCafe is a personal guide to Bandung's coffee shops - honest reviews and discovery for finding your perfect café.",
     "mitmTitle": "Meet in the Middle - Find a Café Between Multiple Spots | BDGCafe",
-    "mitmDesc": "Pick multiple locations in Bandung and find great coffee shops in between - perfect for meeting friends halfway. A BDGCafe tool."
+    "mitmDesc": "Pick multiple locations in Bandung and find great coffee shops in between - perfect for meeting friends halfway. A BDGCafe tool.",
+    "privacyTitle": "Privacy Policy - BDGCafe",
+    "privacyDesc": "How BDGCafé collects and uses data: analytics, performance, error diagnostics, and the choices you have. We don't sell your data or show ads."
   },
   "cafe": {
     "review": "Review",
