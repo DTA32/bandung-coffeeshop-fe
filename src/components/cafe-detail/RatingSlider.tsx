@@ -1,5 +1,5 @@
-import type { RatingEntry } from '@/lib/api/cafe'
 import LocaleLink from '@/components/LocaleLink'
+import type { RatingEntry } from '@/lib/api/cafe'
 import { useTranslation } from 'react-i18next'
 
 interface RatingSliderProps {

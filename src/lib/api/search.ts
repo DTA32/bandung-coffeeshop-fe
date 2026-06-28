@@ -121,30 +121,49 @@ export async function quickSearch(
   return json.data ?? []
 }
 
+// Translates the subset of SearchCafesParams that are simple URL query params.
+// searchCafes keeps its own special 404→notFound handling, so it does not use
+// the generic fetchSearchData helper below.
+function buildSearchParams(params: SearchCafesParams): URLSearchParams {
+  const sp = new URLSearchParams()
+  if (params.query_id) sp.set('query_id', params.query_id)
+  if (params.query_type) sp.set('query_type', params.query_type)
+  if (params.sort) sp.set('sort', params.sort)
+  if (params.query_coords) sp.set('query_coords', params.query_coords)
+  if (params.radius_max != null) sp.set('radius_max', String(params.radius_max))
+  if (params.page != null) sp.set('page', String(params.page))
+  if (params.size != null) sp.set('size', String(params.size))
+  if (params.open_hour) sp.set('open_hour', params.open_hour)
+  if (params.tags) sp.set('tags', params.tags)
+  if (params.price_min != null) sp.set('price_min', String(params.price_min))
+  if (params.price_max != null) sp.set('price_max', String(params.price_max))
+  if (params.ratings) sp.set('ratings', params.ratings)
+  if (params.is_featured != null)
+    sp.set('is_featured', String(params.is_featured))
+  if (params.order) sp.set('order', params.order)
+  return sp
+}
+
+// Shared fetch-and-parse for simple cafes-endpoint calls that throw on any
+// non-ok response. Not used by searchCafes, which has special 404→notFound
+// handling that must be preserved exactly.
+async function fetchSearchData(
+  url: URL,
+  lang: Locale | undefined,
+  errorMessage: string,
+): Promise<SearchCafesData> {
+  const res = await fetch(url, { headers: langHeaders(lang) })
+  if (!res.ok) throw new Error(errorMessage)
+  const json: { success: boolean; data: SearchCafesData } = await res.json()
+  return json.data
+}
+
 export async function searchCafes(
   params: SearchCafesParams,
   lang?: Locale,
 ): Promise<SearchCafesData> {
   const url = new URL(`${API_BASE}/v1/search/cafes`)
-  if (params.query_id) url.searchParams.set('query_id', params.query_id)
-  if (params.query_type) url.searchParams.set('query_type', params.query_type)
-  if (params.sort) url.searchParams.set('sort', params.sort)
-  if (params.query_coords)
-    url.searchParams.set('query_coords', params.query_coords)
-  if (params.radius_max != null)
-    url.searchParams.set('radius_max', String(params.radius_max))
-  if (params.page != null) url.searchParams.set('page', String(params.page))
-  if (params.size != null) url.searchParams.set('size', String(params.size))
-  if (params.open_hour) url.searchParams.set('open_hour', params.open_hour)
-  if (params.tags) url.searchParams.set('tags', params.tags)
-  if (params.price_min != null)
-    url.searchParams.set('price_min', String(params.price_min))
-  if (params.price_max != null)
-    url.searchParams.set('price_max', String(params.price_max))
-  if (params.ratings) url.searchParams.set('ratings', params.ratings)
-  if (params.is_featured != null)
-    url.searchParams.set('is_featured', String(params.is_featured))
-  if (params.order) url.searchParams.set('order', params.order)
+  url.search = buildSearchParams(params).toString()
   const res = await fetch(url.toString(), { headers: langHeaders(lang) })
   // 404 = specified location or filters doesn't exist →
   // render the route's notFoundComponent. Other failures → errorComponent.
@@ -160,10 +179,7 @@ export async function getFeaturedCafes(
   const url = new URL(`${API_BASE}/v1/search/cafes`)
   url.searchParams.set('is_featured', 'true')
   url.searchParams.set('size', '5')
-  const res = await fetch(url, { headers: langHeaders(lang) })
-  if (!res.ok) throw new Error('Failed to fetch featured cafes')
-  const json: { success: boolean; data: SearchCafesData } = await res.json()
-  return json.data
+  return fetchSearchData(url, lang, 'Failed to fetch featured cafes')
 }
 
 export async function getNearbyCafes(
@@ -176,8 +192,5 @@ export async function getNearbyCafes(
   url.searchParams.set('sort', 'distance')
   url.searchParams.set('size', '4')
   url.searchParams.set('radius_max', '2000')
-  const res = await fetch(url, { headers: langHeaders(lang) })
-  if (!res.ok) throw new Error('Failed to fetch nearby cafes')
-  const json: { success: boolean; data: SearchCafesData } = await res.json()
-  return json.data
+  return fetchSearchData(url, lang, 'Failed to fetch nearby cafes')
 }

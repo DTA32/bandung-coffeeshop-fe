@@ -1,14 +1,13 @@
-import { useState } from 'react'
 import { ClientOnly } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
+import type { GeoJsonObject } from 'geojson'
 import L from 'leaflet'
 import type { LatLngExpression } from 'leaflet'
 import { Info, Locate, Map } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { MapView, queryMarkerIcon } from '@/components/map'
 import type { SearchCafesData } from '@/lib/api/search'
-import MapView from '@/components/meet-in-the-middle/MapView'
-import { queryMarkerIcon } from '@/components/meet-in-the-middle/mapIcons'
-import type { GeoJsonObject } from 'geojson'
 
 type MapMarker = { lat: number; lng: number }
 

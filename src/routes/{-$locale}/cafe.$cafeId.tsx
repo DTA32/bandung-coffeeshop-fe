@@ -5,16 +5,18 @@ import {
 } from '@tanstack/react-router'
 import { getCafe, getCafeReview } from '@/lib/api/cafe'
 import { getNearbyCafes } from '@/lib/api/search'
-import CafeHero from '@/components/cafe-detail/CafeHero'
-import CafeTitle from '@/components/cafe-detail/CafeTitle'
-import ReviewCard from '@/components/cafe-detail/ReviewCard'
-import RatingsCard from '@/components/cafe-detail/RatingsCard'
-import Disclaimer from '@/components/cafe-detail/Disclaimer'
-import QuickFacts from '@/components/cafe-detail/QuickFacts'
-import ScoreCard from '@/components/cafe-detail/ScoreCard'
-import PriceCard from '@/components/cafe-detail/PriceCard'
-import UpdatedAt from '@/components/cafe-detail/UpdatedAt'
-import NearbyCafe from '@/components/cafe-detail/NearbyCafe'
+import {
+  CafeHero,
+  CafeTitle,
+  ReviewCard,
+  RatingsCard,
+  Disclaimer,
+  QuickFacts,
+  ScoreCard,
+  PriceCard,
+  UpdatedAt,
+  NearbyCafe,
+} from '@/components/cafe-detail'
 import LocaleLink from '@/components/LocaleLink'
 import Breadcrumb from '@/components/Breadcrumb'
 import { TriangleAlert } from 'lucide-react'
@@ -181,6 +183,29 @@ function Widgets(): JSX.Element {
   )
 }
 
+function CafeStatusBanner({ status }: { status: string }) {
+  const { t } = useTranslation()
+  return (
+    <div className="rounded-2xl bg-red-50 p-4 mx-6 md:mx-16 mt-4">
+      <div className="flex items-center">
+        <div className="flex-shrink-0">
+          <TriangleAlert
+            size={20}
+            className="text-red-400"
+            aria-hidden="true"
+          />
+        </div>
+        <div className="flex flex-col ml-3 text-red-800">
+          <p className="font-medium">
+            {t('cafe.statusBannerTitle', { status })}
+          </p>
+          <p className="text-sm">{t('cafe.statusBannerBody')}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function CafeDetailPage() {
   const { cafe, review } = Route.useLoaderData()
   const { t } = useTranslation()
@@ -196,25 +221,7 @@ function CafeDetailPage() {
         isSubjective={review.is_subjective}
         gmapsId={cafe.gmaps_id}
       />
-      {cafe.status !== 'active' && (
-        <div className="rounded-2xl bg-red-50 p-4 mx-6 md:mx-16 mt-4">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <TriangleAlert
-                size={20}
-                className="text-red-400"
-                aria-hidden="true"
-              />
-            </div>
-            <div className="flex flex-col ml-3 text-red-800">
-              <p className="font-medium">
-                {t('cafe.statusBannerTitle', { status: cafe.status })}
-              </p>
-              <p className="text-sm">{t('cafe.statusBannerBody')}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      {cafe.status !== 'active' && <CafeStatusBanner status={cafe.status} />}
       <Widgets />
       <Breadcrumb
         items={cafeCrumbs(cafe, t, locale)}

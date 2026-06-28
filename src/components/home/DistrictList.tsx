@@ -1,8 +1,8 @@
-import type { LocationData } from '@/lib/api/location'
-import { exploreSplat } from '@/lib/explore'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
 import Image from '@/components/Image'
+import type { LocationData } from '@/lib/api/location'
+import { exploreSplat } from '@/lib/explore'
 import type { Location } from '@/lib/type'
 
 export default function DistrictList({

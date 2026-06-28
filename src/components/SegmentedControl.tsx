@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+
 interface Segment {
   value: string
   label: string
@@ -19,9 +21,8 @@ export default function SegmentedControl({
       {segments.map((seg, i) => {
         const active = seg.value === value
         return (
-          <>
+          <Fragment key={seg.value}>
             <button
-              key={seg.value}
               type="button"
               aria-pressed={active}
               onClick={() => onChange(seg.value)}
@@ -33,10 +34,8 @@ export default function SegmentedControl({
             >
               {seg.label}
             </button>
-            {i < segments.length - 1 && (
-              <div key={seg.value + i} className="w-px bg-grove-light" />
-            )}
-          </>
+            {i < segments.length - 1 && <div className="w-px bg-grove-light" />}
+          </Fragment>
         )
       })}
     </div>

@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import AboutEN from '@/components/about/EN'
+import AboutID from '@/components/about/ID'
 import Breadcrumb from '@/components/Breadcrumb'
 import { useLocale } from '@/lib/locale'
 import {
@@ -10,8 +12,6 @@ import {
 } from '@/lib/seo'
 import type { SeoMeta } from '@/lib/seo'
 import { createI18n, normalizeLocale } from '@/i18n'
-import AboutEN from '@/components/about/EN'
-import AboutID from '@/components/about/ID'
 
 export const Route = createFileRoute('/{-$locale}/about')({
   head: (ctx: any) => {

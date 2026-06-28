@@ -2,11 +2,11 @@ import type { LocationData } from '@/lib/api/location'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
 import Image from '@/components/Image'
-import type { Location } from '@/lib/type'
-import { exploreSplat } from '@/lib/explore'
 import LocationHero from '@/components/explore/LocationHero'
 import WelcomeHeading from '@/components/explore/WelcomeHeading'
 import type { SearchCafesData } from '@/lib/api/search'
+import { exploreSplat } from '@/lib/explore'
+import type { Location } from '@/lib/type'
 
 const locationTypeHeadingKeys: Record<string, string> = {
   area: 'explore.areaHeading',

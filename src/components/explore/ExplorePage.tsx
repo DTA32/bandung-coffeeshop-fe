@@ -1,24 +1,19 @@
-import {
-  useNavigate,
-  useRouteContext,
-  useRouterState,
-} from '@tanstack/react-router'
+import { useRouteContext, useRouterState } from '@tanstack/react-router'
 import { LayoutGrid, List, Map } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/SearchBox'
-import CafeCard from '@/components/explore/CafeCard'
-import CafeListItem from '@/components/explore/CafeListItem'
+import { CafeCard, CafeListItem } from '@/components/cafe'
 import ExplorePanel from '@/components/explore/ExplorePanel'
 import ExploreContent from '@/components/explore/ExploreContent'
 import Pagination from '@/components/explore/Pagination'
+import { useExploreNavigation } from '@/components/explore/useExploreNavigation'
+import LocaleLink from '@/components/LocaleLink'
 import type { SrpContent } from '@/lib/srp'
 import type { FilterOptions } from '@/lib/api/filters'
 import { buildExploreH1, srpLocationClause } from '@/lib/seoTemplate'
-import LocaleLink from '@/components/LocaleLink'
 import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
-import { SORT_OPTIONS } from '@/lib/constants'
-import { useLocale, localeParam } from '@/lib/locale'
+import { useLocale } from '@/lib/locale'
 import type { LocationData } from '@/lib/api/location'
 
 // Shared error UI for both explore routes.
@@ -56,6 +51,89 @@ export function ExploreNotFound() {
   )
 }
 
+// Grid / List / Show-Map view toggle bar.
+// Rendered above the results on mobile and inline with the header controls on desktop.
+function ViewToggle({
+  mobile,
+  view,
+  mapView,
+  showMap,
+  onGoTo,
+}: {
+  mobile: boolean
+  view: 'grid' | 'list'
+  mapView: boolean
+  showMap: boolean | undefined
+  onGoTo: (update: ExploreSearch) => void
+}) {
+  const { t } = useTranslation()
+
+  // When the location has a dedicated map (show_map), the toggle is only
+  // relevant on mobile while the map is already open; otherwise show it
+  // whenever the map isn't shown (desktop) or always on mobile.
+  const showMapToggle = showMap ? mobile && mapView : mobile || !mapView
+
+  const toggleBtnBase = mobile
+    ? 'flex rounded-lg cursor-pointer items-center gap-1.5 px-3 py-1.5 text-sm transition border border-grove-light'
+    : 'flex rounded-lg cursor-pointer items-center gap-1.5 border-none px-3 py-1.5 text-sm transition'
+  const toggleBtnClass = (active: boolean) =>
+    `${toggleBtnBase} ${active ? 'bg-forest text-cream' : 'bg-transparent text-forest hover:bg-grove-light'}`
+
+  return (
+    <div
+      className={
+        mobile
+          ? `flex items-center gap-2 w-full bg-white justify-between ${showMapToggle && 'flex-row-reverse'} px-4 py-2 border-b border-grove-light/50`
+          : 'flex items-center gap-2'
+      }
+    >
+      {showMapToggle && (
+        <button
+          onClick={() =>
+            onGoTo({
+              map_view: mapView ? undefined : true,
+              view: mapView ? undefined : 'list',
+            })
+          }
+          aria-pressed={mapView}
+          className={`flex cursor-pointer items-center gap-1.5 text-sm rounded-lg transition ${
+            mobile
+              ? `px-3 py-1.5 border border-grove-light ${mapView ? 'bg-forest text-cream' : 'bg-white text-forest hover:bg-grove-light'}`
+              : 'px-4 py-2.5 bg-white text-forest hover:bg-grove-light'
+          }`}
+        >
+          <Map size={14} aria-hidden="true" />
+          {mobile ? t('explore.map') : t('explore.showMap')}
+        </button>
+      )}
+      <div
+        className={
+          mobile
+            ? 'flex overflow-hidden rounded-lg bg-white gap-2'
+            : 'flex overflow-hidden rounded-lg border border-white bg-white p-1 '
+        }
+      >
+        <button
+          onClick={() => onGoTo({ view: 'grid' })}
+          aria-pressed={view === 'grid'}
+          className={toggleBtnClass(view === 'grid')}
+        >
+          <LayoutGrid size={14} aria-hidden="true" />
+          {t('explore.grid')}
+        </button>
+        <button
+          onClick={() => onGoTo({ view: 'list' })}
+          aria-pressed={view === 'list'}
+          className={toggleBtnClass(view === 'list')}
+        >
+          <List size={14} aria-hidden="true" />
+          {t('explore.list')}
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export default function ExplorePage({
   data,
   search,
@@ -73,26 +151,20 @@ export default function ExplorePage({
   locationSplat?: string
   filterOptions?: FilterOptions
 }) {
-  const navigate = useNavigate()
   const { t } = useTranslation()
   const locale = useLocale()
   const isLoading = useRouterState({ select: (s) => s.isLoading })
   const { ua } = useRouteContext({ from: '__root__' })
   const isMobile = ua.isMobile
 
+  const { goTo, applyFilters, placeMarker, marker, sortOptions, activeSort } =
+    useExploreNavigation({ search, locationSplat })
+
   // Resolved values with defaults applied
   const page = search.page ?? 1
-  const sort = search.sort ?? 'default'
   const view = search.view ?? 'grid'
   const mapView = search.map_view === true
   const totalPages = Math.ceil(data.total / (search.size ?? 8))
-
-  // Single map marker derived from query_coords ("lat,lng")
-  const marker = (() => {
-    if (!search.query_coords) return null
-    const [lat, lng] = search.query_coords.split(',').map(Number)
-    return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null
-  })()
 
   // Path-encoded filters (pretty URL) merged onto the query-string search. Used
   // ONLY for display: the filter button's count and the modal's pre-selection.
@@ -102,134 +174,6 @@ export default function ExplorePage({
 
   const locationClause = srpLocationClause(data.formatted_location_name, t)
   const h1 = buildExploreH1(srpContent?.crumbs ?? [], locationClause, t, locale)
-
-  // Search-only update → stay on the current location path (relative nav).
-  function goTo(update: ExploreSearch) {
-    navigate({
-      to: '.',
-      search: cleanExploreSearch({ ...search, ...update }),
-    })
-  }
-
-  // Applying filters lifts them OUT of the pretty path and into the query
-  // string: navigate to the location-only path (or base /explore when
-  // unfocused), never a /explore/<…filters> URL. The modal's update carries the
-  // complete filter set, so the location stays pretty while the filters live in
-  // the query. On the index/location routes (no filter path) this resolves to
-  // the same destination as goTo.
-  function applyFilters(update: ExploreSearch) {
-    const next = cleanExploreSearch({ ...search, ...update })
-    if (locationSplat) {
-      navigate({
-        to: '/{-$locale}/explore/$',
-        params: { locale: localeParam(locale), _splat: locationSplat },
-        search: next,
-      })
-    } else {
-      navigate({
-        to: '/{-$locale}/explore',
-        params: { locale: localeParam(locale) },
-        search: next,
-      })
-    }
-  }
-
-  // Placing a marker switches to coordinate search → the base /explore route
-  // (drops any location path; coordinate search has no natural path).
-  function placeMarker(lat: number, lng: number, opts?: { replace?: boolean }) {
-    navigate({
-      to: '/{-$locale}/explore',
-      params: { locale: localeParam(locale) },
-      search: cleanExploreSearch({
-        ...search,
-        // Coordinate search is mutually exclusive with a location focus.
-        query_id: undefined,
-        query_type: undefined,
-        map_view: true,
-        query_coords: `${lat},${lng}`,
-        radius_max: 1500,
-        page: 1,
-        sort: 'distance',
-      }),
-      replace: opts?.replace ?? false,
-    })
-  }
-
-  const sortOptions =
-    search.query_coords !== undefined
-      ? [...SORT_OPTIONS, { value: 'distance', label: 'distance' }]
-      : SORT_OPTIONS
-
-  const activeSort = sortOptions.some((o) => o.value === sort)
-    ? sort
-    : 'default'
-
-  // Grid / List / Show-Map controls, shared between the mobile bar and the desktop header.
-  function viewControls(mobile: boolean) {
-    const toggleBtnBase = mobile
-      ? 'flex rounded-lg cursor-pointer items-center gap-1.5 px-3 py-1.5 text-sm transition border border-grove-light'
-      : 'flex rounded-lg cursor-pointer items-center gap-1.5 border-none px-3 py-1.5 text-sm transition'
-    const toggleBtnClass = (active: boolean) =>
-      `${toggleBtnBase} ${active ? 'bg-forest text-cream' : 'bg-transparent text-forest hover:bg-grove-light'}`
-
-    const showMapToggle = location?.show_map
-      ? mobile && mapView
-      : mobile || !mapView
-
-    return (
-      <div
-        className={
-          mobile
-            ? `flex items-center gap-2 w-full bg-white justify-between ${showMapToggle && 'flex-row-reverse'} px-4 py-2 border-b border-grove-light/50`
-            : 'flex items-center gap-2'
-        }
-      >
-        {showMapToggle && (
-          <button
-            onClick={() =>
-              goTo({
-                map_view: mapView ? undefined : true,
-                view: mapView ? undefined : 'list',
-              })
-            }
-            aria-pressed={mapView}
-            className={`flex cursor-pointer items-center gap-1.5 text-sm rounded-lg transition ${
-              mobile
-                ? `px-3 py-1.5 border border-grove-light ${mapView ? 'bg-forest text-cream' : 'bg-white text-forest hover:bg-grove-light'}`
-                : 'px-4 py-2.5 bg-white text-forest hover:bg-grove-light'
-            }`}
-          >
-            <Map size={14} aria-hidden="true" />
-            {mobile ? t('explore.map') : t('explore.showMap')}
-          </button>
-        )}
-        <div
-          className={
-            mobile
-              ? 'flex overflow-hidden rounded-lg bg-white gap-2'
-              : 'flex overflow-hidden rounded-lg border border-white bg-white p-1 '
-          }
-        >
-          <button
-            onClick={() => goTo({ view: 'grid' })}
-            aria-pressed={view === 'grid'}
-            className={toggleBtnClass(view === 'grid')}
-          >
-            <LayoutGrid size={14} aria-hidden="true" />
-            {t('explore.grid')}
-          </button>
-          <button
-            onClick={() => goTo({ view: 'list' })}
-            aria-pressed={view === 'list'}
-            className={toggleBtnClass(view === 'list')}
-          >
-            <List size={14} aria-hidden="true" />
-            {t('explore.list')}
-          </button>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <main
@@ -242,7 +186,15 @@ export default function ExplorePage({
         onApplyFilters={applyFilters}
         filterOptions={filterOptions}
       />
-      {isMobile && viewControls(isMobile)}
+      {isMobile && (
+        <ViewToggle
+          mobile={true}
+          view={view}
+          mapView={mapView}
+          showMap={location?.show_map}
+          onGoTo={goTo}
+        />
+      )}
       {isMobile && (
         <ExplorePanel
           mapView={mapView}
@@ -272,7 +224,15 @@ export default function ExplorePage({
         <div className="flex flex-col w-full max-w-screen-2xl">
           <h1 className="text-bark mb-4 font-medium">{h1}</h1>
           <div className="mb-6 flex items-center justify-between gap-2 md:text-center">
-            {!isMobile && viewControls(isMobile)}
+            {!isMobile && (
+              <ViewToggle
+                mobile={false}
+                view={view}
+                mapView={mapView}
+                showMap={location?.show_map}
+                onGoTo={goTo}
+              />
+            )}
 
             <h2 className="text-sm text-bark">
               {t('explore.cafesFound', { count: data.total })}

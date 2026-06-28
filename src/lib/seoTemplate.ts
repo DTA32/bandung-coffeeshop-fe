@@ -1,8 +1,8 @@
 import type { SrpItem } from '@/lib/srp'
 import type { CafeListing } from '@/lib/api/search'
-import type { Locale } from '@/i18n'
 import { breadcrumbJsonLd, cafeItemListJsonLd, localizedPath } from '@/lib/seo'
 import type { Crumb, SeoMeta } from '@/lib/seo'
+import type { Locale } from '@/i18n'
 
 type TFn = (key: string) => string
 type Labelable = { name: string; type: string; typeLabel?: string }

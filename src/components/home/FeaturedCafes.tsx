@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import CafeCard from '@/components/explore/CafeCard'
+import { CafeCard } from '@/components/cafe'
 import type { CafeListing } from '@/lib/api/search'
 
 export default function FeaturedCafes({ cafes }: { cafes: CafeListing[] }) {

@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
-import ExplorePage, {
+import {
+  ExplorePage,
   ExploreError,
   ExploreNotFound,
-} from '@/components/explore/ExplorePage'
+} from '@/components/explore'
 import { searchCafes } from '@/lib/api/search'
 import type { SearchCafesData } from '@/lib/api/search'
 import { getFilterOptions } from '@/lib/api/filters'

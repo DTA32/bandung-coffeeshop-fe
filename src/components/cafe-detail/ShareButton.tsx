@@ -1,7 +1,7 @@
 import { Share2 } from 'lucide-react'
 import { useState } from 'react'
-import { ClientOnly, useRouteContext } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { ClientOnly, useRouteContext } from '@tanstack/react-router'
 import { useLocale, localePrefix } from '@/lib/locale'
 
 function ShareButtonInternal({

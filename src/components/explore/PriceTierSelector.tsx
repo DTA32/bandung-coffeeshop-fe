@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Landmark, Leaf, ShoppingBag, Tag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { PriceTier } from '@/lib/api/filters'
 import SegmentedControl from '@/components/SegmentedControl'
 import { DualRange } from '@/components/RangeSelector'
+import type { PriceTier } from '@/lib/api/filters'
 
 interface PriceTierSelectorProps {
   tiers: PriceTier[]

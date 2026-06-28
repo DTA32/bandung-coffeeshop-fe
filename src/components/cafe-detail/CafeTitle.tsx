@@ -1,6 +1,6 @@
 import { Info } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import ShareButton from '@/components/cafe-detail/ShareButton'
+import ShareButton from './ShareButton'
 
 interface CafeTitleProps {
   id: string

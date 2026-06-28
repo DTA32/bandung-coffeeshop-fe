@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import type { UserMarker } from './markers'
+import type { UserMarker } from '@/components/map'
 
 type Props = {
   marker: UserMarker

@@ -1,8 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Hero, FeaturedCafes, DistrictList } from '@/components/home'
 import { getFeaturedCafes } from '@/lib/api/search'
-import Hero from '@/components/Hero'
-import FeaturedCafes from '@/components/FeaturedCafes'
-import DistrictList from '@/components/DistrictList'
 import { getLocation } from '@/lib/api/location'
 import {
   seoHead,

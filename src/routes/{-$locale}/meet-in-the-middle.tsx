@@ -3,22 +3,17 @@ import {
   createFileRoute,
   useRouteContext,
 } from '@tanstack/react-router'
-import { useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useLocale } from '@/lib/locale'
 import L from 'leaflet'
 import type { LatLngTuple } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import DesktopLayout from '@/components/meet-in-the-middle/DesktopLayout'
-import MobileLayout from '@/components/meet-in-the-middle/MobileLayout'
-import {
-  decodeMarker,
-  encodeMarker,
-  randomGreenHex,
-} from '@/components/meet-in-the-middle/markers'
-import type { UserMarker } from '@/components/meet-in-the-middle/markers'
+import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { decodeMarker, encodeMarker, randomGreenHex } from '@/components/map'
+import type { UserMarker } from '@/components/map'
+import { DesktopLayout, MobileLayout } from '@/components/meet-in-the-middle'
 import { searchCafes } from '@/lib/api/search'
 import type { SearchCafesData } from '@/lib/api/search'
+import { useLocale } from '@/lib/locale'
 import {
   seoHead,
   localizedPath,
@@ -70,10 +65,11 @@ function MeetInTheMiddleRoute() {
   )
 }
 
-function MeetInTheMiddle() {
+// Encapsulates all Meet-in-the-Middle state and navigation logic, leaving the
+// component responsible only for choosing between the mobile and desktop layouts.
+function useMeetInTheMiddle() {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
-  const { ua } = useRouteContext({ from: '__root__' })
   const { t } = useTranslation()
   const locale = useLocale()
 
@@ -196,6 +192,13 @@ function MeetInTheMiddle() {
     alert,
     onSearch: () => runSearch(),
   }
+
+  return { sharedProps, midpoint }
+}
+
+function MeetInTheMiddle() {
+  const { ua } = useRouteContext({ from: '__root__' })
+  const { sharedProps, midpoint } = useMeetInTheMiddle()
 
   if (ua.isMobile) {
     return <MobileLayout {...sharedProps} midpoint={midpoint} />

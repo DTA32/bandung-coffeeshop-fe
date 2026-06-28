@@ -1,9 +1,10 @@
 import { createFileRoute, notFound, redirect } from '@tanstack/react-router'
 import type { NotFoundRouteProps } from '@tanstack/react-router'
-import ExplorePage, {
+import {
+  ExplorePage,
   ExploreError,
   ExploreNotFound,
-} from '@/components/explore/ExplorePage'
+} from '@/components/explore'
 import { searchCafes } from '@/lib/api/search'
 import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import {

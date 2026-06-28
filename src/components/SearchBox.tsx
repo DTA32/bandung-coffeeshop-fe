@@ -1,5 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { useState } from 'react'
 import {
   Coffee,
   MapPinned,
@@ -9,14 +8,15 @@ import {
   Tag,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { ExploreSearch, QuickSearchItem } from '@/lib/api/search'
-import { quickSearch } from '@/lib/api/search'
-import { LOCATION_SHORT_LABELS } from '@/lib/constants'
-import { parseRatingIds, parseTags } from '@/lib/explore'
-import { useLocale, localeParam } from '@/lib/locale'
-import LocaleLink from '@/components/LocaleLink'
+// Imported directly, NOT via @/components/explore: SearchBox also renders on the
+// home page, so going through the explore barrel would pull the explore/Leaflet
+// graph into the home bundle. See components/explore/index.ts.
 import FilterModal from '@/components/explore/FilterModal'
+import LocaleLink from '@/components/LocaleLink'
+import { useQuickSearch, optionKey } from '@/components/search/useQuickSearch'
 import type { FilterOptions } from '@/lib/api/filters'
+import type { ExploreSearch, QuickSearchItem } from '@/lib/api/search'
+import { parseRatingIds, parseTags } from '@/lib/explore'
 
 interface SearchBoxProps {
   variant?: 'hero' | 'srp'
@@ -33,10 +33,6 @@ const TYPE_ICONS: Record<string, React.ReactNode> = {
   district: <Map size={14} className="text-forest" />,
   filter: <Tag size={14} className="text-forest" />,
 }
-
-// A result's stable key, namespaced by type so a filter slug can't collide with
-// a location id (both spaces are flat).
-const optionKey = (item: QuickSearchItem) => `${item.type}-${item.id}`
 
 // Renders a quicksearch result as a Link to its destination. The backend hands
 // us a ready-made `slug` navigation target:
@@ -124,15 +120,8 @@ export default function SearchBox({
   onApplyFilters,
   filterOptions,
 }: SearchBoxProps) {
-  const navigate = useNavigate()
   const { t } = useTranslation()
-  const locale = useLocale()
-  const listboxId = useId()
-  const [query, setQuery] = useState(initialQuery)
-  const [results, setResults] = useState<QuickSearchItem[]>([])
-  const [isOpen, setIsOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(-1)
 
   const activeFilterCount = search
     ? parseTags(search.tags).length +
@@ -140,130 +129,24 @@ export default function SearchBox({
       (search.open_hour ? 1 : 0) +
       (search.price_min != null || search.price_max != null ? 1 : 0)
     : 0
-  const containerRef = useRef<HTMLDivElement>(null)
-  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
-  const itemRefs = useRef<Array<HTMLAnchorElement | null>>([])
-  // Start true: only user typing should enable searches, not external/initial sync
-  const cancelledRef = useRef(true)
 
-  function dismiss() {
-    cancelledRef.current = true
-    clearTimeout(timerRef.current)
-    setIsOpen(false)
-    setResults([])
-    setActiveIndex(-1)
-  }
-
-  function handleChange(value: string) {
-    cancelledRef.current = false
-    setQuery(value)
-  }
-
-  useEffect(() => {
-    cancelledRef.current = true
-    clearTimeout(timerRef.current)
-    setQuery(initialQuery)
-  }, [initialQuery])
-
-  useEffect(() => {
-    if (query.length < 2) {
-      setResults([])
-      setIsOpen(false)
-      setActiveIndex(-1)
-      return
-    }
-    if (query != initialQuery) {
-      timerRef.current = setTimeout(async () => {
-        const items = await quickSearch(query, locale)
-        if (cancelledRef.current) return
-        setResults(items)
-        setIsOpen(items.length > 0)
-        setActiveIndex(-1)
-      }, 300)
-    }
-    return () => clearTimeout(timerRef.current)
-  }, [query])
-
-  useEffect(() => {
-    if (activeIndex >= 0) {
-      itemRefs.current[activeIndex]?.scrollIntoView({ block: 'nearest' })
-    }
-  }, [activeIndex])
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        dismiss()
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
-
-  function handleSearch() {
-    dismiss()
-    navigate({
-      to: '/{-$locale}/explore',
-      params: { locale: localeParam(locale) },
-      search: {},
-    })
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent) {
-    const hasOptions = isOpen && flatResults.length > 0
-
-    if (hasOptions && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
-      e.preventDefault()
-      const lastIndex = flatResults.length - 1
-      setActiveIndex((prev) => {
-        if (e.key === 'ArrowDown') return prev >= lastIndex ? 0 : prev + 1
-        return prev <= 0 ? lastIndex : prev - 1
-      })
-      return
-    }
-    if (e.key === 'Enter') {
-      if (hasOptions && activeIndex >= 0) {
-        e.preventDefault()
-        itemRefs.current[activeIndex]?.click()
-        return
-      }
-      handleSearch()
-      return
-    }
-    if (e.key === 'Escape') {
-      setIsOpen(false)
-      setActiveIndex(-1)
-    }
-  }
-
-  // Partial: a group key only exists once a result of that type shows up, so
-  // indexing yields `undefined` for the (common) absent groups.
-  const grouped = results.reduce<Partial<Record<string, QuickSearchItem[]>>>(
-    (acc, item) => {
-      ;(acc[item.type] ??= []).push(item)
-      return acc
-    },
-    {},
-  )
-  // Location groups first, then the filter group.
-  const groupOrder = [...Object.keys(LOCATION_SHORT_LABELS), 'filter']
-  const flatResults = groupOrder.flatMap((type) => grouped[type] ?? [])
-  const optionIndexByKey = flatResults.reduce<Record<string, number>>(
-    (acc, item, index) => {
-      acc[optionKey(item)] = index
-      return acc
-    },
-    {},
-  )
-  const activeItem = activeIndex >= 0 ? flatResults[activeIndex] : undefined
-  const activeOptionId = activeItem
-    ? `${listboxId}-option-${optionKey(activeItem)}`
-    : undefined
-
-  itemRefs.current = []
+  const {
+    query,
+    results,
+    isOpen,
+    activeIndex,
+    activeOptionId,
+    listboxId,
+    containerRef,
+    itemRefs,
+    grouped,
+    groupOrder,
+    optionIndexByKey,
+    handleChange,
+    handleKeyDown,
+    handleSearch,
+    dismiss,
+  } = useQuickSearch(initialQuery)
 
   const dropdown = isOpen && results.length > 0 && (
     <div

@@ -1,5 +1,5 @@
-import type { RatingCategory } from '@/lib/api/filters'
 import FilterChip from '@/components/FilterChip'
+import type { RatingCategory } from '@/lib/api/filters'
 
 interface RatingCategoryGroupProps {
   category: RatingCategory

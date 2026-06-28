@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { LatLngExpression } from 'leaflet'
-import type { SearchCafesData } from '@/lib/api/search'
-import MapView from '@/components/meet-in-the-middle/MapView'
+import { MapView } from '@/components/map'
 import WelcomeHeading from '@/components/explore/WelcomeHeading'
 import Image from '@/components/Image'
+import type { SearchCafesData } from '@/lib/api/search'
 
 export default function LocationHero({
   location,

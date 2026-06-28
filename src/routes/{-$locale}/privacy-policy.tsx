@@ -1,4 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
+import Breadcrumb from '@/components/Breadcrumb'
+import PrivacyPolicyEN from '@/components/privacy-policy/EN'
+import PrivacyPolicyID from '@/components/privacy-policy/ID'
 import { useLocale } from '@/lib/locale'
 import {
   breadcrumbJsonLd,
@@ -8,10 +12,6 @@ import {
 } from '@/lib/seo'
 import type { SeoMeta } from '@/lib/seo'
 import { createI18n, normalizeLocale } from '@/i18n'
-import PrivacyPolicyEN from '@/components/privacy-policy/EN'
-import PrivacyPolicyID from '@/components/privacy-policy/ID'
-import Breadcrumb from '@/components/Breadcrumb'
-import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/{-$locale}/privacy-policy')({
   head: (ctx: any) => {

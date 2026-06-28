@@ -38,6 +38,7 @@ export interface RatingRange {
   description: string
   lower_bound: number
   upper_bound: number
+  slug?: string | null
 }
 
 export interface RatingEntry {
