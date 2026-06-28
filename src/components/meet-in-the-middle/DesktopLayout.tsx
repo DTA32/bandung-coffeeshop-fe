@@ -73,7 +73,7 @@ export default function DesktopLayout({
         zoomControlPosition="bottomleft"
       />
       <div className="absolute top-10 left-8 flex flex-col z-1000 max-w-sm">
-        <div className="flex flex-col rounded-t-2xl border border-grove-light bg-white/90 shadow-lg p-5 w-full gap-4">
+        <div className="flex flex-col rounded-t-2xl border border-grove-light bg-surface/90 shadow-lg p-5 w-full gap-4">
           <div className="flex flex-col pt-2 px-2 mb-4">
             <Breadcrumb items={mitmCrumbs(t, locale)} className="mb-1" />
             <h1 className="text-2xl font-bold text-forest">
@@ -145,7 +145,7 @@ export default function DesktopLayout({
         </button>
       </div>
       {results && (
-        <div className="absolute top-10 right-8 flex flex-col z-1000 max-w-sm border border-grove-light rounded-2xl bg-white/90 shadow-lg w-sm">
+        <div className="absolute top-10 right-8 flex flex-col z-1000 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm">
           {results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 h-48 p-4 text-center">
               <p className="text-forest font-semibold">

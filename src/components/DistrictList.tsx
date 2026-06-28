@@ -30,7 +30,7 @@ export default function DistrictList({
           return (
             <LocaleLink
               key={district.id}
-              className="flex flex-col w-full max-w-60 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0 bg-white"
+              className="flex flex-col w-full max-w-60 border border-forest-lighter rounded-lg transition hover:shadow-md shrink-0 bg-surface"
               to="/{-$locale}/explore/$"
               params={{ _splat: exploreSplat([districtLocation]) }}
               title={linkTitle}

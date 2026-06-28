@@ -126,14 +126,14 @@ export default function ExploreMapView({
 
         <button
           onClick={findNearby}
-          className="flex cursor-pointer items-center gap-2 rounded-lg bg-white px-2 py-2 text-sm text-bark shadow-md transition-colors hover:bg-white/80 w-fit"
+          className="flex cursor-pointer items-center gap-2 rounded-lg bg-surface px-2 py-2 text-sm text-bark shadow-md transition-colors hover:bg-surface/80 w-fit"
         >
           <Locate size={14} />
           {t('explore.findNearby')}
         </button>
       </div>
       {!marker && (
-        <div className="absolute bottom-2 left-2 z-1000 flex items-center gap-1.5 rounded-xl bg-white/80 px-2 py-1 text-[11px] text-moss-dark shadow-sm">
+        <div className="absolute bottom-2 left-2 z-1000 flex items-center gap-1.5 rounded-xl bg-surface/80 px-2 py-1 text-[11px] text-moss-dark shadow-sm">
           <Info size={12} />
           {t('explore.clickToFindNearby')}
         </div>

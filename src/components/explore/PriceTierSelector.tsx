@@ -73,7 +73,7 @@ export default function PriceTierSelector({
       />
 
       {mode === 'tiers' ? (
-        <div className="flex w-full gap-1 rounded-lg bg-white p-1">
+        <div className="flex w-full gap-1 rounded-lg bg-surface p-1">
           {tiers.map((tier, i) => {
             const Icon = TIER_ICONS[i] ?? Tag
             const active = matchesTier(tier)

@@ -180,7 +180,7 @@ export default function ExplorePage({
       <div
         className={
           mobile
-            ? `flex items-center gap-2 w-full bg-white justify-between ${showMapToggle && 'flex-row-reverse'} px-4 py-2 border-b border-grove-light/50`
+            ? `flex items-center gap-2 w-full bg-surface justify-between ${showMapToggle && 'flex-row-reverse'} px-4 py-2 border-b border-grove-light/50`
             : 'flex items-center gap-2'
         }
       >
@@ -195,8 +195,8 @@ export default function ExplorePage({
             aria-pressed={mapView}
             className={`flex cursor-pointer items-center gap-1.5 text-sm rounded-lg transition ${
               mobile
-                ? `px-3 py-1.5 border border-grove-light ${mapView ? 'bg-forest text-cream' : 'bg-white text-forest hover:bg-grove-light'}`
-                : 'px-4 py-2.5 bg-white text-forest hover:bg-grove-light'
+                ? `px-3 py-1.5 border border-grove-light ${mapView ? 'bg-forest text-cream' : 'bg-surface text-forest hover:bg-grove-light'}`
+                : 'px-4 py-2.5 bg-surface text-forest hover:bg-grove-light'
             }`}
           >
             <Map size={14} aria-hidden="true" />
@@ -206,8 +206,8 @@ export default function ExplorePage({
         <div
           className={
             mobile
-              ? 'flex overflow-hidden rounded-lg bg-white gap-2'
-              : 'flex overflow-hidden rounded-lg border border-white bg-white p-1 '
+              ? 'flex overflow-hidden rounded-lg bg-surface gap-2'
+              : 'flex overflow-hidden rounded-lg border border-surface bg-surface p-1 '
           }
         >
           <button

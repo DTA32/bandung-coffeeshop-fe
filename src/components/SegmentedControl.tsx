@@ -15,7 +15,7 @@ export default function SegmentedControl({
   onChange,
 }: SegmentedControlProps) {
   return (
-    <div className="flex w-full gap-1 rounded-lg bg-white p-1">
+    <div className="flex w-full gap-1 rounded-lg bg-surface p-1">
       {segments.map((seg, i) => {
         const active = seg.value === value
         return (

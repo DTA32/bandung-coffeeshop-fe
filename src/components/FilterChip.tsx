@@ -20,7 +20,7 @@ export default function FilterChip({
       className={`cursor-pointer rounded-full px-3 py-1.5 text-sm transition ${
         selected
           ? 'bg-forest text-cream'
-          : 'border border-grove-light bg-white text-forest hover:bg-grove-light'
+          : 'border border-grove-light bg-surface text-forest hover:bg-grove-light'
       }`}
     >
       {label}

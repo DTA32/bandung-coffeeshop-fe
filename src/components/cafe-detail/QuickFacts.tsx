@@ -59,7 +59,7 @@ export default function QuickFacts({
   const hasLastLocation = locations.length >= 1 && locations.length <= 2
 
   return (
-    <div className="bg-white rounded-2xl p-5 flex flex-col gap-3">
+    <div className="bg-surface rounded-2xl p-5 flex flex-col gap-3">
       <h2 className="text-base font-bold text-forest m-0">
         {t('cafe.quickFacts')}
       </h2>

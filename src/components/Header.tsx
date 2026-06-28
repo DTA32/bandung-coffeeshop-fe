@@ -2,6 +2,7 @@ import { useRouteContext } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
 import LanguageToggle from '@/components/LanguageToggle'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function Header() {
   const { ua } = useRouteContext({ from: '__root__' })
@@ -10,7 +11,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b border-grove-light bg-cream px-6 md:px-16">
       <LocaleLink to="/{-$locale}" className="no-underline">
-        <span className="text-xl font-bold text-[#2A3D22]">{t('brand')}</span>
+        <span className="text-xl font-bold text-forest">{t('brand')}</span>
       </LocaleLink>
 
       <nav
@@ -36,7 +37,7 @@ export default function Header() {
           {t('nav.about')}
         </LocaleLink>
         <LanguageToggle />
-        {/* <Sun size={20} color="#4A7038" /> */}
+        <ThemeToggle />
       </nav>
     </header>
   )

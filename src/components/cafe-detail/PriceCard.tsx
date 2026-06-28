@@ -46,7 +46,7 @@ export default function PriceCard({ price }: PriceCardProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-5 flex flex-col gap-3.5">
+    <div className="bg-surface rounded-2xl p-5 flex flex-col gap-3.5">
       <div className="flex justify-between items-end">
         <div className="flex flex-col lg:flex-row justify-center lg:items-end gap-1">
           <h2 className="text-base font-bold text-forest m-0">
@@ -87,7 +87,7 @@ export default function PriceCard({ price }: PriceCardProps) {
       )}
       {price.rank && (
         <div
-          className={`flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5 self-start ${PRICE_RANK_COLORS[price.rank.type] || 'bg-gray-100 text-gray-600'}`}
+          className={`flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5 self-start ${PRICE_RANK_COLORS[price.rank.type] || 'bg-gray-100 text-gray-600 dark:bg-grove-light dark:text-bark'}`}
         >
           <Tag size={12} aria-hidden="true" />
           <span className="text-xs font-semibold">{price.rank.label}</span>

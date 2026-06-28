@@ -269,7 +269,7 @@ export default function SearchBox({
     <div
       id={listboxId}
       role="listbox"
-      className="absolute left-0 right-0 top-full z-2000 mt-1 overflow-hidden rounded-lg border border-grove-light bg-white shadow-lg"
+      className="absolute left-0 right-0 top-full z-2000 mt-1 overflow-hidden rounded-lg border border-grove-light bg-surface shadow-lg"
     >
       {groupOrder.map((type) => {
         const items = grouped[type]
@@ -309,7 +309,7 @@ export default function SearchBox({
   if (variant === 'srp') {
     return (
       <>
-        <div className="flex items-center justify-between gap-4 border-b border-grove-light/50 bg-white px-6 md:px-16 py-5">
+        <div className="flex items-center justify-between gap-4 border-b border-grove-light/50 bg-surface px-6 md:px-16 py-5">
           <div
             ref={containerRef}
             className="relative flex gap-3 border border-grove-light bg-cream w-full px-4 items-center rounded-lg"
@@ -366,7 +366,7 @@ export default function SearchBox({
   return (
     <div
       ref={containerRef}
-      className="relative flex w-full max-w-150 items-center gap-2 rounded-lg bg-white p-2"
+      className="relative flex w-full max-w-150 items-center gap-2 rounded-lg bg-surface p-2"
     >
       <input
         type="text"

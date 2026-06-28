@@ -8,7 +8,9 @@
     "meetInTheMiddleShort1": "Meet in",
     "meetInTheMiddleShort2": "the Middle",
     "about": "About",
-    "language": "Language"
+    "language": "Language",
+    "darkMode": "Switch to dark mode",
+    "lightMode": "Switch to light mode"
   },
   "footer": {
     "tagline": "Discover the best cafes in Bandung for remote work and hanging out with friends. Find your perfect spot today!",

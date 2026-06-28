@@ -50,7 +50,7 @@ export default function MarkerListItem({
                   onCancelEdit()
                 }
               }}
-              className="font-semibold text-forest bg-white border border-grove-light rounded px-1 py-0.5 text-sm outline-none focus:border-forest"
+              className="font-semibold text-forest bg-surface border border-grove-light rounded px-1 py-0.5 text-sm outline-none focus:border-forest"
             />
           ) : (
             <button

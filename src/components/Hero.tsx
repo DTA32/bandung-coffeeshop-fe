@@ -10,7 +10,7 @@ export default function Hero() {
         bg-[url(https://image.bdgcafe.com/homepage.jpg)]
       "
     >
-      <div className="flex w-full max-w-240 flex-col items-center gap-5 p-6 rounded-lg text-cream">
+      <div className="flex w-full max-w-240 flex-col items-center gap-5 p-6 rounded-lg text-[#f7f5ee]">
         <h1 className="m-0 md:text-center text-3xl md:text-5xl font-bold leading-[1.15]">
           {t('home.heroTitle')}
         </h1>

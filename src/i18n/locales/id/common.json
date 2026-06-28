@@ -5,7 +5,9 @@
     "home": "Beranda",
     "explore": "Eksplor",
     "about": "Tentang",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "darkMode": "Ganti ke mode gelap",
+    "lightMode": "Ganti ke mode terang"
   },
   "footer": {
     "tagline": "Temukan kafe terbaik di Bandung untuk kerja remote dan nongkrong bersama teman. Temukan tempat favoritmu hari ini!",

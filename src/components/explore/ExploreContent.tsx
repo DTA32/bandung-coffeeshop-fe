@@ -24,7 +24,7 @@ function VariantLinks({ items, locale }: { items: SrpItem[]; locale: string }) {
             <LocaleLink
               to="/{-$locale}/explore/$"
               params={{ _splat: v.url }}
-              className="inline-block rounded-full bg-white px-3 py-1.5 text-sm text-forest no-underline transition hover:bg-grove-light"
+              className="inline-block rounded-full bg-surface px-3 py-1.5 text-sm text-forest no-underline transition hover:bg-grove-light"
             >
               {formatSrpLabel(v, t, locale)}
             </LocaleLink>

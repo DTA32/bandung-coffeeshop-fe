@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/plus-jakarta-sans';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-forest: #2a3d22;
   --color-moss-dark: #4a5a38;
@@ -9,9 +11,38 @@
   --color-grove-light: #d4e3c5;
   --color-bark: #7a8e70;
   --color-cream: #f7f5ee;
+  --color-surface: #ffffff;
   --color-forest-light: #a0b090;
   --color-forest-lighter: #eaf3de;
   --font-sans: 'Plus Jakarta Sans Variable', sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+  --color-cream: #14180f;
+  --color-surface: #1e251a;
+  --color-forest-lighter: #232b1d;
+  --color-forest: #eaefe2;
+  --color-bark: #a2b397;
+  --color-forest-light: #7f9072;
+  --color-moss: #9bcb7c;
+  --color-grove: #82bc64;
+  --color-moss-dark: #5e7547;
+  --color-grove-light: #313b27;
+  --color-amber-50: #451a03; /* amber-950 — warning badge bg */
+  --color-amber-600: #fcd34d; /* amber-300 — toast text */
+  --color-amber-700: #fcd34d; /* amber-300 — warning badge text */
+  --color-amber-800: #fcd34d; /* amber-300 — toast text */
+  --color-orange-100: #431407; /* orange-950 — price-tier bg */
+  --color-orange-400: #fdba74; /* orange-300 — price-tier text */
+  --color-red-50: #450a0a; /* red-950 — error banner bg */
+  --color-red-100: #450a0a; /* red-950 — price-tier bg */
+  --color-red-400: #fca5a5; /* red-300 — error icon / price-tier text */
+  --color-red-800: #fca5a5; /* red-300 — error text */
 }
 
 * {
@@ -21,5 +52,9 @@
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans Variable', sans-serif;
+  color: var(--color-forest);
   -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }

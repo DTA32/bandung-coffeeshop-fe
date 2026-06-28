@@ -19,7 +19,7 @@ export default function MapPreview({
     <>
       <iframe
         title={t('cafe.mapOf', { name: cafeName })}
-        className={`bg-white rounded-xl border border-grove-light overflow-hidden shadow-sm z-10
+        className={`bg-surface rounded-xl border border-grove-light overflow-hidden shadow-sm z-10
           ${additionalClass || ''}
           ${withAlternateButton ? 'invisible md:visible' : ''}
         `}
@@ -29,7 +29,7 @@ export default function MapPreview({
       {withAlternateButton && (
         <a
           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cafeName)}&query_place_id=${placeId}`}
-          className="md:invisible absolute right-6 top-4 w-fit bg-white rounded-lg  overflow-hidden shadow-sm text-moss py-2 px-3 flex items-center gap-1 text-xs"
+          className="md:invisible absolute right-6 top-4 w-fit bg-surface rounded-lg  overflow-hidden shadow-sm text-moss py-2 px-3 flex items-center gap-1 text-xs"
           target="_blank"
           rel="noopener noreferrer"
           aria-label={t('cafe.openInGmaps', { name: cafeName })}

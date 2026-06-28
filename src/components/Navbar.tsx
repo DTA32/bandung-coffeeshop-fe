@@ -2,6 +2,8 @@ import { useRouteContext } from '@tanstack/react-router'
 import { Compass, Home, MapPin } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
+import LanguageToggle from "#/components/LanguageToggle.tsx";
+import ThemeToggle from "#/components/ThemeToggle.tsx";
 
 export default function Navbar() {
   const { ua } = useRouteContext({ from: '__root__' })
@@ -9,7 +11,7 @@ export default function Navbar() {
   if (!ua.isMobile) return null
   return (
     <div className="sticky mb-5 w-full bottom-5 z-1000 h-16">
-      <nav className="flex bg-white border h-full border-grove-light rounded-full mx-6 items-stretch font-medium text-xs text-bark no-underline text-center *:px-4 *:w-full *:flex *:flex-col *:items-center *:justify-center *:mx-2 *:my-1.5 *:rounded-full">
+      <nav className="flex bg-surface border h-full border-grove-light rounded-full mx-6 items-stretch font-medium text-xs text-bark no-underline text-center *:px-4 *:w-full *:flex *:flex-col *:items-center *:justify-center *:mx-2 *:my-1.5 *:rounded-full">
         <LocaleLink
           to="/{-$locale}"
           activeOptions={{ exact: true }}
@@ -39,6 +41,10 @@ export default function Navbar() {
           <span className="truncate">{t('nav.meetInTheMiddleShort1')}</span>
           <span className="truncate">{t('nav.meetInTheMiddleShort2')}</span>
         </LocaleLink>
+        <div className="!flex-row !px-1 !justify-between">
+          <LanguageToggle className={"!text-bark"} />
+          <ThemeToggle className={"!text-bark"} />
+        </div>
       </nav>
     </div>
   )

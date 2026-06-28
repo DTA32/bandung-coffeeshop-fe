@@ -41,7 +41,7 @@ export default function CafeListItem({
       to="/{-$locale}/cafe/$cafeId"
       target={openNewTab ? '_blank' : undefined}
       params={{ cafeId: cafe.id }}
-      className={`flex gap-4 rounded-xl ${smallVersion ? `h-20` : `h-25`} bg-white no-underline transition hover:bg-grove-light/20 ${withBorder ? 'border border-grove-light' : ''}`}
+      className={`flex gap-4 rounded-xl ${smallVersion ? `h-20` : `h-25`} bg-surface no-underline transition hover:bg-grove-light/20 ${withBorder ? 'border border-grove-light' : ''}`}
       title={linkTitle}
     >
       <div
