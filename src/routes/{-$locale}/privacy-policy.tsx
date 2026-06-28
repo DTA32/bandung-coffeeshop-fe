@@ -1,14 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useLocale } from '@/lib/locale'
-import { localizedPath, seoHead } from '@/lib/seo'
+import {
+  breadcrumbJsonLd,
+  localizedPath,
+  privacyPolicyCrumbs,
+  seoHead,
+} from '@/lib/seo'
 import type { SeoMeta } from '@/lib/seo'
 import { createI18n, normalizeLocale } from '@/i18n'
 import PrivacyPolicyEN from '@/components/privacy-policy/EN'
 import PrivacyPolicyID from '@/components/privacy-policy/ID'
+import Breadcrumb from '@/components/Breadcrumb'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/{-$locale}/privacy-policy')({
-  // Only the SEO title/description live in i18n; the page content stays in the
-  // EN/ID components.
   head: (ctx: any) => {
     const locale = normalizeLocale(ctx.params.locale)
     const i18n = createI18n(locale)
@@ -16,6 +21,7 @@ export const Route = createFileRoute('/{-$locale}/privacy-policy')({
       title: i18n.t('seo.privacyTitle'),
       description: i18n.t('seo.privacyDesc'),
       canonicalPath: localizedPath(locale, '/privacy-policy'),
+      jsonLd: [breadcrumbJsonLd(privacyPolicyCrumbs((k) => i18n.t(k), locale))],
     }
     return seoHead(seo)
   },
@@ -23,6 +29,14 @@ export const Route = createFileRoute('/{-$locale}/privacy-policy')({
 })
 
 function PrivacyPolicy() {
+  const { t } = useTranslation()
   const locale = useLocale()
-  return locale === 'en' ? <PrivacyPolicyEN /> : <PrivacyPolicyID />
+  return (
+    <main className="flex-1 md:px-8 py-12">
+      <div className="mx-auto max-w-3xl px-6 sm:px-8">
+        <Breadcrumb items={privacyPolicyCrumbs(t, locale)} />
+      </div>
+      {locale === 'en' ? <PrivacyPolicyEN /> : <PrivacyPolicyID />}
+    </main>
+  )
 }

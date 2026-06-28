@@ -37,6 +37,16 @@ export function aboutCrumbs(t: TFn, locale: Locale): Crumb[] {
   ]
 }
 
+export function privacyPolicyCrumbs(t: TFn, locale: Locale): Crumb[] {
+  return [
+    homeCrumb(t, locale),
+    {
+      name: t('nav.privacyPolicy'),
+      path: localizedPath(locale, '/privacy-policy'),
+    },
+  ]
+}
+
 export function mitmCrumbs(t: TFn, locale: Locale): Crumb[] {
   return [
     homeCrumb(t, locale),
