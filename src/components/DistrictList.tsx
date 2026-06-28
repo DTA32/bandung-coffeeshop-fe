@@ -24,9 +24,12 @@ export default function DistrictList({
             type: district.type,
             thumbnail: null,
           }
-          const linkTitle = `${district.name} ${district.descendants && `${t('home.districtLinkTitleDescriber')} ${
-            district.descendants.map((d) => d.name).join(', ')
-          }`}`
+          const linkTitle = `${district.name} ${
+            district.descendants &&
+            `${t('home.districtLinkTitleDescriber')} ${district.descendants
+              .map((d) => d.name)
+              .join(', ')}`
+          }`
           return (
             <LocaleLink
               key={district.id}

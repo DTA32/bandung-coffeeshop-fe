@@ -9,14 +9,35 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReadyRouteImport } from './routes/ready'
+import { Route as MetricsRouteImport } from './routes/metrics'
+import { Route as HealthRouteImport } from './routes/health'
 import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route'
 import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}/index'
 import { Route as Char123LocaleChar125MeetInTheMiddleRouteImport } from './routes/{-$locale}/meet-in-the-middle'
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}/about'
+import { Route as TelemetryVitalsRouteImport } from './routes/telemetry.vitals'
+import { Route as TelemetryNavRouteImport } from './routes/telemetry.nav'
+import { Route as TelemetryErrorRouteImport } from './routes/telemetry.error'
 import { Route as Char123LocaleChar125ExploreIndexRouteImport } from './routes/{-$locale}/explore.index'
 import { Route as Char123LocaleChar125ExploreSplatRouteImport } from './routes/{-$locale}/explore.$'
 import { Route as Char123LocaleChar125CafeCafeIdRouteImport } from './routes/{-$locale}/cafe.$cafeId'
 
+const ReadyRoute = ReadyRouteImport.update({
+  id: '/ready',
+  path: '/ready',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetricsRoute = MetricsRouteImport.update({
+  id: '/metrics',
+  path: '/metrics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char123LocaleChar125RouteRoute =
   Char123LocaleChar125RouteRouteImport.update({
     id: '/{-$locale}',
@@ -41,6 +62,21 @@ const Char123LocaleChar125AboutRoute =
     path: '/about',
     getParentRoute: () => Char123LocaleChar125RouteRoute,
   } as any)
+const TelemetryVitalsRoute = TelemetryVitalsRouteImport.update({
+  id: '/telemetry/vitals',
+  path: '/telemetry/vitals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TelemetryNavRoute = TelemetryNavRouteImport.update({
+  id: '/telemetry/nav',
+  path: '/telemetry/nav',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TelemetryErrorRoute = TelemetryErrorRouteImport.update({
+  id: '/telemetry/error',
+  path: '/telemetry/error',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char123LocaleChar125ExploreIndexRoute =
   Char123LocaleChar125ExploreIndexRouteImport.update({
     id: '/explore/',
@@ -62,6 +98,12 @@ const Char123LocaleChar125CafeCafeIdRoute =
 
 export interface FileRoutesByFullPath {
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/health': typeof HealthRoute
+  '/metrics': typeof MetricsRoute
+  '/ready': typeof ReadyRoute
+  '/telemetry/error': typeof TelemetryErrorRoute
+  '/telemetry/nav': typeof TelemetryNavRoute
+  '/telemetry/vitals': typeof TelemetryVitalsRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
@@ -70,6 +112,12 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/explore/': typeof Char123LocaleChar125ExploreIndexRoute
 }
 export interface FileRoutesByTo {
+  '/health': typeof HealthRoute
+  '/metrics': typeof MetricsRoute
+  '/ready': typeof ReadyRoute
+  '/telemetry/error': typeof TelemetryErrorRoute
+  '/telemetry/nav': typeof TelemetryNavRoute
+  '/telemetry/vitals': typeof TelemetryVitalsRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
   '/{-$locale}': typeof Char123LocaleChar125IndexRoute
@@ -80,6 +128,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/health': typeof HealthRoute
+  '/metrics': typeof MetricsRoute
+  '/ready': typeof ReadyRoute
+  '/telemetry/error': typeof TelemetryErrorRoute
+  '/telemetry/nav': typeof TelemetryNavRoute
+  '/telemetry/vitals': typeof TelemetryVitalsRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
   '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
@@ -91,6 +145,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/{-$locale}'
+    | '/health'
+    | '/metrics'
+    | '/ready'
+    | '/telemetry/error'
+    | '/telemetry/nav'
+    | '/telemetry/vitals'
     | '/{-$locale}/about'
     | '/{-$locale}/meet-in-the-middle'
     | '/{-$locale}/'
@@ -99,6 +159,12 @@ export interface FileRouteTypes {
     | '/{-$locale}/explore/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/health'
+    | '/metrics'
+    | '/ready'
+    | '/telemetry/error'
+    | '/telemetry/nav'
+    | '/telemetry/vitals'
     | '/{-$locale}/about'
     | '/{-$locale}/meet-in-the-middle'
     | '/{-$locale}'
@@ -108,6 +174,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/{-$locale}'
+    | '/health'
+    | '/metrics'
+    | '/ready'
+    | '/telemetry/error'
+    | '/telemetry/nav'
+    | '/telemetry/vitals'
     | '/{-$locale}/about'
     | '/{-$locale}/meet-in-the-middle'
     | '/{-$locale}/'
@@ -118,10 +190,37 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   Char123LocaleChar125RouteRoute: typeof Char123LocaleChar125RouteRouteWithChildren
+  HealthRoute: typeof HealthRoute
+  MetricsRoute: typeof MetricsRoute
+  ReadyRoute: typeof ReadyRoute
+  TelemetryErrorRoute: typeof TelemetryErrorRoute
+  TelemetryNavRoute: typeof TelemetryNavRoute
+  TelemetryVitalsRoute: typeof TelemetryVitalsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/ready': {
+      id: '/ready'
+      path: '/ready'
+      fullPath: '/ready'
+      preLoaderRoute: typeof ReadyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metrics': {
+      id: '/metrics'
+      path: '/metrics'
+      fullPath: '/metrics'
+      preLoaderRoute: typeof MetricsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/{-$locale}': {
       id: '/{-$locale}'
       path: '/{-$locale}'
@@ -149,6 +248,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/{-$locale}/about'
       preLoaderRoute: typeof Char123LocaleChar125AboutRouteImport
       parentRoute: typeof Char123LocaleChar125RouteRoute
+    }
+    '/telemetry/vitals': {
+      id: '/telemetry/vitals'
+      path: '/telemetry/vitals'
+      fullPath: '/telemetry/vitals'
+      preLoaderRoute: typeof TelemetryVitalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/telemetry/nav': {
+      id: '/telemetry/nav'
+      path: '/telemetry/nav'
+      fullPath: '/telemetry/nav'
+      preLoaderRoute: typeof TelemetryNavRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/telemetry/error': {
+      id: '/telemetry/error'
+      path: '/telemetry/error'
+      fullPath: '/telemetry/error'
+      preLoaderRoute: typeof TelemetryErrorRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/{-$locale}/explore/': {
       id: '/{-$locale}/explore/'
@@ -203,6 +323,12 @@ const Char123LocaleChar125RouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   Char123LocaleChar125RouteRoute: Char123LocaleChar125RouteRouteWithChildren,
+  HealthRoute: HealthRoute,
+  MetricsRoute: MetricsRoute,
+  ReadyRoute: ReadyRoute,
+  TelemetryErrorRoute: TelemetryErrorRoute,
+  TelemetryNavRoute: TelemetryNavRoute,
+  TelemetryVitalsRoute: TelemetryVitalsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

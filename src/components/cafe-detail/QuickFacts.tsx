@@ -89,6 +89,7 @@ export default function QuickFacts({
                 if (tag.slug) {
                   el = (
                     <LocaleLink
+                      key={`${tag.name}-link`}
                       to="/{-$locale}/explore/$"
                       params={{ _splat: tag.slug }}
                       className="text-xs font-semibold text-forest hover:underline"
@@ -98,7 +99,10 @@ export default function QuickFacts({
                   )
                 } else {
                   el = (
-                    <span className="text-xs font-semibold text-forest">
+                    <span
+                      key={`${tag.name}-name`}
+                      className="text-xs font-semibold text-forest"
+                    >
                       {tag.name}
                     </span>
                   )
@@ -107,7 +111,10 @@ export default function QuickFacts({
                   <>
                     {el}
                     {index < tags.length - 1 && (
-                      <span className="text-xs text-forest font-semibold">
+                      <span
+                        key={`tag-divider-${index}`}
+                        className="text-xs text-forest font-semibold"
+                      >
                         ,&nbsp;
                       </span>
                     )}

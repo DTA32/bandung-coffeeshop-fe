@@ -13,6 +13,11 @@ import Navbar from '@/components/Navbar'
 import { getUserAgentInfo } from '@/lib/helper'
 import { createI18n } from '@/i18n'
 import { localeFromPathname } from '@/lib/locale'
+import { requestLogger } from '@/lib/middleware'
+import TelemetryClient, {
+  reportClientError,
+} from '@/components/TelemetryClient'
+import LocaleLink from '@/components/LocaleLink'
 
 import appCss from '@/styles.css?url'
 import Footer from '@/components/Footer'
@@ -22,6 +27,9 @@ export const Route = createRootRoute({
     const ua = await getUserAgentInfo()
     return { ua }
   },
+  server: {
+    middleware: [requestLogger],
+  },
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -29,14 +37,68 @@ export const Route = createRootRoute({
       { title: 'BDGCafe' },
     ],
     links: [{ rel: 'stylesheet', href: appCss }],
+    scripts: [
+      import.meta.env.PROD
+        ? {
+            async: true,
+            src: 'https://www.googletagmanager.com/gtag/js?id=G-HG0K2CZQWH',
+          }
+        : undefined,
+      import.meta.env.PROD
+        ? {
+            children: `window.dataLayer = window.dataLayer || [];
+                     function gtag(){dataLayer.push(arguments);}
+                     gtag('js', new Date());
+                     gtag('config', 'G-HG0K2CZQWH', { send_page_view: false });`,
+          }
+        : undefined,
+    ],
   }),
+  errorComponent: RootErrorComponent,
+  notFoundComponent: RootNotFoundComponent,
   shellComponent: RootDocument,
 })
 
+function RootErrorComponent({ error }: { error: Error }) {
+  const { t } = useTranslation()
+  reportClientError({
+    message: error.message,
+    stack: error.stack,
+    source: 'root-error-boundary',
+    path: window.location.pathname,
+  })
+
+  return (
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 py-32 text-forest text-center">
+      <p className="text-2xl font-semibold">{t('errors.genericTitle')}</p>
+      <p className="mt-2 text-bark">{t('errors.genericBody')}</p>
+      <LocaleLink
+        to="/{-$locale}"
+        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
+      >
+        {t('errors.backToHome')}
+      </LocaleLink>
+    </main>
+  )
+}
+
+function RootNotFoundComponent() {
+  const { t } = useTranslation()
+  return (
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 py-32 text-forest text-center">
+      <p className="text-2xl font-semibold">{t('errors.notFoundTitle')}</p>
+      <p className="mt-2 text-bark">{t('errors.notFoundBody')}</p>
+      <LocaleLink
+        to="/{-$locale}"
+        className="py-4 px-8 text-sm bg-forest text-cream rounded-lg"
+      >
+        {t('errors.backToHome')}
+      </LocaleLink>
+    </main>
+  )
+}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
-  // Locale is derived from the URL (bare = id, /en = en). A fresh i18n instance
-  // is created per locale so SSR renders the right language with no cross-request
-  // leakage; deriving from pathname keeps server and client renders in sync.
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const locale = localeFromPathname(pathname)
   const i18n = useMemo(() => createI18n(locale), [locale])
@@ -48,6 +110,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className={'m-0 bg-cream flex flex-col min-h-screen'}>
         <I18nextProvider i18n={i18n}>
+          <TelemetryClient />
           <SkipLink />
           <Header />
           <div id="main" className="contents">

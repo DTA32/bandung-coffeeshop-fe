@@ -202,6 +202,8 @@
   },
   "errors": {
     "backToHome": "Back to home",
+    "genericTitle": "Something went wrong",
+    "genericBody": "An unexpected error occurred. Please try again.",
     "cafeLoadFailedTitle": "Failed to load cafe detail.",
     "cafeLoadFailedBody": "Uh oh, something went wrong. Please try again later.",
     "cafeNotFoundTitle": "Cafe not found",

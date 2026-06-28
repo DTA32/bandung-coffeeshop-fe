@@ -197,6 +197,8 @@
   },
   "errors": {
     "backToHome": "Kembali ke beranda",
+    "genericTitle": "Terjadi kesalahan",
+    "genericBody": "Terjadi kesalahan tak terduga. Silakan coba lagi.",
     "cafeLoadFailedTitle": "Gagal memuat detail kafe.",
     "cafeLoadFailedBody": "Yah, terjadi kesalahan. Silakan coba lagi nanti.",
     "cafeNotFoundTitle": "Kafe tidak ditemukan",

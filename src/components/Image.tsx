@@ -4,7 +4,10 @@ import type { Operations } from 'unpic'
 
 const ASSET_HOST = 'image.bdgcafe.com'
 
-function watermarkTransformer(src: string | URL, { width }: Operations): string {
+function watermarkTransformer(
+  src: string | URL,
+  { width }: Operations,
+): string {
   const url = new URL(String(src))
   if (url.hostname === ASSET_HOST && width) {
     url.searchParams.set('w', String(Math.round(Number(width))))

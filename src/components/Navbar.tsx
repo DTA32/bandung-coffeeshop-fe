@@ -2,7 +2,7 @@ import { useRouteContext } from '@tanstack/react-router'
 import { Compass, Home, MapPin } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
-import LanguageToggle from "#/components/LanguageToggle.tsx";
+import LanguageToggle from '@/components/LanguageToggle'
 
 export default function Navbar() {
   const { ua } = useRouteContext({ from: '__root__' })
@@ -40,7 +40,7 @@ export default function Navbar() {
           <span className="truncate">{t('nav.meetInTheMiddleShort1')}</span>
           <span className="truncate">{t('nav.meetInTheMiddleShort2')}</span>
         </LocaleLink>
-        <LanguageToggle className={"!px-0"} />
+        <LanguageToggle className={'!px-0'} />
       </nav>
     </div>
   )
