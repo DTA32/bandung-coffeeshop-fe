@@ -10,7 +10,7 @@ interface ReviewCardProps {
 export default function ReviewCard({ content, visited_at }: ReviewCardProps) {
   const { t } = useTranslation()
   const locale = useLocale()
-  const paragraphs = content !== null ? content.split('\n\n') : []
+  const paragraphs = content !== null ? content.split('\n') : []
   const visited_at_formatted = visited_at
     ? new Date(visited_at).toLocaleString(dateLocale(locale), {
         year: 'numeric',
