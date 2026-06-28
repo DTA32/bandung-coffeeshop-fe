@@ -9,7 +9,7 @@ interface RatingsCardProps {
 export default function RatingsCard({ ratings }: RatingsCardProps) {
   const { t } = useTranslation()
   return (
-    <div className="bg-white rounded-2xl p-5 flex flex-col gap-2">
+    <div className="bg-surface rounded-2xl p-5 flex flex-col gap-2">
       <h2 className="text-base font-bold text-forest m-0">
         {t('cafe.ratings')}
       </h2>

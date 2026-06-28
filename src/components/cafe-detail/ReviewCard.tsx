@@ -20,7 +20,7 @@ export default function ReviewCard({ content, visited_at }: ReviewCardProps) {
     : null
 
   return (
-    <div className="bg-white rounded-2xl p-5 flex flex-col gap-3 text-moss-dark antialiased">
+    <div className="bg-surface rounded-2xl p-5 flex flex-col gap-3 text-moss-dark antialiased">
       <div className="flex justify-between">
         <h2 className="text-base font-bold  m-0">{t('cafe.review')}</h2>
         {visited_at_formatted && (

@@ -26,7 +26,7 @@ export default function CafeCard({
     <LocaleLink
       to="/{-$locale}/cafe/$cafeId"
       params={{ cafeId: cafe.id }}
-      className={`flex flex-col overflow-hidden rounded-xl bg-white no-underline transition hover:shadow-md w-full shrink-0
+      className={`flex flex-col overflow-hidden rounded-xl bg-surface no-underline transition hover:shadow-md w-full shrink-0
       ${showBorder && `border-[0.5px] border-grove-light`}
       ${small && `max-w-xs`}
       `}

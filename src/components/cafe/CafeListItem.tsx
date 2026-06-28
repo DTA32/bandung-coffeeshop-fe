@@ -43,7 +43,7 @@ export default function CafeListItem({
       target={openNewTab ? '_blank' : undefined}
       params={{ cafeId: cafe.id }}
       className={cn(
-        'flex gap-4 rounded-xl bg-white no-underline transition hover:bg-grove-light/20',
+        'flex gap-4 rounded-xl bg-surface no-underline transition hover:bg-grove-light/20',
         smallVersion ? 'h-20' : 'h-25',
         withBorder && 'border border-grove-light',
       )}

@@ -38,6 +38,10 @@ export const Route = createRootRoute({
     ],
     links: [{ rel: 'stylesheet', href: appCss }],
     scripts: [
+      // for applying light/dark theme before paint to avoid a flash of the wrong theme. stored choice wins over OS preference.
+      {
+        children: `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',d);}catch(e){}})()`,
+      },
       import.meta.env.PROD
         ? {
             async: true,
