@@ -35,7 +35,7 @@ export default function ExplorePanel({
     return (
       <aside
         className={cn(
-          isMobile ? 'w-full h-80' : 'w-full max-w-2xl h-160',
+          isMobile ? 'w-full h-80' : 'w-full lg:max-w-2xl h-160',
           polygon && 'flex flex-col gap-2',
         )}
       >
@@ -62,7 +62,7 @@ export default function ExplorePanel({
 
   if (location && location.type !== 'poi') {
     return (
-      <aside className={isMobile ? 'w-full h-fit' : 'w-full max-w-2xl h-fit'}>
+      <aside className={isMobile ? 'w-full h-fit' : 'w-full lg:max-w-2xl h-fit'}>
         <LocationDetail
           location={location}
           isMobile={isMobile}

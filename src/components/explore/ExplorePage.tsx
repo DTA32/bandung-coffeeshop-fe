@@ -226,7 +226,7 @@ export default function ExplorePage({
         />
       )}
 
-      <div className="mx-auto flex-1 w-full px-6 md:px-16 py-6 flex gap-6 md:justify-center flex-col md:flex-row min-h-[85vh]">
+      <div className="mx-auto flex-1 w-full px-6 md:px-16 py-6 flex gap-6 lg:justify-center flex-col lg:flex-row min-h-[85vh]">
         {!isMobile && (
           <ExplorePanel
             mapView={mapView}
@@ -284,7 +284,9 @@ export default function ExplorePage({
               <div
                 className={cn(
                   'grid gap-6 grid-cols-2 md:grid-cols-3',
-                  mapView ? 'xl:grid-cols-4' : 'lg:grid-cols-4',
+                  mapView || (location && location.type !== 'poi') 
+                    ? 'xl:grid-cols-4' 
+                    : 'lg:grid-cols-4',
                 )}
               >
                 {data.cafes.map((cafe) => (

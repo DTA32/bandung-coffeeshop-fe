@@ -66,7 +66,7 @@ export default function LocationDetail({
           )}
         >
           <h2 className="text-lg font-semibold">{descendantName}</h2>
-          <div className="flex overflow-scroll md:grid md:grid-cols-3 gap-4 pb-1">
+          <div className="flex overflow-scroll lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-1">
             {location.descendants.map((desc) => {
               const splats = [...refs, desc]
               return (
