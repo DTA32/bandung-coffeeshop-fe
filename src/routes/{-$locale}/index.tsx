@@ -19,6 +19,7 @@ export const Route = createFileRoute('/{-$locale}/')({
       title: i18n.t('seo.homeTitle'),
       description: i18n.t('seo.homeDesc'),
       canonicalPath: localizedPath(locale, '/'),
+      locale,
       jsonLd: [websiteJsonLd(locale), organizationJsonLd()],
     }
     return seoHead(seo)

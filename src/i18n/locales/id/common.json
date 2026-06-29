@@ -7,7 +7,8 @@
     "about": "Tentang",
     "language": "Ganti bahasa",
     "currentLanguage": "ID",
-    "privacyPolicy": "Kebijakan Privasi"
+    "privacyPolicy": "Kebijakan Privasi",
+    "primary": "Navigasi utama"
   },
   "footer": {
     "tagline": "Temukan kafe terbaik di Bandung untuk kerja remote dan nongkrong bersama teman. Temukan tempat favoritmu hari ini!",
@@ -161,6 +162,8 @@
     "closeGallery": "Tutup",
     "previousImage": "Foto sebelumnya",
     "nextImage": "Foto berikutnya",
+    "viewImage": "Lihat foto {{number}}",
+    "detailsRegion": "Detail kafe",
     "disclaimer": "Penilaian bersifat subjektif dan tidak akurat. Semua skor mencerminkan satu kali kunjungan dan preferensi pribadi. Pengalamanmu bisa berbeda.",
     "statusBannerTitle": "Kafe ini {{status}}.",
     "statusBannerBody": "Eksplor kafe lain di sekitarnya di bawah ini",

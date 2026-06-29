@@ -21,6 +21,7 @@ export const Route = createFileRoute('/{-$locale}/about')({
       title: i18n.t('seo.aboutTitle'),
       description: i18n.t('seo.aboutDesc'),
       canonicalPath: localizedPath(locale, '/about'),
+      locale,
       jsonLd: [breadcrumbJsonLd(aboutCrumbs((k) => i18n.t(k), locale))],
     }
     return seoHead(seo)

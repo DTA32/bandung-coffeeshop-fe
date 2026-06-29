@@ -12,7 +12,11 @@ export function encodeMarker(m: UserMarker) {
   return `${m.lat},${m.lng},${m.color.replace('#', '')},${encodeURIComponent(m.name)}`
 }
 
-export function decodeMarker(entry: string, i: number): UserMarker | null {
+export function decodeMarker(
+  entry: string,
+  i: number,
+  defaultName: string,
+): UserMarker | null {
   const parts = entry.split(',')
   const lat = parseFloat(parts[0])
   const lng = parseFloat(parts[1])
@@ -24,7 +28,7 @@ export function decodeMarker(entry: string, i: number): UserMarker | null {
     parts.length > 3 && parts.slice(3).join(',').trim()
       ? decodeURIComponent(parts.slice(3).join(','))
       : null
-  const name = givenName ? givenName : `Marker ${i + 1}`
+  const name = givenName ? givenName : defaultName
   return { id: `m-${i}`, lat, lng, color, name }
 }
 

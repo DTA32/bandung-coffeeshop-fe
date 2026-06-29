@@ -14,7 +14,7 @@ export default function Header() {
       </LocaleLink>
 
       <nav
-        aria-label="Primary"
+        aria-label={t('nav.primary')}
         className="flex items-center gap-4 md:gap-8 font-medium"
       >
         <LocaleLink

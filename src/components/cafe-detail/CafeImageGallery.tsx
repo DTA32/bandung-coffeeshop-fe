@@ -130,7 +130,7 @@ function CafeImageGalleryInternal({
           {images.map((img, i) => (
             <button
               key={i}
-              aria-label={`View image ${i + 1}`}
+              aria-label={t('cafe.viewImage', { number: i + 1 })}
               onClick={() => setIndex(i)}
               className={`h-16 w-20 flex-shrink-0 cursor-pointer overflow-hidden rounded ${
                 i === index

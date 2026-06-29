@@ -62,6 +62,7 @@ export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
       title: i18n.t('seo.cafeTitle', { name: cafe.name }),
       description: i18n.t('seo.cafeDesc', { name: cafe.name, location }),
       canonicalPath,
+      locale: lang,
       ogImage: cafe.images[0]?.url,
       jsonLd: [
         cafeJsonLd(cafe, review, canonicalPath),
@@ -110,6 +111,7 @@ function CafeNotFoundComponent() {
 function Widgets(): JSX.Element {
   const { cafe, review, nearbyCafes } = Route.useLoaderData()
   const { ua } = useRouteContext({ from: '__root__' })
+  const { t } = useTranslation()
   if (ua.isMobile) {
     return (
       <div className="flex flex-col gap-y-4 mx-6 my-9 flex-1 min-w-0 shrink-0">
@@ -159,7 +161,7 @@ function Widgets(): JSX.Element {
         <NearbyCafe cafes={nearbyCafes.cafes} />
       </div>
       <aside
-        aria-label="Cafe details"
+        aria-label={t('cafe.detailsRegion')}
         className="flex flex-col gap-6 w-full md:w-80 lg:w-100 shrink-0"
       >
         <QuickFacts

@@ -90,8 +90,14 @@ export interface SeoMeta {
   title: string
   description: string
   canonicalPath: string // locale-prefixed; includes ?page=N when applicable
+  locale: Locale // the page's locale; drives og:locale + its alternate
   ogImage?: string // absolute content image; falls back to the site logo
   jsonLd?: object[]
+}
+
+// Open Graph locale tag (underscore form).
+function ogLocale(locale: Locale): string {
+  return locale === 'en' ? 'en_US' : 'id_ID'
 }
 
 // Strips the '/en' locale prefix off a path, yielding the bare (Indonesian)
@@ -133,6 +139,11 @@ export function seoHead(seo: SeoMeta) {
       { property: 'og:type', content: 'website' },
       { property: 'og:url', content: url },
       { property: 'og:site_name', content: SITE_NAME },
+      { property: 'og:locale', content: ogLocale(seo.locale) },
+      {
+        property: 'og:locale:alternate',
+        content: ogLocale(seo.locale === 'en' ? 'id' : 'en'),
+      },
       { property: 'og:image', content: ogImage },
       {
         name: 'twitter:card',

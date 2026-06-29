@@ -21,6 +21,7 @@ export const Route = createFileRoute('/{-$locale}/privacy-policy')({
       title: i18n.t('seo.privacyTitle'),
       description: i18n.t('seo.privacyDesc'),
       canonicalPath: localizedPath(locale, '/privacy-policy'),
+      locale,
       jsonLd: [breadcrumbJsonLd(privacyPolicyCrumbs((k) => i18n.t(k), locale))],
     }
     return seoHead(seo)

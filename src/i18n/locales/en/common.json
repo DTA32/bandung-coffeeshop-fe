@@ -10,7 +10,8 @@
     "about": "About",
     "language": "Change language",
     "currentLanguage": "EN",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "primary": "Primary navigation"
   },
   "footer": {
     "tagline": "Discover the best cafes in Bandung for remote work and hanging out with friends. Find your perfect spot today!",
@@ -166,6 +167,8 @@
     "closeGallery": "Close",
     "previousImage": "Previous image",
     "nextImage": "Next image",
+    "viewImage": "View image {{number}}",
+    "detailsRegion": "Cafe details",
     "disclaimer": "Rating is subjective and not accurate. All scores reflect a single visit and personal preference. Your experience may vary.",
     "statusBannerTitle": "This cafe is {{status}}.",
     "statusBannerBody": "Explore other cafes nearby below",

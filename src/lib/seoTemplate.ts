@@ -165,6 +165,7 @@ export function buildExploreSeo(args: {
     title,
     description,
     canonicalPath,
+    locale,
     jsonLd: [
       breadcrumbJsonLd(exploreCrumbs(crumbs, t, locale)),
       cafeItemListJsonLd(cafes, locale),

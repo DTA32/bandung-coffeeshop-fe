@@ -47,6 +47,7 @@ export const Route = createFileRoute('/{-$locale}/meet-in-the-middle')({
       title: i18n.t('seo.mitmTitle'),
       description: i18n.t('seo.mitmDesc'),
       canonicalPath: path,
+      locale,
       jsonLd: [
         breadcrumbJsonLd(mitmCrumbs((k) => i18n.t(k), locale)),
         webApplicationJsonLd(i18n.t('mitm.title'), path),
@@ -83,9 +84,11 @@ function useMeetInTheMiddle() {
   const markers: UserMarker[] = useMemo(() => {
     if (!search.m) return []
     return search.m
-      .map((entry, i) => decodeMarker(entry, i))
+      .map((entry, i) =>
+        decodeMarker(entry, i, t('mitm.marker', { number: i + 1 })),
+      )
       .filter((m): m is UserMarker => m !== null)
-  }, [search.m])
+  }, [search.m, t])
 
   const [radiusKm, setRadiusKm] = useState(1.0)
   const [sort, setSort] = useState<string>('distance')
