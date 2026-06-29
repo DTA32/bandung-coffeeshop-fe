@@ -5,6 +5,9 @@ import SearchBox from '@/components/SearchBox'
 import { CafeCard, CafeListItem } from '@/components/cafe'
 import ExplorePanel from '@/components/explore/ExplorePanel'
 import ExploreContent from '@/components/explore/ExploreContent'
+import LocationDescendants, {
+  hasPoiDescendants,
+} from '@/components/explore/LocationDescendants'
 import Pagination from '@/components/explore/Pagination'
 import { useExploreNavigation } from '@/components/explore/useExploreNavigation'
 import LocaleLink from '@/components/LocaleLink'
@@ -284,8 +287,8 @@ export default function ExplorePage({
               <div
                 className={cn(
                   'grid gap-6 grid-cols-2 md:grid-cols-3',
-                  mapView || (location && location.type !== 'poi') 
-                    ? 'xl:grid-cols-4' 
+                  mapView || (location && location.type !== 'poi')
+                    ? 'xl:grid-cols-4'
                     : 'lg:grid-cols-4',
                 )}
               >
@@ -309,6 +312,9 @@ export default function ExplorePage({
           </div>
         </div>
       </div>
+      {location && isMobile && hasPoiDescendants(location) && (
+        <LocationDescendants location={location} className="mb-6" />
+      )}
 
       {srpContent && <ExploreContent content={srpContent} locale={locale} />}
     </main>
