@@ -1,3 +1,5 @@
+import { cn } from '@/lib/cn'
+
 interface FilterChipProps {
   label: string
   selected: boolean
@@ -17,11 +19,12 @@ export default function FilterChip({
       title={title}
       aria-pressed={selected}
       onClick={onToggle}
-      className={`cursor-pointer rounded-full px-3 py-1.5 text-sm transition ${
+      className={cn(
+        'cursor-pointer rounded-full px-3 py-1.5 text-sm transition',
         selected
           ? 'bg-forest text-cream'
-          : 'border border-grove-light bg-white text-forest hover:bg-grove-light'
-      }`}
+          : 'border border-grove-light bg-white text-forest hover:bg-grove-light',
+      )}
     >
       {label}
     </button>

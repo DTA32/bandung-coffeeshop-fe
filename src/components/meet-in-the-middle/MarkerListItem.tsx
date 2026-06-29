@@ -1,5 +1,6 @@
 import { X } from 'lucide-react'
 import type { UserMarker } from '@/components/map'
+import { cn } from '@/lib/cn'
 
 type Props = {
   marker: UserMarker
@@ -26,9 +27,12 @@ export default function MarkerListItem({
 
   return (
     <div
-      className={`flex w-full justify-between py-2 rounded-lg bg-forest-lighter ${containerGap}`}
+      className={cn(
+        'flex w-full justify-between py-2 rounded-lg bg-forest-lighter',
+        containerGap,
+      )}
     >
-      <div className={`flex items-center min-w-0 ${innerGap}`}>
+      <div className={cn('flex items-center min-w-0', innerGap)}>
         <span
           className="w-3 h-3 rounded-full shrink-0"
           style={{ backgroundColor: marker.color }}
@@ -55,7 +59,10 @@ export default function MarkerListItem({
           ) : (
             <button
               onClick={onStartEdit}
-              className={`font-semibold text-forest text-left cursor-text hover:underline ${nameSize}`}
+              className={cn(
+                'font-semibold text-forest text-left cursor-text hover:underline',
+                nameSize,
+              )}
             >
               {marker.name}
             </button>

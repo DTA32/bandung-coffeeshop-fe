@@ -1,6 +1,7 @@
 import LocaleLink from '@/components/LocaleLink'
 import type { RatingEntry } from '@/lib/api/cafe'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/cn'
 
 interface RatingSliderProps {
   label: string
@@ -71,7 +72,10 @@ export default function RatingSlider({ label, rating }: RatingSliderProps) {
                 key={r.name}
                 to="/{-$locale}/explore/$"
                 params={{ _splat: `${r.slug}` }}
-                className={`${className} underline underline-offset-2 hover:underline-offset-4 decoration-[0.5px]`}
+                className={cn(
+                  className,
+                  'underline underline-offset-2 hover:underline-offset-4 decoration-[0.5px]',
+                )}
                 title={`${t('cafe.similarRating', { type: label, name: r.name })}`}
               >
                 {r.name}

@@ -8,6 +8,7 @@ import {
   Tag,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/cn'
 // Imported directly, NOT via @/components/explore: SearchBox also renders on the
 // home page, so going through the explore barrel would pull the explore/Leaflet
 // graph into the home bundle. See components/explore/index.ts.
@@ -59,8 +60,10 @@ function ResultLink({
   children: React.ReactNode
   search?: ExploreSearch
 }) {
-  const className = `flex gap-4 w-full cursor-pointer items-center border-none px-6 py-3 text-left
-                    hover:bg-cream ${isActive ? 'bg-cream' : 'bg-transparent'}`
+  const className = cn(
+    'flex gap-4 w-full cursor-pointer items-center border-none px-6 py-3 text-left hover:bg-cream',
+    isActive ? 'bg-cream' : 'bg-transparent',
+  )
 
   if (item.type === 'cafe') {
     return (

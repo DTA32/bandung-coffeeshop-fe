@@ -4,6 +4,7 @@ import ExploreMapView from '@/components/explore/ExploreMapView'
 import LocationDetail from '@/components/explore/LocationDetail'
 import { TriangleAlert } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/cn'
 
 type MapMarker = { lat: number; lng: number }
 
@@ -33,7 +34,10 @@ export default function ExplorePanel({
     const polygon = location?.polygon ? location.polygon : null
     return (
       <aside
-        className={`${isMobile ? 'w-full h-80' : 'w-full max-w-2xl h-160'} ${polygon && 'flex flex-col gap-2'}`}
+        className={cn(
+          isMobile ? 'w-full h-80' : 'w-full max-w-2xl h-160',
+          polygon && 'flex flex-col gap-2',
+        )}
       >
         <ExploreMapView
           marker={marker}

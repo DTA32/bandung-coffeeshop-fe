@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MapView, queryMarkerIcon } from '@/components/map'
 import type { SearchCafesData } from '@/lib/api/search'
+import { cn } from '@/lib/cn'
 
 type MapMarker = { lat: number; lng: number }
 
@@ -69,7 +70,10 @@ export default function ExploreMapView({
 
   return (
     <div
-      className={`relative h-full w-full overflow-hidden ${!isMobile && `rounded-2xl`}`}
+      className={cn(
+        'relative h-full w-full overflow-hidden',
+        !isMobile && 'rounded-2xl',
+      )}
     >
       <ClientOnly
         fallback={
@@ -79,7 +83,7 @@ export default function ExploreMapView({
         }
       >
         {alert && (
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-amber-600 text-sm font-semibold px-4 py-2 rounded-md shadow-md z-1500 transition-opacity duration-300 text-center">
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-1500 transition-opacity duration-300 text-center">
             {alert}
           </div>
         )}

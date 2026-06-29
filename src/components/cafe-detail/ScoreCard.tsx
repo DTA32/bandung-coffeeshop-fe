@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/cn'
 
 interface ScoreCardProps {
   overallScore: number | null
@@ -29,7 +30,10 @@ export default function ScoreCard({ overallScore, wfcScore }: ScoreCardProps) {
         )}
         {wfcScore && (
           <div
-            className={`flex flex-col gap-2 ${overallScore ? 'items-end' : 'items-start'}`}
+            className={cn(
+              'flex flex-col gap-2',
+              overallScore ? 'items-end' : 'items-start',
+            )}
           >
             <span className="text-xs font-semibold text-bark">
               {t('cafe.wfcScore')}

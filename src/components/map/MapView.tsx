@@ -11,6 +11,7 @@ import {
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
 import { useLocale, localeParam } from '@/lib/locale'
+import { COLORS } from '@/lib/colors'
 import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
 import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
@@ -129,8 +130,8 @@ export default function MapView({
             center={circleAt}
             radius={circleR}
             pathOptions={{
-              color: '#2A3D22',
-              fillColor: '#2A3D22',
+              color: COLORS.forest,
+              fillColor: COLORS.forest,
               fillOpacity: 0.05,
               weight: 1,
             }}
@@ -168,8 +169,8 @@ export default function MapView({
           key={JSON.stringify(polygon)}
           data={polygon}
           style={{
-            color: '#2A3D22',
-            fillColor: '#2A3D22',
+            color: COLORS.forest,
+            fillColor: COLORS.forest,
             fillOpacity: 0.1,
             weight: 0.5,
           }}

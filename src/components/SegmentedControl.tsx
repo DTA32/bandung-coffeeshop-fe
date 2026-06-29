@@ -1,4 +1,5 @@
 import { Fragment } from 'react'
+import { cn } from '@/lib/cn'
 
 interface Segment {
   value: string
@@ -26,11 +27,12 @@ export default function SegmentedControl({
               type="button"
               aria-pressed={active}
               onClick={() => onChange(seg.value)}
-              className={`flex-1 cursor-pointer rounded-md px-3 py-1.5 text-sm transition ${
+              className={cn(
+                'flex-1 cursor-pointer rounded-md px-3 py-1.5 text-sm transition',
                 active
                   ? 'shadow-sm bg-forest text-cream'
-                  : 'bg-transparent text-forest hover:bg-grove-light'
-              }`}
+                  : 'bg-transparent text-forest hover:bg-grove-light',
+              )}
             >
               {seg.label}
             </button>

@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import type { ExploreSearch } from '@/lib/api/search'
+import { cn } from '@/lib/cn'
 
 interface PaginationProps {
   page: number
@@ -71,11 +72,12 @@ export default function Pagination({
             search={searchForPage(p)}
             preload="intent"
             aria-current={p === page ? 'page' : undefined}
-            className={`${linkCls} ${
+            className={cn(
+              linkCls,
               p === page
                 ? 'bg-forest text-cream'
-                : 'text-forest hover:bg-grove-light'
-            }`}
+                : 'text-forest hover:bg-grove-light',
+            )}
           >
             {p}
           </Link>

@@ -7,6 +7,7 @@ import WelcomeHeading from '@/components/explore/WelcomeHeading'
 import type { SearchCafesData } from '@/lib/api/search'
 import { exploreSplat } from '@/lib/explore'
 import type { Location } from '@/lib/type'
+import { cn } from '@/lib/cn'
 
 const locationTypeHeadingKeys: Record<string, string> = {
   area: 'explore.areaHeading',
@@ -50,16 +51,19 @@ export default function LocationDetail({
         <WelcomeHeading location={location} className="text-2xl font-bold" />
       )}
       {location.description && (
-        <div className={`${isMobile && `px-6 bg-white text-sm py-4`}`}>
+        <div className={cn(isMobile && 'px-6 bg-white text-sm py-4')}>
           <h2 className="text-base font-semibold mb-2">{t('explore.about')}</h2>
-          <p className="text-gray-600 whitespace-pre-line">
+          <p className="text-muted whitespace-pre-line">
             {location.description}
           </p>
         </div>
       )}
       {location.descendants && location.descendants.length > 0 && (
         <div
-          className={`flex flex-col gap-5 p-6 bg-white ${!isMobile && `rounded-2xl`}`}
+          className={cn(
+            'flex flex-col gap-5 p-6 bg-white',
+            !isMobile && 'rounded-2xl',
+          )}
         >
           <h2 className="text-lg font-semibold">{descendantName}</h2>
           <div className="flex overflow-scroll md:grid md:grid-cols-3 gap-4 pb-1">

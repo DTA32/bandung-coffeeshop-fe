@@ -1,3 +1,5 @@
+import { COLORS } from '@/lib/colors'
+
 export type UserMarker = {
   id: string
   lat: number
@@ -17,7 +19,7 @@ export function decodeMarker(entry: string, i: number): UserMarker | null {
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
   const givenColor =
     parts[2] && parts[2].match(/^[0-9A-Fa-f]{6}$/) ? `#${parts[2]}` : null
-  const color = `${givenColor ?? '#4A7038'}`
+  const color = `${givenColor ?? COLORS.moss}`
   const givenName =
     parts.length > 3 && parts.slice(3).join(',').trim()
       ? decodeURIComponent(parts.slice(3).join(','))

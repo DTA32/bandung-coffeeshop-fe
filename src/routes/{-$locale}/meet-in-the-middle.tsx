@@ -8,6 +8,7 @@ import type { LatLngTuple } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { z } from 'zod'
 import { decodeMarker, encodeMarker, randomGreenHex } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import { DesktopLayout, MobileLayout } from '@/components/meet-in-the-middle'
@@ -24,14 +25,20 @@ import {
 import type { SeoMeta } from '@/lib/seo'
 import { createI18n, normalizeLocale } from '@/i18n'
 
-type MarkerSearch = { m?: string[] }
+// `m` accepts a single value or a repeated param; normalize to string[].
+const MarkerSearchSchema = z.object({
+  m: z
+    .preprocess(
+      (v) => (v == null ? undefined : (Array.isArray(v) ? v : [v]).map(String)),
+      z.array(z.string()).optional(),
+    )
+    .optional(),
+})
+type MarkerSearch = z.infer<typeof MarkerSearchSchema>
 
 export const Route = createFileRoute('/{-$locale}/meet-in-the-middle')({
-  validateSearch: (search: Record<string, unknown>): MarkerSearch => {
-    const raw = search.m
-    const arr = Array.isArray(raw) ? raw : raw != null ? [raw] : undefined
-    return arr ? { m: arr.map(String) } : {}
-  },
+  validateSearch: (search: Record<string, unknown>): MarkerSearch =>
+    MarkerSearchSchema.parse(search),
   head: (ctx: any) => {
     const locale = normalizeLocale(ctx.params.locale)
     const i18n = createI18n(locale)

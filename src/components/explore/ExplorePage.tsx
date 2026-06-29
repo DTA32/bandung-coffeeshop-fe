@@ -15,6 +15,7 @@ import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import type { LocationData } from '@/lib/api/location'
+import { cn } from '@/lib/cn'
 
 // Shared error UI for both explore routes.
 export function ExploreError() {
@@ -77,13 +78,21 @@ function ViewToggle({
     ? 'flex rounded-lg cursor-pointer items-center gap-1.5 px-3 py-1.5 text-sm transition border border-grove-light'
     : 'flex rounded-lg cursor-pointer items-center gap-1.5 border-none px-3 py-1.5 text-sm transition'
   const toggleBtnClass = (active: boolean) =>
-    `${toggleBtnBase} ${active ? 'bg-forest text-cream' : 'bg-transparent text-forest hover:bg-grove-light'}`
+    cn(
+      toggleBtnBase,
+      active
+        ? 'bg-forest text-cream'
+        : 'bg-transparent text-forest hover:bg-grove-light',
+    )
 
   return (
     <div
       className={
         mobile
-          ? `flex items-center gap-2 w-full bg-white justify-between ${showMapToggle && 'flex-row-reverse'} px-4 py-2 border-b border-grove-light/50`
+          ? cn(
+              'flex items-center gap-2 w-full bg-white justify-between px-4 py-2 border-b border-grove-light/50',
+              showMapToggle && 'flex-row-reverse',
+            )
           : 'flex items-center gap-2'
       }
     >
@@ -96,11 +105,17 @@ function ViewToggle({
             })
           }
           aria-pressed={mapView}
-          className={`flex cursor-pointer items-center gap-1.5 text-sm rounded-lg transition ${
+          className={cn(
+            'flex cursor-pointer items-center gap-1.5 text-sm rounded-lg transition',
             mobile
-              ? `px-3 py-1.5 border border-grove-light ${mapView ? 'bg-forest text-cream' : 'bg-white text-forest hover:bg-grove-light'}`
-              : 'px-4 py-2.5 bg-white text-forest hover:bg-grove-light'
-          }`}
+              ? cn(
+                  'px-3 py-1.5 border border-grove-light',
+                  mapView
+                    ? 'bg-forest text-cream'
+                    : 'bg-white text-forest hover:bg-grove-light',
+                )
+              : 'px-4 py-2.5 bg-white text-forest hover:bg-grove-light',
+          )}
         >
           <Map size={14} aria-hidden="true" />
           {mobile ? t('explore.map') : t('explore.showMap')}
@@ -177,7 +192,10 @@ export default function ExplorePage({
 
   return (
     <main
-      className={`flex flex-col bg-cream flex-1 transition-opacity ${isLoading ? 'opacity-50' : 'opacity-100'}`}
+      className={cn(
+        'flex flex-col bg-cream flex-1 transition-opacity',
+        isLoading ? 'opacity-50' : 'opacity-100',
+      )}
     >
       <SearchBox
         variant="srp"
@@ -264,10 +282,10 @@ export default function ExplorePage({
               </div>
             ) : view === 'grid' ? (
               <div
-                className={`grid gap-6
-                grid-cols-2 md:grid-cols-3
-                ${mapView ? `xl:grid-cols-4` : `lg:grid-cols-4`}
-              `}
+                className={cn(
+                  'grid gap-6 grid-cols-2 md:grid-cols-3',
+                  mapView ? 'xl:grid-cols-4' : 'lg:grid-cols-4',
+                )}
               >
                 {data.cafes.map((cafe) => (
                   <CafeCard key={cafe.id} cafe={cafe} small={false} />

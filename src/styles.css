@@ -11,6 +11,20 @@
   --color-cream: #f7f5ee;
   --color-forest-light: #a0b090;
   --color-forest-lighter: #eaf3de;
+
+  /* Utility colors */
+  --color-warning: var(--color-amber-700);
+  --color-warning-bg: var(--color-amber-50);
+  --color-error: var(--color-red-800);
+  --color-error-bg: var(--color-red-50);
+  --color-error-accent: var(--color-red-400);
+  --color-price-mid: var(--color-orange-400);
+  --color-price-mid-bg: var(--color-orange-100);
+  --color-price-high: var(--color-red-400);
+  --color-price-high-bg: var(--color-red-100);
+  --color-muted: var(--color-gray-600);
+  --color-muted-bg: var(--color-gray-100);
+
   --font-sans: 'Plus Jakarta Sans Variable', sans-serif;
 }
 

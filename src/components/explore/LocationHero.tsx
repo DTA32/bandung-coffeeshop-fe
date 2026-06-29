@@ -8,6 +8,7 @@ import { MapView } from '@/components/map'
 import WelcomeHeading from '@/components/explore/WelcomeHeading'
 import Image from '@/components/Image'
 import type { SearchCafesData } from '@/lib/api/search'
+import { cn } from '@/lib/cn'
 
 export default function LocationHero({
   location,
@@ -30,7 +31,11 @@ export default function LocationHero({
 
   return (
     <div
-      className={`${isMobile ? `h-50` : `h-60`} ${location.show_map ? `overflow-hidden` : `overflow-scroll`} flex gap-2 w-full bg-grove-light relative`}
+      className={cn(
+        isMobile ? 'h-50' : 'h-60',
+        location.show_map ? 'overflow-hidden' : 'overflow-scroll',
+        'flex gap-2 w-full bg-grove-light relative',
+      )}
     >
       {location.show_map ? (
         <>

@@ -2,6 +2,7 @@ import { Tag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import type { CafePrice } from '@/lib/api/cafe'
+import { cn } from '@/lib/cn'
 
 function fmtPrice(
   t: TFunction,
@@ -41,8 +42,8 @@ export default function PriceCard({ price }: PriceCardProps) {
   ]
   const PRICE_RANK_COLORS: Record<number, string> = {
     0: 'bg-grove-light text-moss',
-    1: 'bg-orange-100 text-orange-400',
-    2: 'bg-red-100 text-red-400',
+    1: 'bg-price-mid-bg text-price-mid',
+    2: 'bg-price-high-bg text-price-high',
   }
 
   return (
@@ -87,7 +88,10 @@ export default function PriceCard({ price }: PriceCardProps) {
       )}
       {price.rank && (
         <div
-          className={`flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5 self-start ${PRICE_RANK_COLORS[price.rank.type] || 'bg-gray-100 text-gray-600'}`}
+          className={cn(
+            'flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5 self-start',
+            PRICE_RANK_COLORS[price.rank.type] ?? 'bg-muted-bg text-muted',
+          )}
         >
           <Tag size={12} aria-hidden="true" />
           <span className="text-xs font-semibold">{price.rank.label}</span>

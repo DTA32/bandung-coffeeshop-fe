@@ -186,16 +186,16 @@ function Widgets(): JSX.Element {
 function CafeStatusBanner({ status }: { status: string }) {
   const { t } = useTranslation()
   return (
-    <div className="rounded-2xl bg-red-50 p-4 mx-6 md:mx-16 mt-4">
+    <div className="rounded-2xl bg-error-bg p-4 mx-6 md:mx-16 mt-4">
       <div className="flex items-center">
         <div className="flex-shrink-0">
           <TriangleAlert
             size={20}
-            className="text-red-400"
+            className="text-error-accent"
             aria-hidden="true"
           />
         </div>
-        <div className="flex flex-col ml-3 text-red-800">
+        <div className="flex flex-col ml-3 text-error">
           <p className="font-medium">
             {t('cafe.statusBannerTitle', { status })}
           </p>

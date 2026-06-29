@@ -3,6 +3,7 @@ import { Landmark, Leaf, ShoppingBag, Tag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import SegmentedControl from '@/components/SegmentedControl'
 import { DualRange } from '@/components/RangeSelector'
+import { cn } from '@/lib/cn'
 import type { PriceTier } from '@/lib/api/filters'
 
 interface PriceTierSelectorProps {
@@ -87,11 +88,12 @@ export default function PriceTierSelector({
                     ? onChange(undefined, undefined)
                     : onChange(tier.min, tier.max ?? undefined)
                 }
-                className={`flex flex-1 cursor-pointer flex-col items-center gap-1 rounded-md px-2 py-2 text-center transition ${
+                className={cn(
+                  'flex flex-1 cursor-pointer flex-col items-center gap-1 rounded-md px-2 py-2 text-center transition',
                   active
                     ? 'shadow-sm bg-forest text-cream'
-                    : 'bg-transparent text-forest hover:bg-grove-light'
-                }`}
+                    : 'bg-transparent text-forest hover:bg-grove-light',
+                )}
               >
                 <Icon size={16} aria-hidden="true" />
                 <span className={`text-sm font-semibold`}>{tier.label}</span>
