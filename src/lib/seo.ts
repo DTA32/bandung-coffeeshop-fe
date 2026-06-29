@@ -226,8 +226,33 @@ export function cafeJsonLd(
     node.sameAs = `https://www.instagram.com/${cafe.instagram}`
   const priceRange = cafe.price.rank?.label
   if (priceRange) node.priceRange = priceRange
+  if (cafe.open_hour && cafe.close_hour) {
+    const is24h = cafe.open_hour === cafe.close_hour
+    node.openingHoursSpecification = {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ],
+      opens: is24h ? '00:00' : cafe.open_hour,
+      closes: is24h ? '23:59' : cafe.close_hour,
+    }
+  }
   // Single-author review → schema.org Review, scored out of 5.
   if (review.overall_score != null) {
+    node.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: review.overall_score,
+      bestRating: 5,
+      worstRating: 0,
+      ratingCount: 1,
+      reviewCount: 1,
+    }
     node.review = {
       '@type': 'Review',
       reviewRating: {
