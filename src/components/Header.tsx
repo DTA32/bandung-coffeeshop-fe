@@ -8,7 +8,7 @@ export default function Header() {
   const { t } = useTranslation()
   if (ua.isMobile) return null
   return (
-    <header className="sticky top-0 z-50 flex h-12 items-center justify-between border-b border-grove-light bg-cream px-6 md:px-16">
+    <header className="sticky top-0 z-30 flex h-12 items-center justify-between border-b border-grove-light bg-cream px-6 md:px-16">
       <LocaleLink to="/{-$locale}" className="no-underline">
         <span className="text-xl font-bold text-forest">{t('brand')}</span>
       </LocaleLink>

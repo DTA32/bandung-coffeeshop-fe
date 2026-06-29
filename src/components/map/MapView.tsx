@@ -90,7 +90,7 @@ export default function MapView({
   const circleR = circleRadiusM ?? resultsRadiusKm * 1000
   return (
     <MapContainer
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '100%', isolation: 'isolate' }}
       center={center}
       zoom={zoom}
       zoomControl={false}

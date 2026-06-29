@@ -83,7 +83,7 @@ export default function ExploreMapView({
         }
       >
         {alert && (
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-1500 transition-opacity duration-300 text-center">
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-20 transition-opacity duration-300 text-center">
             {alert}
           </div>
         )}
@@ -116,7 +116,7 @@ export default function ExploreMapView({
           polygon={polygon && !isPointPolygon ? polygon : undefined}
         />
       </ClientOnly>
-      <div className="flex flex-col absolute left-4 top-4 z-1000 gap-2">
+      <div className="flex flex-col absolute left-4 top-4 z-10 gap-2">
         {!isMobile && (
           <button
             onClick={onHideMap}
@@ -136,7 +136,7 @@ export default function ExploreMapView({
         </button>
       </div>
       {!marker && (
-        <div className="absolute bottom-2 left-2 z-1000 flex items-center gap-1.5 rounded-xl bg-white/80 px-2 py-1 text-[11px] text-moss-dark shadow-sm">
+        <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1.5 rounded-xl bg-white/80 px-2 py-1 text-[11px] text-moss-dark shadow-sm">
           <Info size={12} />
           {t('explore.clickToFindNearby')}
         </div>

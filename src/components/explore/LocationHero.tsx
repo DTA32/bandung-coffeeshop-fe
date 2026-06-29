@@ -61,7 +61,7 @@ export default function LocationHero({
             type="button"
             onClick={onExpandMap}
             aria-label={t('explore.expandMapOf', { name: location.name })}
-            className="absolute inset-0 z-1000 cursor-pointer"
+            className="absolute inset-0 z-10 cursor-pointer"
           />
         </>
       ) : (
@@ -83,7 +83,7 @@ export default function LocationHero({
         ))
       )}
       {isMobile && (
-        <div className="absolute z-1500 left-0 bottom-0 w-full min-h-32 flex items-end px-6 py-3 text-xl font-bold text-white bg-linear-to-t from-black/70 to-transparent pointer-events-none">
+        <div className="absolute z-20 left-0 bottom-0 w-full min-h-32 flex items-end px-6 py-3 text-xl font-bold text-white bg-linear-to-t from-black/70 to-transparent pointer-events-none">
           <WelcomeHeading location={location} />
         </div>
       )}

@@ -59,7 +59,7 @@ export default function DesktopLayout({
   return (
     <main className="w-screen h-[95vh] relative">
       {alert && (
-        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-50 transition-opacity duration-300 z-1000 text-center">
+        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-20 transition-opacity duration-300 text-center">
           {alert}
         </div>
       )}
@@ -72,7 +72,7 @@ export default function DesktopLayout({
         onMoveMarker={onMoveMarker}
         zoomControlPosition="bottomleft"
       />
-      <div className="absolute top-10 left-8 flex flex-col z-1000 max-w-sm">
+      <div className="absolute top-10 left-8 flex flex-col z-10 max-w-sm">
         <div className="flex flex-col rounded-t-2xl border border-grove-light bg-white/90 shadow-lg p-5 w-full gap-4">
           <div className="flex flex-col pt-2 px-2 mb-4">
             <Breadcrumb items={mitmCrumbs(t, locale)} className="mb-1" />
@@ -145,7 +145,7 @@ export default function DesktopLayout({
         </button>
       </div>
       {results && (
-        <div className="absolute top-10 right-8 flex flex-col z-1000 max-w-sm border border-grove-light rounded-2xl bg-white/90 shadow-lg w-sm">
+        <div className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-white/90 shadow-lg w-sm">
           {results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 h-48 p-4 text-center">
               <p className="text-forest font-semibold">

@@ -122,7 +122,7 @@ function FilterModalInternal({
       role="dialog"
       aria-modal="true"
       aria-label={t('explore.filters.dialogLabel')}
-      className="fixed inset-0 z-[3000] flex items-end justify-center bg-black/50 sm:items-center shadow-md"
+      className="fixed inset-0 z-60 flex items-end justify-center bg-black/50 sm:items-center shadow-md"
       onClick={onClose}
     >
       <div

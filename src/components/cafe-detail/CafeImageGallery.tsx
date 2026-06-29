@@ -65,7 +65,7 @@ function CafeImageGalleryInternal({
       role="dialog"
       aria-modal="true"
       aria-label={t('cafe.imageGallery')}
-      className="fixed inset-0 z-[3000] flex flex-col bg-black/90"
+      className="fixed inset-0 z-60 flex flex-col bg-black/90"
       onClick={onClose}
     >
       <div className="flex items-center justify-between p-4 text-white">
