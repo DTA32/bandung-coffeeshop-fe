@@ -47,7 +47,7 @@ export default function QuickFacts({
   const { t } = useTranslation()
   let hours = ''
   if (openHour !== null && closeHour !== null) {
-    if (openHour === closeHour) {
+    if (openHour === '00:00' && closeHour === '23:59') {
       hours = t('cafe.open24Hours')
     } else {
       hours = `${openHour} - ${closeHour}`
