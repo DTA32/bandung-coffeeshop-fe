@@ -48,8 +48,8 @@ export default function PriceCard({ price }: PriceCardProps) {
 
   return (
     <div className="bg-white rounded-2xl p-5 flex flex-col gap-3.5">
-      <div className="flex justify-between items-end">
-        <div className="flex flex-col lg:flex-row justify-center lg:items-end gap-1">
+      <div className="flex justify-between items-center">
+        <div className="flex flex-col justify-center gap-1">
           <h2 className="text-base font-bold text-forest m-0">
             {t('price.priceRange')}
           </h2>
