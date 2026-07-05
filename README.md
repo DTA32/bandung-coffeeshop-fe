@@ -1,201 +1,94 @@
-Welcome to your new TanStack Start app!
+# BDGCafé
 
-# Getting Started
+A bilingual (Indonesian / English) café discovery and review site for Bandung — live at **[bdgcafe.com](https://bdgcafe.com)**.
 
-To run this application:
+Browse cafés by location, tag, price, and rating; read honest per-dimension reviews (wifi, vibe, noise, price, meals, atmosphere, parking); and use the **Meet in the Middle** tool to find cafés between several spots.
 
-```bash
-npm install
-npm run dev
-```
+## Tech stack
 
-# Building For Production
+- **[TanStack Start](https://tanstack.com/start)** — SSR-capable React meta-framework
+- **[TanStack Router](https://tanstack.com/router)** — file-based routing with loaders
+- **React 19** + **TypeScript**
+- **[Tailwind CSS v4](https://tailwindcss.com/)** with custom design tokens
+- **[i18next](https://www.i18next.com/)** / react-i18next for localization
+- **[Leaflet](https://leafletjs.com/)** for maps
+- **[Vitest](https://vitest.dev/)** + React Testing Library for tests
+- **[Bun](https://bun.sh/)** as the package manager and production server
 
-To build this application for production:
+## Getting started
 
-```bash
-npm run build
-```
-
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+This project uses **bun**.
 
 ```bash
-npm run test
+bun install
+bun dev          # dev server on http://localhost:3000
 ```
 
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `npm install @tailwindcss/vite tailwindcss -D`
-
-## Linting & Formatting
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+The frontend talks to a REST backend. Point it at your API via an env var (defaults to `http://localhost:8080`):
 
 ```bash
-npm run lint
-npm run format
-npm run check
+# .env
+VITE_API_BASE_URL=http://localhost:8080
 ```
 
-## Routing
+## Scripts
 
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from '@tanstack/react-router'
+```bash
+bun dev               # Dev server on port 3000
+bun run build         # Production build (SSR + prerender + sitemap)
+bun run start         # Serve the production build with the Bun server (server.ts)
+bun run test          # Run all tests once
+bun run test:watch    # Tests in watch mode
+bun run test:coverage # Coverage report (v8)
+bun run lint          # ESLint
+bun run format        # Prettier check
+bun run check         # Prettier write + ESLint fix
 ```
 
-Then anywhere in your JSX you can use it like so:
+Run a single test file:
 
-```tsx
-<Link to="/about">About</Link>
+```bash
+bunx vitest run src/path/to/file.test.ts
 ```
 
-This will create a link that will navigate to the `/about` route.
+## Project structure
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
+```
+src/
+  routes/              File-based routes
+    {-$locale}/        User-facing pages under an optional locale segment
+                       (bare path = Indonesian, /en prefix = English)
+    telemetry/         Beacon sinks (web vitals, navigation, errors)
+    (monitoring)/      Infra endpoints (health, ready, Prometheus metrics)
+    __root.tsx         Root layout (header, navbar, footer, middleware)
+  components/          Shared primitives + page-scoped folders
+                       (cafe-detail/, explore/, meet-in-the-middle/, home/, map/)
+  lib/
+    api/               REST client wrappers (cafe, search, location, filters)
+    telemetry/         Logging, metrics, tracing
+    seo.ts, srp.ts     SEO metadata + Search-Result-Page pretty URLs
+    explore.ts         Explore search-param (de)serialization
+    locale.ts          Locale helpers (useLocale, LocaleLink support)
+  i18n/                i18next setup + en/id translation resources
+  styles.css           Tailwind theme tokens
+  test/                Vitest helpers (renderWithProviders, router mock)
+docs/                  Design notes
+server.ts              Bun production server (static asset preloading)
 ```
 
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
+## Localization
 
-## Server Functions
+Indonesian is the default and lives at bare paths; English is served under a `/en` prefix. Short UI strings live in `src/i18n/locales/{en,id}/common.json`; long-form page prose (About, Privacy Policy) lives in per-locale React components. Navigate with `<LocaleLink>` so links stay in the active language.
 
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
+## Contributing
 
-```tsx
-import { createServerFn } from '@tanstack/react-start'
+See [`CLAUDE.md`](./CLAUDE.md) for the in-depth architecture guide, testing conventions, and code-style notes. Prettier is configured for no semicolons, single quotes, and trailing commas — run `bun run check` before committing.
 
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
+## License
 
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
+Copyright © 2026 Muhammad Raditya.
 
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
+This project is licensed under the **[Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/)**.
+See [`LICENSE`](./LICENSE) for the full legal text.
 
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+You are free to **fork, use, and adapt** this code **for personal, non-commercial purposes**, provided you give appropriate credit and link back to this repository. **Commercial use is not permitted.**
