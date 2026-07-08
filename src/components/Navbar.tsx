@@ -40,7 +40,7 @@ export default function Navbar() {
           <span className="truncate">{t('nav.meetInTheMiddleShort1')}</span>
           <span className="truncate">{t('nav.meetInTheMiddleShort2')}</span>
         </LocaleLink>
-        <LanguageToggle className={'!px-0'} />
+        <LanguageToggle className={'max-w-fit text-bark'} />
       </nav>
     </div>
   )

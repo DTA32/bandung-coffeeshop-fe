@@ -14,8 +14,10 @@ const RawLink = Link as (props: Record<string, unknown>) => ReactElement
 // (bare path) ⇄ English (`/en`), preserving the path and search params.
 export default function LanguageToggle({
   className = '',
+  languageHintClassName = ''
 }: {
   className?: string
+  languageHintClassName?: string
 }) {
   const { t } = useTranslation()
   const { pathname, search } = useRouterState({ select: (s) => s.location })
@@ -25,10 +27,10 @@ export default function LanguageToggle({
       search={search}
       aria-label={t('nav.language')}
       title={t('nav.language')}
-      className={`flex flex-col items-center text-moss ${className} cursor-pointer`}
+      className={`flex items-center text-moss ${className} cursor-pointer relative`}
     >
       <Languages size={18} aria-hidden="true" />
-      <span className="text-xs font-medium">{t('nav.currentLanguage')}</span>
+      <span className={`text-xs text-bark font-medium ${languageHintClassName}`}>{t('nav.currentLanguage')}</span>
     </RawLink>
   )
 }

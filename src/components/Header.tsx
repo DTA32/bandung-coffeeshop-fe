@@ -35,7 +35,7 @@ export default function Header() {
         >
           {t('nav.about')}
         </LocaleLink>
-        <LanguageToggle />
+        <LanguageToggle languageHintClassName={'text-moss absolute -top-2 -right-3'} />
         {/* <Sun size={20} color="#4A7038" /> */}
       </nav>
     </header>
