@@ -21,6 +21,14 @@ const config = defineConfig(({ mode }) => ({
         crawlLinks: true,
         failOnError: false,
         concurrency: 5,
+        // Cafe pages: lift review.updated_at (rendered as JSON-LD
+        // "dateModified" by cafeJsonLd) into sitemap <lastmod>. The patch must
+        // be RETURNED — `page` is a zod-parsed copy, mutating it does nothing.
+        onSuccess: ({ page, html }) => {
+          if (!/^\/(?:en\/)?cafe\//.test(page.path)) return
+          const lastmod = html.match(/"dateModified":"([^"]+)"/)?.[1]
+          if (lastmod) return { sitemap: { lastmod } }
+        },
       },
       sitemap: {
         enabled: true,
