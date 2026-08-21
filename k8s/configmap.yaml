@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bandung-coffeeshop-fe-config
+data:
+  PORT: "3000"
+  VITE_API_BASE_URL: "https://bdgcafe.com/api"
+  ASSET_PRELOAD_VERBOSE_LOGGING: "true"
+  # readiness probe (/ready) checks the backend in-cluster instead of hairpinning
+  # out through https://bdgcafe.com/api; overrides the build-baked API_BASE at runtime
+  READINESS_CHECK_URL: "http://bandung-coffeeshop-be-service/health"
