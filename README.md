@@ -31,6 +31,10 @@ The frontend talks to a REST backend. Point it at your API via an env var (defau
 VITE_API_BASE_URL=http://localhost:8080
 ```
 
+`VITE_API_BASE_URL` is inlined at build time and used by the browser. Server-side fetches (SSR loaders, `/ready`) can
+use a different origin via `API_INTERNAL_URL` — read at runtime, never shipped to the client — e.g. the in-cluster
+Service address, so SSR bypasses the public edge. Unset, the server falls back to `VITE_API_BASE_URL`.
+
 ## Scripts
 
 ```bash

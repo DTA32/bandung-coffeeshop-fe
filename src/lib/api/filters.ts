@@ -1,4 +1,4 @@
-import { API_BASE, langHeaders } from '@/lib/api/index'
+import { apiFetch } from '@/lib/api/index'
 import type { ApiResponse } from '@/lib/type'
 import { DEFAULT_LOCALE } from '@/i18n'
 import type { Locale } from '@/i18n'
@@ -56,8 +56,10 @@ export function getFilterOptions(
   if (cached) return cached
 
   const promise = (async () => {
-    const url = `${API_BASE}/v1/filters${enrich ? '?enrich_content=true' : ''}`
-    const res = await fetch(url, { headers: langHeaders(lang) })
+    const params = enrich
+      ? new URLSearchParams({ enrich_content: 'true' })
+      : undefined
+    const res = await apiFetch('/v1/filters', { lang, params })
     if (!res.ok) throw new Error('Failed to fetch filter options')
     const json: ApiResponse<FilterOptions> = await res.json()
     return json.data

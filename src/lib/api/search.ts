@@ -1,5 +1,5 @@
 import { notFound } from '@tanstack/react-router'
-import { API_BASE, langHeaders } from '@/lib/api/index'
+import { apiFetch } from '@/lib/api/index'
 import type { LocationType, Location } from '@/lib/type'
 import type { Locale } from '@/i18n'
 
@@ -112,10 +112,10 @@ export async function quickSearch(
   q: string,
   lang?: Locale,
 ): Promise<QuickSearchItem[]> {
-  const res = await fetch(
-    `${API_BASE}/v1/quicksearch?q=${encodeURIComponent(q)}`,
-    { headers: langHeaders(lang) },
-  )
+  const res = await apiFetch('/v1/quicksearch', {
+    lang,
+    params: new URLSearchParams({ q }),
+  })
   if (!res.ok) return []
   const json: { success: boolean; data?: QuickSearchItem[] } = await res.json()
   return json.data ?? []
@@ -148,11 +148,11 @@ function buildSearchParams(params: SearchCafesParams): URLSearchParams {
 // non-ok response. Not used by searchCafes, which has special 404→notFound
 // handling that must be preserved exactly.
 async function fetchSearchData(
-  url: URL,
+  params: URLSearchParams,
   lang: Locale | undefined,
   errorMessage: string,
 ): Promise<SearchCafesData> {
-  const res = await fetch(url, { headers: langHeaders(lang) })
+  const res = await apiFetch('/v1/search/cafes', { lang, params })
   if (!res.ok) throw new Error(errorMessage)
   const json: { success: boolean; data: SearchCafesData } = await res.json()
   return json.data
@@ -162,9 +162,10 @@ export async function searchCafes(
   params: SearchCafesParams,
   lang?: Locale,
 ): Promise<SearchCafesData> {
-  const url = new URL(`${API_BASE}/v1/search/cafes`)
-  url.search = buildSearchParams(params).toString()
-  const res = await fetch(url.toString(), { headers: langHeaders(lang) })
+  const res = await apiFetch('/v1/search/cafes', {
+    lang,
+    params: buildSearchParams(params),
+  })
   // 404 = specified location or filters doesn't exist →
   // render the route's notFoundComponent. Other failures → errorComponent.
   if (res.status === 404) throw notFound()
@@ -176,21 +177,20 @@ export async function searchCafes(
 export async function getFeaturedCafes(
   lang?: Locale,
 ): Promise<SearchCafesData> {
-  const url = new URL(`${API_BASE}/v1/search/cafes`)
-  url.searchParams.set('is_featured', 'true')
-  url.searchParams.set('size', '5')
-  return fetchSearchData(url, lang, 'Failed to fetch featured cafes')
+  const params = new URLSearchParams({ is_featured: 'true', size: '5' })
+  return fetchSearchData(params, lang, 'Failed to fetch featured cafes')
 }
 
 export async function getNearbyCafes(
   id: string,
   lang?: Locale,
 ): Promise<SearchCafesData> {
-  const url = new URL(`${API_BASE}/v1/search/cafes`)
-  url.searchParams.set('query_id', id)
-  url.searchParams.set('query_type', 'cafe')
-  url.searchParams.set('sort', 'distance')
-  url.searchParams.set('size', '4')
-  url.searchParams.set('radius_max', '2000')
-  return fetchSearchData(url, lang, 'Failed to fetch nearby cafes')
+  const params = new URLSearchParams({
+    query_id: id,
+    query_type: 'cafe',
+    sort: 'distance',
+    size: '4',
+    radius_max: '2000',
+  })
+  return fetchSearchData(params, lang, 'Failed to fetch nearby cafes')
 }
