@@ -20,11 +20,11 @@ function LastLocation({ locations }: { locations: Location[] }) {
   const lastLocation = locations.at(-1)
   if (lastLocation === undefined) return null
   return (
-    <div className="flex justify-between items-center">
-      <dt className="text-xs text-bark">
+    <div className="col-span-2 grid grid-cols-subgrid items-center">
+      <dt className="text-xs text-bark whitespace-nowrap">
         {t(`explore.locationTypes.${lastLocation.type}`)}
       </dt>
-      <dd className="text-xs font-semibold text-forest m-0">
+      <dd className="text-xs font-semibold text-forest text-right m-0">
         <LocaleLink
           to="/{-$locale}/explore/$"
           params={{ _splat: exploreSplat(locations) }}
@@ -64,11 +64,13 @@ export default function QuickFacts({
       <h2 className="text-base font-bold text-forest m-0">
         {t('cafe.quickFacts')}
       </h2>
-      <dl className="flex flex-col gap-3 m-0">
+      <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-3 m-0">
         {instagram && (
-          <div className="flex justify-between items-center">
-            <dt className="text-xs text-bark">{t('cafe.instagram')}</dt>
-            <dd className="text-xs font-semibold text-forest m-0">
+          <div className="col-span-2 grid grid-cols-subgrid items-center">
+            <dt className="text-xs text-bark whitespace-nowrap">
+              {t('cafe.instagram')}
+            </dt>
+            <dd className="text-xs font-semibold text-forest text-right m-0">
               <a
                 href={`https://www.instagram.com/${instagram}`}
                 className="hover:underline"
@@ -82,8 +84,10 @@ export default function QuickFacts({
         )}
         {hasLastLocation && <LastLocation locations={locations} />}
         {tags.length > 0 && (
-          <div className="flex justify-between items-start gap-2">
-            <dt className="text-xs text-bark">{t('cafe.tags')}</dt>
+          <div className="col-span-2 grid grid-cols-subgrid items-start">
+            <dt className="text-xs text-bark">
+              {t('cafe.tags')}
+            </dt>
             <dd className="m-0 flex items-start flex-wrap justify-end">
               {tags.map((tag, index) => (
                 <Fragment key={`tag-${index}`}>
@@ -111,9 +115,13 @@ export default function QuickFacts({
           </div>
         )}
         {hours !== '' && (
-          <div className="flex justify-between items-center">
-            <dt className="text-xs text-bark">{t('cafe.opens')}</dt>
-            <dd className="text-xs font-semibold text-forest m-0">{hours}</dd>
+          <div className="col-span-2 grid grid-cols-subgrid items-center">
+            <dt className="text-xs text-bark whitespace-nowrap">
+              {t('cafe.opens')}
+            </dt>
+            <dd className="text-xs font-semibold text-forest text-right m-0">
+              {hours}
+            </dd>
           </div>
         )}
       </dl>
