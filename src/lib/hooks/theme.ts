@@ -1,6 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 
 const STORAGE_KEY = 'theme'
+
+// Re-renders whenever the `dark` class on <html> flips, regardless of which
+// component (or the pre-paint script) flipped it. SSR renders as light.
+function subscribeToThemeClass(onChange: () => void) {
+  const observer = new MutationObserver(onChange)
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  })
+  return () => observer.disconnect()
+}
+
+export function useIsDark() {
+  return useSyncExternalStore(
+    subscribeToThemeClass,
+    () => document.documentElement.classList.contains('dark'),
+    () => false,
+  )
+}
 
 export function useTheme() {
   const [isDark, setIsDark] = useState(false)

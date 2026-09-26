@@ -12,6 +12,7 @@ import { useNavigate, useRouter } from '@tanstack/react-router'
 import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
 import { useLocale, localeParam } from '@/lib/locale'
 import { COLORS } from '@/lib/colors'
+import { useIsDark } from '@/lib/hooks/theme'
 import type { SearchCafesData } from '@/lib/api/search'
 import type { UserMarker } from './markers'
 import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
@@ -19,6 +20,22 @@ import { GeoJSON } from 'react-leaflet/GeoJSON'
 import type { GeoJsonObject } from 'geojson'
 
 const DEFAULT_CENTER: LatLngExpression = [-6.901557664008111, 107.6177579567244]
+
+const OSM_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+
+const TILES = {
+  light: {
+    url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: OSM_ATTRIBUTION,
+  },
+  // CARTO Dark Matter basemap for dark mode.
+  dark: {
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution: `${OSM_ATTRIBUTION} &copy; <a href="https://carto.com/attributions">CARTO</a>`,
+    subdomains: 'abcd',
+  },
+} as const
 
 function ClickHandler({
   onAdd,
@@ -81,6 +98,10 @@ export default function MapView({
   const navigate = useNavigate()
   const router = useRouter()
   const locale = useLocale()
+  const isDark = useIsDark()
+  const tiles = isDark ? TILES.dark : TILES.light
+  // Forest-green overlays disappear on the dark basemap; switch to grove.
+  const overlayColor = isDark ? COLORS.grove : COLORS.forest
   const circleAt =
     circleCenter !== undefined
       ? circleCenter
@@ -101,10 +122,9 @@ export default function MapView({
       boxZoom={interactive}
       keyboard={interactive}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      {/* Keyed so switching themes remounts the layer (attribution isn't
+          updated in place). */}
+      <TileLayer key={isDark ? 'dark' : 'light'} {...tiles} />
       {zoomControlPosition && <ZoomControl position={zoomControlPosition} />}
       {interactive && onAddMarker && <ClickHandler onAdd={onAddMarker} />}
       <MapController center={focusCenter} />
@@ -130,8 +150,8 @@ export default function MapView({
             center={circleAt}
             radius={circleR}
             pathOptions={{
-              color: COLORS.forest,
-              fillColor: COLORS.forest,
+              color: overlayColor,
+              fillColor: overlayColor,
               fillOpacity: 0.05,
               weight: 1,
             }}
@@ -169,8 +189,8 @@ export default function MapView({
           key={JSON.stringify(polygon)}
           data={polygon}
           style={{
-            color: COLORS.forest,
-            fillColor: COLORS.forest,
+            color: overlayColor,
+            fillColor: overlayColor,
             fillOpacity: 0.1,
             weight: 0.5,
           }}
