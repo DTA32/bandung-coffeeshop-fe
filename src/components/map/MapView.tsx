@@ -31,7 +31,7 @@ const TILES = {
   },
   // CARTO Dark Matter basemap for dark mode.
   dark: {
-    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    url: 'https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=cb1_3zjf_1_b5600f19acb4d43b7276376b',
     attribution: `${OSM_ATTRIBUTION} &copy; <a href="https://carto.com/attributions">CARTO</a>`,
     subdomains: 'abcd',
   },
