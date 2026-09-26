@@ -124,7 +124,10 @@ export default function MapView({
     >
       {/* Keyed so switching themes remounts the layer (attribution isn't
           updated in place). */}
-      <TileLayer key={isDark ? 'dark' : 'light'} {...tiles} />
+      <TileLayer 
+        key={isDark ? 'dark' : 'light'}
+        className={'dark:contrast-80'}
+        {...tiles} />
       {zoomControlPosition && <ZoomControl position={zoomControlPosition} />}
       {interactive && onAddMarker && <ClickHandler onAdd={onAddMarker} />}
       <MapController center={focusCenter} />
