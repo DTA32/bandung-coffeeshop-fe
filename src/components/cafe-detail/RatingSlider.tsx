@@ -65,7 +65,7 @@ export default function RatingSlider({ label, rating }: RatingSliderProps) {
           const className =
             i === activeCap
               ? 'text-[10px] font-semibold text-forest'
-              : 'text-[10px] text-forest-light'
+              : 'text-[10px] text-bark'
           if (r.slug) {
             return (
               <LocaleLink

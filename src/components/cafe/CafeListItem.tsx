@@ -77,7 +77,7 @@ export default function CafeListItem({
         </h3>
         {distanceStr && (
           <span
-            className={cn(smallVersion ? 'text-xs' : 'text-sm', 'text-grove')}
+            className={cn(smallVersion ? 'text-xs' : 'text-sm', 'text-moss')}
           >
             {t('explore.distanceAway', { distance: distanceStr })}
           </span>

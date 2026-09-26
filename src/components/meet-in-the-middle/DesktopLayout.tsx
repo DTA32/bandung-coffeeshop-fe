@@ -177,7 +177,7 @@ export default function DesktopLayout({
                   <SortSelect
                     value={sort}
                     onChange={onChangeSort}
-                    className="cursor-pointer rounded-md py-1.5 text-sm text-grove focus:outline-none w-fit field-sizing-content pe-2"
+                    className="cursor-pointer rounded-md py-1.5 text-sm text-moss focus:outline-none w-fit field-sizing-content pe-2"
                   />
                 </div>
               </div>
