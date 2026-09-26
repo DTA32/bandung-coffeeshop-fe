@@ -1,26 +1,37 @@
-import { Moon, Sun } from 'lucide-react'
+import { Monitor, Moon, Sun } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/cn'
 import { useTheme } from '@/lib/hooks/theme'
 
-export default function ThemeToggle({ className = '' }: { className?: string }) {
-  const { isDark, toggle } = useTheme()
+const ICONS = { system: Monitor, light: Sun, dark: Moon } as const
+
+const ACTION_LABEL_KEYS = {
+  system: 'nav.systemMode',
+  light: 'nav.lightMode',
+  dark: 'nav.darkMode',
+} as const
+
+// Cycles the theme preference; the icon shows the current mode (device
+// default, light, or dark) and the label announces what a click switches to.
+export default function ThemeToggle({
+  className = '',
+}: {
+  className?: string
+}) {
+  const { preference, next, setPreference } = useTheme()
   const { t } = useTranslation()
-  const label = isDark ? t('nav.lightMode') : t('nav.darkMode')
+  const label = t(ACTION_LABEL_KEYS[next])
+  const Icon = ICONS[preference]
 
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={() => setPreference(next)}
       aria-label={label}
       title={label}
-      aria-pressed={isDark}
-      className={`flex cursor-pointer items-center text-moss ${className}`}
+      className={cn('flex cursor-pointer items-center text-moss', className)}
     >
-      {isDark ? (
-        <Sun size={18} aria-hidden="true" />
-      ) : (
-        <Moon size={18} aria-hidden="true" />
-      )}
+      <Icon size={18} aria-hidden="true" />
     </button>
   )
 }
