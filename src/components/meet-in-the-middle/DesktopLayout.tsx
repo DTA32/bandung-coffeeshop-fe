@@ -126,7 +126,7 @@ export default function DesktopLayout({
                     {t('mitm.midpointCalculated')}
                   </span>
                   <span className="text-bark text-xs">
-                    {midpoint.lat.toFixed(4)}, {midpoint.lng.toFixed(4)}
+                    {midpoint.lat.toFixed(4)}, {midpoint.lng.toFixed(4)} {results?.location_name && `- ${t('mitm.inArea', { location: results.location_name })}`}
                   </span>
                 </div>
               </div>

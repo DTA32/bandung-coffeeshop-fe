@@ -201,7 +201,8 @@
     "tryAdjust": "Try increasing the search radius or adjusting the midpoint.",
     "cafesFound": "{{count}} Cafes found",
     "withinMidpoint": "within {{km}}km of midpoint",
-    "sortBy": "Sort by:"
+    "sortBy": "Sort by:",
+    "inArea": "in {{location}}"
   },
   "about": {
     "title": "About",

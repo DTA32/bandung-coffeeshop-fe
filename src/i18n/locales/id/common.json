@@ -196,7 +196,8 @@
     "tryAdjust": "Coba perbesar radius pencarian atau sesuaikan titik tengahnya.",
     "cafesFound": "{{count}} Kafe ditemukan",
     "withinMidpoint": "dalam radius {{km}}km dari titik tengah",
-    "sortBy": "Urutkan:"
+    "sortBy": "Urutkan:",
+    "inArea": "di {{location}}"
   },
   "about": {
     "title": "Tentang",
