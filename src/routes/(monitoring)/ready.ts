@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { API_BASE } from '@/lib/api'
+import { apiBase } from '@/lib/api'
 import { logger } from '@/lib/telemetry/logger'
 
 const READINESS_TIMEOUT_MS = 2000
 
 function readinessTarget(): string {
-  return process.env.READINESS_CHECK_URL ?? `${API_BASE}/health`
+  return process.env.READINESS_CHECK_URL ?? `${apiBase()}/health`
 }
 
 export const Route = createFileRoute('/(monitoring)/ready')({

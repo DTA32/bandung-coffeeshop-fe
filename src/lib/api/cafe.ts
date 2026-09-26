@@ -1,4 +1,4 @@
-import { API_BASE, langHeaders } from '@/lib/api'
+import { apiFetch } from '@/lib/api'
 import type { Location, LocationImage, ApiResponse } from '@/lib/type'
 import type { Locale } from '@/i18n'
 
@@ -76,9 +76,7 @@ export interface CafeReview {
 }
 
 export async function getCafe(id: string, lang?: Locale): Promise<CafeData> {
-  const res = await fetch(`${API_BASE}/v1/cafe/${id}`, {
-    headers: langHeaders(lang),
-  })
+  const res = await apiFetch(`/v1/cafe/${id}`, { lang })
   if (res.status === 404) throw new Error('404')
   if (!res.ok) throw new Error('failed to fetch cafe')
   const json: ApiResponse<CafeData> = await res.json()
@@ -89,9 +87,7 @@ export async function getCafeReview(
   id: string,
   lang?: Locale,
 ): Promise<CafeReview> {
-  const res = await fetch(`${API_BASE}/v1/cafe/${id}/review`, {
-    headers: langHeaders(lang),
-  })
+  const res = await apiFetch(`/v1/cafe/${id}/review`, { lang })
   if (!res.ok) throw new Error('failed to fetch review')
   const json: ApiResponse<CafeReview> = await res.json()
   return json.data
