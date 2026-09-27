@@ -54,6 +54,7 @@ export interface SearchCafesParams {
   ratings?: string
   is_featured?: boolean
   order?: string
+  status?: 'active' | 'closed' // absent → 'active' (backend default)
 }
 
 // URL search state for the explore routes — all fields optional; absence = use default.
@@ -141,6 +142,7 @@ function buildSearchParams(params: SearchCafesParams): URLSearchParams {
   if (params.is_featured != null)
     sp.set('is_featured', String(params.is_featured))
   if (params.order) sp.set('order', params.order)
+  if (params.status) sp.set('status', params.status)
   return sp
 }
 

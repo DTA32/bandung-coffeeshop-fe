@@ -1,6 +1,11 @@
 import type { SrpItem } from '@/lib/srp'
 import type { CafeListing } from '@/lib/api/search'
-import { breadcrumbJsonLd, cafeItemListJsonLd, localizedPath } from '@/lib/seo'
+import {
+  breadcrumbJsonLd,
+  cafeItemListJsonLd,
+  closedCafesCrumbs,
+  localizedPath,
+} from '@/lib/seo'
 import type { Crumb, SeoMeta } from '@/lib/seo'
 import type { Locale } from '@/i18n'
 
@@ -167,6 +172,29 @@ export function buildExploreSeo(args: {
     locale,
     jsonLd: [
       breadcrumbJsonLd(exploreCrumbs(crumbs, t, locale)),
+      cafeItemListJsonLd(cafes, locale),
+    ],
+  }
+}
+
+// The closed-cafes archive: fixed title/description (no filters), canonical
+// keeps ?page, JSON-LD is the Home › Closed Cafes crumb + the shown cafes.
+export function buildClosedCafesSeo(args: {
+  cafes: CafeListing[]
+  page: number
+  t: TFn
+  locale: Locale
+}): SeoMeta {
+  const { cafes, page, t, locale } = args
+  return {
+    title: t('seo.closedCafesTitle'),
+    description: t('seo.closedCafesDesc'),
+    canonicalPath:
+      localizedPath(locale, '/closed-cafes') +
+      (page > 1 ? `?page=${page}` : ''),
+    locale,
+    jsonLd: [
+      breadcrumbJsonLd(closedCafesCrumbs(t, locale)),
       cafeItemListJsonLd(cafes, locale),
     ],
   }

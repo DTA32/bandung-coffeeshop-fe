@@ -44,6 +44,14 @@ export default function Footer() {
             </li>
             <li>
               <LocaleLink
+                to="/{-$locale}/closed-cafes"
+                className="text-moss hover:underline"
+              >
+                {t('closedCafes.title')}
+              </LocaleLink>
+            </li>
+            <li>
+              <LocaleLink
                 to="/{-$locale}/about"
                 className="text-moss hover:underline"
               >

@@ -199,7 +199,11 @@ function CafeStatusBanner({ status }: { status: string }) {
         </div>
         <div className="flex flex-col ml-3 text-error">
           <p className="font-medium">
-            {t('cafe.statusBannerTitle', { status })}
+            {t('cafe.statusBannerTitle', {
+              status: t(`cafe.statusLabel.${status}`, {
+                defaultValue: status,
+              }),
+            })}
           </p>
           <p className="text-sm">{t('cafe.statusBannerBody')}</p>
         </div>
