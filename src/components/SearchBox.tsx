@@ -225,7 +225,7 @@ export default function SearchBox({
             <button
               type="button"
               onClick={() => setFiltersOpen(true)}
-              className="relative flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-forest px-3 py-2 text-sm text-cream dark:bg-bark"
+              className="relative flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-forest px-3 py-2 text-sm text-cream"
             >
               <SlidersHorizontal size={14} />
               {t('explore.filters.button')}
