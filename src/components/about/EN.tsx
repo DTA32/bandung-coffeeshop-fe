@@ -100,6 +100,57 @@ export default function AboutEN() {
         </ul>
       </div>
 
+      <div id="price-ranks" className="flex flex-col gap-4 scroll-mt-16">
+        <h2 className="font-semibold">
+          Bandung, Riau, or Jakarta? Understanding the price ranks
+        </h2>
+        <p className="text-bark">
+          If you&apos;ve browsed a few cafés here, you&apos;ve probably noticed
+          that instead of the usual $ / $$ / $$$, every café carries a price
+          rank named after a place: Bandung, Riau, or Jakarta. It has nothing to
+          do with where the café is located, it&apos;s a terminology made in
+          this website.
+        </p>
+        <ul className="space-y-4">
+          <li>
+            <h3 className="font-semibold text-forest">
+              Bandung: cheap, like what a Bandung coffee shop should be
+            </h3>
+            <p className="text-bark">
+              This is what I call the &quot;Bandung pricing standard&quot;: most
+              drinks and snacks under 25k, which is exactly what coffee in
+              Bandung should cost: affordable. Great for students, daily
+              caffeine runs, or long work-from-café sessions without emptying
+              your wallet.
+            </p>
+          </li>
+          <li>
+            <h3 className="font-semibold text-forest">
+              Riau: mid-range, but still with a reason
+            </h3>
+            <p className="text-bark">
+              Named after Jalan Riau, one of the city&apos;s road that&apos;s
+              filled with popular cafes in this town. These cafés sit
+              comfortably in the middle, around 25k–45k, a fair trade-off for a
+              more central location or a more polished space. A solid pick when
+              you want quality coffee and a nicer setting without going all-out.
+            </p>
+          </li>
+          <li>
+            <h3 className="font-semibold text-forest">
+              Jakarta: expensive, we&apos;re in Bandung but the price feels like
+              Jakarta
+            </h3>
+            <p className="text-bark">
+              The priciest cafés in town, with prices that feel more like
+              Jakarta than Bandung. In return you can expect either premium
+              beans, standout interiors, or a prime location, best saved for a
+              treat or a special hangout.
+            </p>
+          </li>
+        </ul>
+      </div>
+
       <div className="flex flex-col gap-3">
         <h2 className="font-semibold">Honest, subjective reviews</h2>
         <div className="flex flex-col text-bark gap-1">

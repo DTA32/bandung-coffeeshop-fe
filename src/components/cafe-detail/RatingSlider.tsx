@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import LocaleLink from '@/components/LocaleLink'
 import type { RatingEntry } from '@/lib/api/cafe'
 import { useTranslation } from 'react-i18next'
@@ -6,9 +7,15 @@ import { cn } from '@/lib/cn'
 interface RatingSliderProps {
   label: string
   rating: RatingEntry
+  // Optional element rendered beside the label (e.g. a help link).
+  labelAddon?: ReactNode
 }
 
-export default function RatingSlider({ label, rating }: RatingSliderProps) {
+export default function RatingSlider({
+  label,
+  rating,
+  labelAddon,
+}: RatingSliderProps) {
   const { t } = useTranslation()
   const { range, score, description } = rating
 
@@ -33,7 +40,10 @@ export default function RatingSlider({ label, rating }: RatingSliderProps) {
 
   return (
     <div className="flex flex-col gap-2 flex-1 py-5">
-      <h3 className="text-xs font-semibold text-moss">{label}</h3>
+      <div className="flex items-center gap-1">
+        <h3 className="text-xs font-semibold text-moss">{label}</h3>
+        {labelAddon}
+      </div>
 
       {/* Track */}
       <div
