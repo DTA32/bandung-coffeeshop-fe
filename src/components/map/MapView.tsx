@@ -33,7 +33,6 @@ const TILES = {
   dark: {
     url: 'https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=cb1_3zjf_1_b5600f19acb4d43b7276376b',
     attribution: `${OSM_ATTRIBUTION} &copy; <a href="https://carto.com/attributions">CARTO</a>`,
-    subdomains: 'abcd',
   },
 } as const
 
@@ -124,10 +123,11 @@ export default function MapView({
     >
       {/* Keyed so switching themes remounts the layer (attribution isn't
           updated in place). */}
-      <TileLayer 
+      <TileLayer
         key={isDark ? 'dark' : 'light'}
         className={'dark:contrast-80'}
-        {...tiles} />
+        {...tiles}
+      />
       {zoomControlPosition && <ZoomControl position={zoomControlPosition} />}
       {interactive && onAddMarker && <ClickHandler onAdd={onAddMarker} />}
       <MapController center={focusCenter} />

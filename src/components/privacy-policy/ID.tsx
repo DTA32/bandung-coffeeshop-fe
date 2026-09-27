@@ -68,6 +68,12 @@ export default function PrivacyPolicyID() {
           untuk iklan atau pelacakan lintas situs. Kamu bisa mengatur atau
           menghapus cookie di browser-mu (lihat &quot;Pilihanmu&quot; di bawah).
         </p>
+        <p className="text-bark">
+          Kami juga menyimpan pilihan tema terang/gelap-mu di penyimpanan lokal
+          (local storage) browser-mu. Data ini tidak pernah keluar dari
+          perangkatmu, tidak dikirim ke kami, dan terhapus saat kamu kembali ke
+          tema perangkat atau menghapus data situs di browser-mu.
+        </p>
       </div>
 
       <div className="flex flex-col gap-3">
