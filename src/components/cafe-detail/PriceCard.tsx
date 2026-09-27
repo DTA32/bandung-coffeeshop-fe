@@ -91,22 +91,22 @@ export default function PriceCard({ price }: PriceCardProps) {
         <div className="flex items-center gap-1.5">
           <div
             className={cn(
-              'flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5',
+              'flex items-center gap-1.5 bg-grove-light rounded-lg px-3 py-1.5 relative',
               PRICE_RANK_COLORS[price.rank.type] ?? 'bg-muted-bg text-muted',
             )}
           >
             <Tag size={12} aria-hidden="true" />
             <span className="text-xs font-semibold">{price.rank.label}</span>
+            <LocaleLink
+              to="/{-$locale}/about"
+              hash="price-ranks"
+              aria-label={t('cafe.priceRankHelp')}
+              title={t('cafe.priceRankHelp')}
+              className="shrink-0 text-moss hover:text-forest absolute -top-2 -right-2"
+            >
+              <CircleHelp size={14} aria-hidden="true" />
+            </LocaleLink>
           </div>
-          <LocaleLink
-            to="/{-$locale}/about"
-            hash="price-ranks"
-            aria-label={t('cafe.priceRankHelp')}
-            title={t('cafe.priceRankHelp')}
-            className="shrink-0 text-moss hover:text-forest"
-          >
-            <CircleHelp size={14} aria-hidden="true" />
-          </LocaleLink>
         </div>
       )}
     </div>
