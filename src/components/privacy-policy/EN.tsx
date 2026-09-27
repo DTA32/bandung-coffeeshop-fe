@@ -1,4 +1,4 @@
-const LAST_UPDATED = '28 June 2026'
+const LAST_UPDATED = '27 September 2026'
 const LINK = 'font-medium underline underline-offset-2'
 
 export default function PrivacyPolicyEN() {
@@ -107,6 +107,13 @@ export default function PrivacyPolicyEN() {
               href="https://wiki.osmfoundation.org/wiki/Privacy_Policy"
             >
               OSMF Privacy Policy
+            </a>
+          </li>
+          <li>
+            <span className="font-medium text-forest">CARTO</span> (CartoDB
+            Inc.) — map tiles for interactive maps in dark mode.{' '}
+            <a className={LINK} href="https://carto.com/privacy">
+              CARTO Privacy Notice
             </a>
           </li>
           <li>Images are served from our own CDN (image.bdgcafe.com).</li>

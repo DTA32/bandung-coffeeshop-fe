@@ -1,4 +1,4 @@
-const LAST_UPDATED = '28 Juni 2026'
+const LAST_UPDATED = '27 September 2026'
 const LINK = 'font-medium underline underline-offset-2'
 
 export default function PrivacyPolicyID() {
@@ -109,6 +109,13 @@ export default function PrivacyPolicyID() {
               href="https://wiki.osmfoundation.org/wiki/Privacy_Policy"
             >
               Kebijakan Privasi OSMF
+            </a>
+          </li>
+          <li>
+            <span className="font-medium text-forest">CARTO</span> (CartoDB
+            Inc.) — gambar peta untuk peta interaktif dalam mode gelap.{' '}
+            <a className={LINK} href="https://carto.com/privacy">
+              Pemberitahuan Privasi CARTO
             </a>
           </li>
           <li>Gambar disajikan dari CDN kami sendiri (image.bdgcafe.com).</li>
