@@ -1,6 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import { CircleHelp } from 'lucide-react'
-import LocaleLink from '@/components/LocaleLink'
 import type { RatingsResponse } from '@/lib/api/cafe'
 import RatingSlider from './RatingSlider'
 
@@ -25,23 +23,7 @@ export default function RatingsCard({ ratings }: RatingsCardProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 xl:gap-x-16 divide-y-[0.5px] divide-grove-light">
         {Object.entries(ratings).map(([key, entry]) => (
           <div key={key} className="flex flex-col">
-            <RatingSlider
-              label={entry.display_name || key}
-              rating={entry}
-              labelAddon={
-                key === 'price-rank' && (
-                  <LocaleLink
-                    to="/{-$locale}/about"
-                    hash="price-ranks"
-                    aria-label={t('cafe.priceRankHelp')}
-                    title={t('cafe.priceRankHelp')}
-                    className="text-moss hover:text-forest"
-                  >
-                    <CircleHelp size={14} aria-hidden="true" />
-                  </LocaleLink>
-                )
-              }
-            />
+            <RatingSlider label={entry.display_name || key} rating={entry} />
           </div>
         ))}
       </div>
