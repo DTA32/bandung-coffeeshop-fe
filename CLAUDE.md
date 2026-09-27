@@ -82,7 +82,8 @@ are three route groups:
 - **`{-$locale}/`** — the user-facing pages, under an **optional locale segment**. Bare paths are Indonesian (the
   default); English is served under a visible `/en` prefix. The layout `{-$locale}/route.tsx` redirects the redundant
   `/id` prefix to the bare path and 404s any non-locale prefix. Pages: `index` (home), `explore.index` + `explore.$` (
-  search results / SRP), `cafe.$cafeId` (detail), `meet-in-the-middle`, `about`, `privacy-policy`.
+  search results / SRP), `cafe.$cafeId` (detail), `closed-cafes` (archive of closed/relocated cafés; a top-level
+  sibling of `explore`, never under `/explore/`), `meet-in-the-middle`, `about`, `privacy-policy`.
 - **`telemetry/`** — POST beacon sinks for real-user data: `vitals`, `nav`, `error`. No UI.
 - **`(monitoring)/`** — pathless group of infra endpoints: `health`, `ready`, `metrics` (Prometheus scrape).
 

@@ -124,6 +124,10 @@
       "descTail": "Honest reviews and real scores on BDGCafé help you find your perfect coffee spot."
     }
   },
+  "closedCafes": {
+    "title": "Closed Cafés",
+    "subtitle": "Cafés that have closed their doors or moved somewhere new, may this page remind us of their legacy."
+  },
   "seo": {
     "homeTitle": "BDGCafe - Honest Bandung Coffee Shop Reviews & Discovery",
     "homeDesc": "Discover the best coffee shops in Bandung. Honest reviews on wifi, vibe, price, noise & more to find your perfect café or work spot.",
@@ -134,7 +138,9 @@
     "mitmTitle": "Meet in the Middle - Find a Café Between Multiple Spots | BDGCafe",
     "mitmDesc": "Pick multiple locations in Bandung and find great coffee shops in between - perfect for meeting friends halfway. A BDGCafe tool.",
     "privacyTitle": "Privacy Policy - BDGCafe",
-    "privacyDesc": "How BDGCafé collects and uses data: analytics, performance, error diagnostics, and the choices you have. We don't sell your data or show ads."
+    "privacyDesc": "How BDGCafé collects and uses data: analytics, performance, error diagnostics, and the choices you have. We don't sell your data or show ads.",
+    "closedCafesTitle": "Closed Cafés in Bandung - Closed & Relocated Coffee Shops | BDGCafe",
+    "closedCafesDesc": "Looking for a Bandung café that's no longer around? See the coffee shops that have closed or moved somewhere new, with our past reviews kept on BDGCafe."
   },
   "cafe": {
     "review": "Review",
@@ -175,7 +181,10 @@
     "disclaimer": "Rating is subjective and not accurate. All scores reflect a single visit and personal preference. Your experience may vary.",
     "statusBannerTitle": "This cafe is {{status}}.",
     "statusBannerBody": "Explore other cafes nearby below",
-    "similarRating": "Explore other cafe with {{name}} {{type}}"
+    "similarRating": "Explore other cafe with {{name}} {{type}}",
+    "statusLabel": {
+      "closed": "closed"
+    }
   },
   "price": {
     "priceRange": "Price Range",
