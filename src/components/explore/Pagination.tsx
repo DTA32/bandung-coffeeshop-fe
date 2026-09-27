@@ -75,7 +75,7 @@ export default function Pagination({
             className={cn(
               linkCls,
               p === page
-                ? 'bg-forest text-cream'
+                ? 'bg-forest dark:bg-bark text-cream'
                 : 'text-forest hover:bg-grove-light',
             )}
           >

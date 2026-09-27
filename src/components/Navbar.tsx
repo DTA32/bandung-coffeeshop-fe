@@ -11,13 +11,14 @@ export default function Navbar() {
   if (!ua.isMobile) return null
   return (
     <div className="sticky mb-5 w-full bottom-5 z-30 h-16">
-      <nav className="flex bg-surface border h-full border-grove-light rounded-full mx-6 items-stretch font-medium text-xs text-bark no-underline text-center *:px-4 *:w-full *:flex *:flex-col *:items-center *:justify-center *:mx-2 *:my-1.5 *:rounded-full">
+      <nav className="flex bg-surface border h-full border-grove-light rounded-full mx-4 items-stretch font-medium text-xs text-bark no-underline text-center *:w-full *:flex *:flex-col *:items-center *:justify-center *:mx-2 *:my-1.5 *:rounded-full">
         <LocaleLink
           to="/{-$locale}"
           activeOptions={{ exact: true }}
           activeProps={{
             className: 'bg-forest text-cream justify-center',
           }}
+          className={'px-4'}
         >
           <Home size={14} aria-hidden="true" />
           <span>{t('nav.home')}</span>
@@ -27,6 +28,7 @@ export default function Navbar() {
           activeProps={{
             className: 'bg-forest text-cream justify-center',
           }}
+          className={'px-4'}
         >
           <Compass size={14} aria-hidden="true" />
           <span>{t('nav.explore')}</span>
@@ -36,13 +38,14 @@ export default function Navbar() {
           activeProps={{
             className: 'bg-forest text-cream justify-center',
           }}
+          className={'px-4'}
         >
           <MapPin size={14} aria-hidden="true" />
           <span className="truncate">{t('nav.meetInTheMiddleShort1')}</span>
           <span className="truncate">{t('nav.meetInTheMiddleShort2')}</span>
         </LocaleLink>
-        <LanguageToggle className={'max-w-fit text-bark'} />
-        <ThemeToggle className={'max-w-fit text-bark'} />
+        <LanguageToggle className={'max-w-fit text-bark px-2'} />
+        <ThemeToggle className={'max-w-fit text-bark px-2'} />
       </nav>
     </div>
   )
