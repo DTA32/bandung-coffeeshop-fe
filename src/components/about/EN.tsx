@@ -48,7 +48,7 @@ export default function AboutEN() {
 
       <div className="flex flex-col gap-4">
         <h2 className="font-semibold">
-          &quot;So, how can this web helps me find cafe?&quot;
+          &quot;So, how can this website help me find a café?&quot;
         </h2>
         <ul className="space-y-4">
           <li>
@@ -129,7 +129,7 @@ export default function AboutEN() {
               Riau: mid-range, but still with a reason
             </h3>
             <p className="text-bark">
-              Named after Jalan Riau, one of the city&apos;s road that&apos;s
+              Named after Jalan Riau, one of the city&apos;s roads that&apos;s
               filled with popular cafes in this town. These cafés sit
               comfortably in the middle, around 25k–45k, a fair trade-off for a
               more central location or a more polished space. A solid pick when
