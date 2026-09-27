@@ -17,25 +17,24 @@ export function prettifySlug(slug: string): string {
 
 // Formats anchor / clause text from a {name, type}. Wording + i18n live here,
 // not in the loader:
-//   - price → "Cheap" (only the cheap tier is SRP-eligible today)
 //   - explore root → the localized "Explore"
 //   - location → the title-cased slug
 //   - rating → "<name> <localized category>" (EN) / "<localized category> <name>"
 //     (ID), e.g. "Hangout Vibe" / "Suasana Nongkrong"
-//   - tag → the name as-is
+//   - tag / price → the name as-is (price tiers are named by the backend,
+//     e.g. "Cheap")
 export function formatSrpLabel(
   item: Labelable,
   t: TFn,
   locale: string,
 ): string {
   switch (item.type) {
-    case 'price':
-      return t('explore.priceCheap')
     case 'explore':
       return t('explore.breadcrumb.explore')
     case 'location':
       return prettifySlug(item.name)
     case 'tag':
+    case 'price':
       return item.name
     default: {
       // A rating category type (vibe / noise / …) → its localized label, served

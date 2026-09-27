@@ -85,7 +85,6 @@
     },
     "mapPolygonDisclaimer": "Highlighted area is based on personal preference and not accurate. Please use it as a general guide, not an exact boundary.",
     "exploreMore": "Explore more cafes",
-    "priceCheap": "Cheap",
     "breadcrumb": {
       "label": "Breadcrumb",
       "home": "Home",
@@ -143,6 +142,7 @@
     "highlySubjective": "Highly subjective review",
     "ratings": "Ratings",
     "noRatings": "No ratings available.",
+    "priceRankHelp": "What do this price ranks mean?",
     "scores": "Scores",
     "overallScore": "Overall Score",
     "wfcScore": "Work-from-cafe Score",

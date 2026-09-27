@@ -100,6 +100,58 @@ export default function AboutID() {
         </ul>
       </div>
 
+      <div id="price-ranks" className="flex flex-col gap-4 scroll-mt-16">
+        <h2 className="font-semibold">
+          Bandung, Riau, atau Jakarta? Memahami peringkat harga di sini
+        </h2>
+        <p className="text-bark">
+          Kalo kamu udah liat-liat beberapa kafe di sini, mungkin kamu sadar
+          kalo tiap kafe punya peringkat harga yang dinamai dari nama tempat:
+          Bandung, Riau, atau Jakarta, bukan simbol $ / $$ / $$$ seperti
+          biasanya. Ini gak ada hubungannya sama lokasi kafenya, ini semacam
+          terminologi yang dibuat di website ini.
+        </p>
+        <ul className="space-y-4">
+          <li>
+            <h3 className="font-semibold text-forest">
+              Bandung: murah, seperti seharusnya harga kopi di Bandung
+            </h3>
+            <p className="text-bark">
+              Ini yang aku sebut &quot;standar harga Bandung&quot;: kebanyakan
+              minuman dan camilan di bawah 25 ribu, persis seperti seharusnya
+              harga kopi di Bandung: ramah di kantong. Cocok buat mahasiswa,
+              ngopi harian, atau sesi kerja dari kafe yang panjang tanpa bikin
+              dompet kering.
+            </p>
+          </li>
+          <li>
+            <h3 className="font-semibold text-forest">
+              Riau: menengah, tapi masih wajar
+            </h3>
+            <p className="text-bark">
+              Dinamai dari Jalan Riau, salah satu jalan yang dipenuhi dengan
+              kafe-kafe paling populer di kota ini. Kafe-kafe di sini ada di
+              tengah-tengah rentang harga, sekitar 25–45 ribu, masih wajar untuk
+              lokasi yang lebih di tengah kota atau tempatnya yang lebih bagus.
+              Pilihan pas kalo kamu mau kopi berkualitas dan suasana yang lebih
+              nyaman tanpa harus mahal-mahal.
+            </p>
+          </li>
+          <li>
+            <h3 className="font-semibold text-forest">
+              Jakarta: mahal, ini di Bandung tapi harganya kayak di Jakarta
+            </h3>
+            <p className="text-bark">
+              Kafe-kafe paling mahal di kota, dengan harga yang rasanya lebih
+              kayak kafe di Jakarta ketimbang di Bandung. Meski begitu,
+              kafe-kafe ini punya antara biji kopi premium, interior yang keren,
+              atau lokasi yang strategis, paling pas buat sesekali manjain diri
+              atau nongkrong spesial.
+            </p>
+          </li>
+        </ul>
+      </div>
+
       <div className="flex flex-col gap-3">
         <h2 className="font-semibold">Review jujur yang subjektif</h2>
         <div className="flex flex-col text-bark gap-1">
