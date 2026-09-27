@@ -8,7 +8,10 @@
     "language": "Ganti bahasa",
     "currentLanguage": "ID",
     "privacyPolicy": "Kebijakan Privasi",
-    "primary": "Navigasi utama"
+    "primary": "Navigasi utama",
+    "darkMode": "Ganti ke mode gelap",
+    "lightMode": "Ganti ke mode terang",
+    "systemMode": "Ikuti tema perangkat"
   },
   "footer": {
     "tagline": "Temukan kafe terbaik di Bandung untuk kerja remote dan nongkrong bersama teman. Temukan tempat favoritmu hari ini!",

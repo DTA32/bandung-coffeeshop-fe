@@ -1,4 +1,4 @@
-const LAST_UPDATED = '28 Juni 2026'
+const LAST_UPDATED = '27 September 2026'
 const LINK = 'font-medium underline underline-offset-2'
 
 export default function PrivacyPolicyID() {
@@ -68,6 +68,12 @@ export default function PrivacyPolicyID() {
           untuk iklan atau pelacakan lintas situs. Kamu bisa mengatur atau
           menghapus cookie di browser-mu (lihat &quot;Pilihanmu&quot; di bawah).
         </p>
+        <p className="text-bark">
+          Kami juga menyimpan pilihan tema terang/gelap-mu di penyimpanan lokal
+          (local storage) browser-mu. Data ini tidak pernah keluar dari
+          perangkatmu, tidak dikirim ke kami, dan terhapus saat kamu kembali ke
+          tema perangkat atau menghapus data situs di browser-mu.
+        </p>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -109,6 +115,13 @@ export default function PrivacyPolicyID() {
               href="https://wiki.osmfoundation.org/wiki/Privacy_Policy"
             >
               Kebijakan Privasi OSMF
+            </a>
+          </li>
+          <li>
+            <span className="font-medium text-forest">CARTO</span> (CartoDB
+            Inc.) — gambar peta untuk peta interaktif dalam mode gelap.{' '}
+            <a className={LINK} href="https://carto.com/privacy">
+              Pemberitahuan Privasi CARTO
             </a>
           </li>
           <li>Gambar disajikan dari CDN kami sendiri (image.bdgcafe.com).</li>

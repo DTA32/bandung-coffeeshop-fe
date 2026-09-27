@@ -68,11 +68,11 @@ export default function MobileLayout({
           {alert}
         </div>
       )}
-      <div className="bg-forest text-cream px-5 py-4">
+      <div className="bg-forest dark:bg-cream text-cream dark:text-moss px-5 py-4">
         <h1 className="text-lg font-bold">{t('mitm.title')}</h1>
-        <p className="text-xs text-cream/80">{t('mitm.subtitle')}</p>
+        <p className="text-xs text-cream/80 dark:text-moss/80">{t('mitm.subtitle')}</p>
       </div>
-      <div className="flex flex-col bg-white border-b border-grove-light p-4 gap-3">
+      <div className="flex flex-col bg-surface border-b border-grove-light p-4 gap-3">
         <div className="flex flex-col">
           <p className="text-forest font-semibold text-sm">
             {t('mitm.yourMarkers')}
@@ -110,7 +110,7 @@ export default function MobileLayout({
                     'px-3.5 py-1 rounded-full text-xs font-semibold transition-colors cursor-pointer',
                     active
                       ? 'bg-forest text-cream'
-                      : 'bg-white text-forest border border-grove-light',
+                      : 'bg-surface text-forest border border-grove-light',
                   )}
                 >
                   {opt.label}

@@ -11,7 +11,10 @@
     "language": "Change language",
     "currentLanguage": "EN",
     "privacyPolicy": "Privacy Policy",
-    "primary": "Primary navigation"
+    "primary": "Primary navigation",
+    "darkMode": "Switch to dark mode",
+    "lightMode": "Switch to light mode",
+    "systemMode": "Use device theme"
   },
   "footer": {
     "tagline": "Discover the best cafes in Bandung for remote work and hanging out with friends. Find your perfect spot today!",

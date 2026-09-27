@@ -1,4 +1,4 @@
-const LAST_UPDATED = '28 June 2026'
+const LAST_UPDATED = '27 September 2026'
 const LINK = 'font-medium underline underline-offset-2'
 
 export default function PrivacyPolicyEN() {
@@ -70,6 +70,12 @@ export default function PrivacyPolicyEN() {
           cross-site tracking. You can control or clear cookies in your browser
           (see &quot;Your choices&quot; below).
         </p>
+        <p className="text-bark">
+          We also keep your light/dark theme choice in your browser&apos;s local
+          storage. It never leaves your device, isn&apos;t sent to us, and is
+          removed when you switch back to your device theme or clear your
+          browser&apos;s site data.
+        </p>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -107,6 +113,13 @@ export default function PrivacyPolicyEN() {
               href="https://wiki.osmfoundation.org/wiki/Privacy_Policy"
             >
               OSMF Privacy Policy
+            </a>
+          </li>
+          <li>
+            <span className="font-medium text-forest">CARTO</span> (CartoDB
+            Inc.) — map tiles for interactive maps in dark mode.{' '}
+            <a className={LINK} href="https://carto.com/privacy">
+              CARTO Privacy Notice
             </a>
           </li>
           <li>Images are served from our own CDN (image.bdgcafe.com).</li>

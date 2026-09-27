@@ -41,7 +41,7 @@ export default function LocationDescendants({
   const refs = [...location.ancestors, currentLocation]
   if (!location.descendants || location.descendants.length === 0) return null
   return (
-    <div className={cn('flex flex-col gap-5 p-6 bg-white', className)}>
+    <div className={cn('flex flex-col gap-5 p-6 bg-surface', className)}>
       <h2 className="text-lg font-semibold">{descendantName}</h2>
       <div className="flex overflow-scroll lg:grid lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-1">
         {location.descendants.map((desc) => {
