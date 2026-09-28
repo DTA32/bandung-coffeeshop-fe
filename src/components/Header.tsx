@@ -36,7 +36,9 @@ export default function Header() {
         >
           {t('nav.about')}
         </LocaleLink>
-        <LanguageToggle languageHintClassName={'text-moss absolute -top-2 -right-3'} />
+        <LanguageToggle
+          languageHintClassName={'text-moss absolute -top-2 -right-3'}
+        />
         <ThemeToggle />
       </nav>
     </header>

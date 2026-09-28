@@ -67,7 +67,9 @@ export function OrDivider() {
   return (
     <div className="flex w-full items-center gap-3 md:w-auto">
       <span className="h-px flex-1 bg-forest/25 md:w-12 md:flex-none" />
-      <span className="text-xs md:text-[13px] text-forest/70">{t('common.or')}</span>
+      <span className="text-xs md:text-[13px] text-forest/70">
+        {t('common.or')}
+      </span>
       <span className="h-px flex-1 bg-forest/25 md:w-12 md:flex-none" />
     </div>
   )

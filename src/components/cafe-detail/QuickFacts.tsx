@@ -85,9 +85,7 @@ export default function QuickFacts({
         {hasLastLocation && <LastLocation locations={locations} />}
         {tags.length > 0 && (
           <div className="col-span-2 grid grid-cols-subgrid items-start">
-            <dt className="text-xs text-bark">
-              {t('cafe.tags')}
-            </dt>
+            <dt className="text-xs text-bark">{t('cafe.tags')}</dt>
             <dd className="m-0 flex items-start flex-wrap justify-end">
               {tags.map((tag, index) => (
                 <Fragment key={`tag-${index}`}>
