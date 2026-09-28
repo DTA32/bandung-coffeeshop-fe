@@ -74,7 +74,7 @@ export function weatherPhrase(
   const ordered = WEATHER_CONDITIONS.filter((c) => conditions.includes(c))
   return joinWithOr(
     ordered.map((c) => t(`explore.weather.adjective.${c}`)),
-    t('explore.weather.or'),
+    t('common.or'),
   )
 }
 

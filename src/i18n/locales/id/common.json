@@ -1,6 +1,9 @@
 {
   "brand": "BDGCafé",
   "skipToMain": "Lewati ke konten utama",
+  "common": {
+    "or": "atau"
+  },
   "nav": {
     "home": "Beranda",
     "explore": "Eksplor",
@@ -41,7 +44,6 @@
       "date": "Coffee date",
       "read": "Baca buku"
     },
-    "or": "atau",
     "matchWeather": "Sesuai cuaca sekarang",
     "surpriseMe": "Pilihin random",
     "surpriseLoading": "Lagi milihin kafe…"
@@ -152,8 +154,7 @@
         "rain": "Pilihan indoor yang tetap nyaman walau hujan deras."
       },
       "updated": "Diperbarui {{time}} WIB",
-      "poweredBy": "Didukung oleh WeatherAPI.com",
-      "or": "atau"
+      "poweredBy": "Didukung oleh WeatherAPI.com"
     }
   },
   "closedCafes": {

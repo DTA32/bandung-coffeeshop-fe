@@ -1,6 +1,9 @@
 {
   "brand": "BDGCafé",
   "skipToMain": "Skip to main content",
+  "common": {
+    "or": "or"
+  },
   "nav": {
     "home": "Home",
     "explore": "Explore",
@@ -44,7 +47,6 @@
       "date": "Coffee date",
       "read": "Read a book"
     },
-    "or": "or",
     "matchWeather": "Match the weather",
     "surpriseMe": "Surprise me",
     "surpriseLoading": "Picking a café…"
@@ -157,8 +159,7 @@
         "rain": "Cozy indoor picks that stay comfortable when it pours."
       },
       "updated": "Updated {{time}} WIB",
-      "poweredBy": "Powered by WeatherAPI.com",
-      "or": "or"
+      "poweredBy": "Powered by WeatherAPI.com"
     }
   },
   "closedCafes": {
