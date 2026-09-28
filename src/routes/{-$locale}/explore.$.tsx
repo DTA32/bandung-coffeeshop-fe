@@ -134,6 +134,8 @@ export const Route = createFileRoute('/{-$locale}/explore/$')({
       t: (k) => i18n.t(k),
       locale: lang,
     })
+    // Weather results change with the live condition → never index them.
+    if (deps.weather) seo.noindex = true
 
     const toReturn = {
       searchData,

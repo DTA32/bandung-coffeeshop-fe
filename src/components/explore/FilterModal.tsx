@@ -2,21 +2,52 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ClientOnly } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { SlidersHorizontal, X } from 'lucide-react'
-import type { ExploreSearch } from '@/lib/api/search'
+import {
+  Clock3,
+  Cloud,
+  CloudRain,
+  CloudSun,
+  SlidersHorizontal,
+  Sun,
+  X,
+} from 'lucide-react'
+import type { ExploreSearch, WeatherCondition } from '@/lib/api/search'
 import { getFilterOptions } from '@/lib/api/filters'
 import type { FilterOptions } from '@/lib/api/filters'
 import {
   parseRatingIds,
   parseTags,
+  parseWeather,
   serializeRatingIds,
   serializeTags,
+  serializeWeather,
+  WEATHER_CURRENT,
+  weatherPhrase,
 } from '@/lib/explore'
 import { useLocale } from '@/lib/locale'
+import { cn } from '@/lib/cn'
 import FilterChip from '@/components/FilterChip'
 import OpenHoursControl from './OpenHoursControl'
 import PriceTierSelector from './PriceTierSelector'
 import RatingCategoryGroup from './RatingCategoryGroup'
+
+const WEATHER_ICONS: Record<WeatherCondition, typeof Sun> = {
+  clear: Sun,
+  cloudy: Cloud,
+  rain: CloudRain,
+}
+
+// "Now" (the live Bandung condition, resolved server-side) is mutually
+// exclusive with the explicit conditions; the explicit ones combine freely.
+function toggleWeather(prev: string[], slug: string): string[] {
+  if (slug === WEATHER_CURRENT) {
+    return prev.includes(WEATHER_CURRENT) ? [] : [WEATHER_CURRENT]
+  }
+  const explicit = prev.filter((s) => s !== WEATHER_CURRENT)
+  return explicit.includes(slug)
+    ? explicit.filter((s) => s !== slug)
+    : [...explicit, slug]
+}
 
 interface FilterModalProps {
   search: ExploreSearch
@@ -55,6 +86,9 @@ function FilterModalInternal({
   )
   const [draftOpenHour, setDraftOpenHour] = useState<string | undefined>(
     search.open_hour,
+  )
+  const [draftWeather, setDraftWeather] = useState<string[]>(() =>
+    parseWeather(search.weather),
   )
 
   // Prefer the options the route already loaded; otherwise lazy-load them the
@@ -104,6 +138,7 @@ function FilterModalInternal({
       price_min: draftPriceMin,
       price_max: draftPriceMax,
       open_hour: draftOpenHour,
+      weather: serializeWeather(draftWeather),
       page: 1, // filter change resets pagination
     })
     onClose()
@@ -115,7 +150,54 @@ function FilterModalInternal({
     setDraftPriceMin(undefined)
     setDraftPriceMax(undefined)
     setDraftOpenHour(undefined)
+    setDraftWeather([])
   }
+
+  const weatherOptions = options?.weather ?? []
+  const weatherCaption = draftWeather.includes(WEATHER_CURRENT)
+    ? t('explore.filters.weatherNowCaption')
+    : draftWeather.length > 0
+      ? t('explore.filters.weatherPickedCaption', {
+          weather: weatherPhrase(draftWeather, t),
+        })
+      : t('explore.filters.weatherHint')
+
+  // Rendered in two places (after open hours on mobile, atop the right column
+  // on desktop) to match the design's per-breakpoint placement.
+  const weatherSection = (className: string) =>
+    weatherOptions.length > 0 && (
+      <section className={cn('flex flex-col gap-2', className)}>
+        <h3 className="flex items-center gap-1.5 text-xs font-semibold text-forest uppercase">
+          <CloudSun size={14} aria-hidden="true" />
+          {t('explore.filters.weatherTitle')}
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          <FilterChip
+            label={t('explore.filters.weatherNow')}
+            icon={<Clock3 size={14} aria-hidden="true" />}
+            selected={draftWeather.includes(WEATHER_CURRENT)}
+            onToggle={() =>
+              setDraftWeather((prev) => toggleWeather(prev, WEATHER_CURRENT))
+            }
+          />
+          {weatherOptions.map((w) => {
+            const Icon = WEATHER_ICONS[w.slug]
+            return (
+              <FilterChip
+                key={w.slug}
+                label={w.name}
+                icon={<Icon size={14} aria-hidden="true" />}
+                selected={draftWeather.includes(w.slug)}
+                onToggle={() =>
+                  setDraftWeather((prev) => toggleWeather(prev, w.slug))
+                }
+              />
+            )
+          })}
+        </div>
+        <p className="text-xs text-bark">{weatherCaption}</p>
+      </section>
+    )
 
   return createPortal(
     <div
@@ -175,6 +257,8 @@ function FilterModalInternal({
                   />
                 </section>
 
+                {weatherSection('py-4 md:hidden')}
+
                 {options.tags.length > 0 && (
                   <section className="flex flex-col gap-2 py-4">
                     <h3 className="text-xs font-semibold text-forest uppercase">
@@ -219,37 +303,42 @@ function FilterModalInternal({
                   </section>
                 )}
               </div>
-              {options.rating_categories.length > 0 && (
-                <>
-                  <hr className="block md:hidden border-[0.5px] h-[0.5px] border-forest-light" />
-                  <section className="flex flex-1 flex-col gap-4 py-4 md:py-0 md:pb-4">
-                    {options.rating_categories.map((cat) => {
-                      const optionIds = cat.options.map((o) => o.id)
-                      const selectedId = draftRatingIds.find((id) =>
-                        optionIds.includes(id),
-                      )
-                      return (
-                        <RatingCategoryGroup
-                          key={cat.type}
-                          category={cat}
-                          selectedId={selectedId}
-                          onSelect={(id) =>
-                            setDraftRatingIds((prev) => {
-                              // one bucket per category: drop siblings first
-                              const without = prev.filter(
-                                (x) => !optionIds.includes(x),
-                              )
-                              return id === undefined
-                                ? without
-                                : [...without, id]
-                            })
-                          }
-                        />
-                      )
-                    })}
-                  </section>
-                </>
-              )}
+              <div className="flex flex-1 flex-col">
+                {weatherSection(
+                  'hidden md:flex pb-4 mb-4 border-b-[0.5px] border-forest-light',
+                )}
+                {options.rating_categories.length > 0 && (
+                  <>
+                    <hr className="block md:hidden border-[0.5px] h-[0.5px] border-forest-light" />
+                    <section className="flex flex-1 flex-col gap-4 py-4 md:py-0 md:pb-4">
+                      {options.rating_categories.map((cat) => {
+                        const optionIds = cat.options.map((o) => o.id)
+                        const selectedId = draftRatingIds.find((id) =>
+                          optionIds.includes(id),
+                        )
+                        return (
+                          <RatingCategoryGroup
+                            key={cat.type}
+                            category={cat}
+                            selectedId={selectedId}
+                            onSelect={(id) =>
+                              setDraftRatingIds((prev) => {
+                                // one bucket per category: drop siblings first
+                                const without = prev.filter(
+                                  (x) => !optionIds.includes(x),
+                                )
+                                return id === undefined
+                                  ? without
+                                  : [...without, id]
+                              })
+                            }
+                          />
+                        )
+                      })}
+                    </section>
+                  </>
+                )}
+              </div>
             </div>
           )}
         </div>

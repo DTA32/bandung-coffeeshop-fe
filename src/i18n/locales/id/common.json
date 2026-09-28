@@ -104,7 +104,12 @@
       "reset": "Atur ulang",
       "loading": "Memuat filter…",
       "loadError": "Gagal memuat filter.",
-      "retry": "Coba lagi"
+      "retry": "Coba lagi",
+      "weatherTitle": "Cuaca",
+      "weatherNow": "Sekarang",
+      "weatherNowCaption": "Menyesuaikan cuaca Bandung saat ini",
+      "weatherPickedCaption": "Menampilkan kafe yang cocok untuk cuaca {{weather}}",
+      "weatherHint": "Pilih Sekarang untuk cuaca Bandung saat ini, atau pilih satu atau lebih"
     },
     "in": "di",
     "near": "dekat",
@@ -116,6 +121,28 @@
       "cafes": "cafe",
       "descLead": "Eksplor",
       "descTail": "Ulasan jujur dan skor nyata di BDGCafé membantumu menemukan tempat ngopi terbaik."
+    },
+    "cafesMatchWeather_one": "{{count}} kafe cocok untuk cuaca {{weather}}",
+    "cafesMatchWeather_other": "{{count}} kafe cocok untuk cuaca {{weather}}",
+    "weather": {
+      "adjective": {
+        "clear": "cerah",
+        "cloudy": "mendung",
+        "rain": "hujan"
+      },
+      "title": {
+        "clear": "Lagi cerah di Bandung · {{temp}}°C",
+        "cloudy": "Lagi mendung di Bandung · {{temp}}°C",
+        "rain": "Lagi hujan di Bandung · {{temp}}°C"
+      },
+      "subtitle": {
+        "clear": "Tempat terang dan lega, pas buat hari cerah.",
+        "cloudy": "Tempat santai buat sore yang mendung.",
+        "rain": "Pilihan indoor yang tetap nyaman walau hujan deras."
+      },
+      "updated": "Diperbarui {{time}} WIB",
+      "poweredBy": "Didukung oleh WeatherAPI.com",
+      "or": "atau"
     }
   },
   "closedCafes": {

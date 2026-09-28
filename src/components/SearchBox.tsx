@@ -17,7 +17,7 @@ import LocaleLink from '@/components/LocaleLink'
 import { useQuickSearch, optionKey } from '@/components/search/useQuickSearch'
 import type { FilterOptions } from '@/lib/api/filters'
 import type { ExploreSearch, QuickSearchItem } from '@/lib/api/search'
-import { parseRatingIds, parseTags } from '@/lib/explore'
+import { parseRatingIds, parseTags, parseWeather } from '@/lib/explore'
 
 interface SearchBoxProps {
   variant?: 'hero' | 'srp'
@@ -130,7 +130,8 @@ export default function SearchBox({
     ? parseTags(search.tags).length +
       parseRatingIds(search.ratings).length +
       (search.open_hour ? 1 : 0) +
-      (search.price_min != null || search.price_max != null ? 1 : 0)
+      (search.price_min != null || search.price_max != null ? 1 : 0) +
+      (parseWeather(search.weather).length > 0 ? 1 : 0)
     : 0
 
   const {

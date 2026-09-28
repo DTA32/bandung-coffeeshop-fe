@@ -1,5 +1,6 @@
 import { apiFetch } from '@/lib/api/index'
 import type { ApiResponse } from '@/lib/type'
+import type { WeatherCondition } from '@/lib/api/search'
 import { DEFAULT_LOCALE } from '@/i18n'
 import type { Locale } from '@/i18n'
 
@@ -33,10 +34,16 @@ export interface PriceTier {
   max: number | null
 }
 
+export interface WeatherOption {
+  slug: WeatherCondition
+  name: string
+}
+
 export interface FilterOptions {
   tags: FilterTag[]
   rating_categories: RatingCategory[]
   price_tiers: PriceTier[]
+  weather?: WeatherOption[]
 }
 
 // Memoized fetch keyed by locale + enrich. The filter modal calls this with
