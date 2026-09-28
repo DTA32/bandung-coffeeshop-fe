@@ -92,3 +92,16 @@ export async function getCafeReview(
   const json: ApiResponse<CafeReview> = await res.json()
   return json.data
 }
+
+export interface RandomCafe {
+  id: string
+  name: string
+}
+
+// A uniformly random active café, for the home "Surprise me" shortcut.
+export async function getRandomCafe(lang?: Locale): Promise<RandomCafe> {
+  const res = await apiFetch('/v1/cafe/random', { lang })
+  if (!res.ok) throw new Error('Failed to fetch a random cafe')
+  const json: ApiResponse<RandomCafe> = await res.json()
+  return json.data
+}

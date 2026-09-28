@@ -36,7 +36,18 @@
     "noFeaturedCafes": "No featured cafes at the moment.",
     "exploreByDistrict": "Explore by district",
     "districtUnavailable": "District is unavailable at the moment. Please check back later.",
-    "districtLinkTitleDescriber": "consists of"
+    "districtLinkTitleDescriber": "consists of",
+    "moodKicker": "I'm in the mood to…",
+    "moods": {
+      "wfc": "Work from a café",
+      "hangout": "Hang out",
+      "date": "Coffee date",
+      "read": "Read a book"
+    },
+    "or": "or",
+    "matchWeather": "Match the weather",
+    "surpriseMe": "Surprise me",
+    "surpriseLoading": "Picking a café…"
   },
   "search": {
     "placeholder": "Search by cafe name, area, facility, vibe, and others...",

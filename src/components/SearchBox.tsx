@@ -217,7 +217,7 @@ export default function SearchBox({
               aria-controls={listboxId}
               aria-autocomplete="list"
               aria-activedescendant={activeOptionId}
-              className="flex-1 bg-transparent text-sm text-forest focus:outline-none py-3"
+              className="min-w-0 flex-1 truncate bg-transparent text-sm text-forest focus:outline-none py-3"
               placeholder={t('search.placeholderShort')}
             />
             {dropdown}
@@ -253,7 +253,7 @@ export default function SearchBox({
   return (
     <div
       ref={containerRef}
-      className="relative flex w-full max-w-150 items-center gap-2 rounded-lg bg-surface p-2"
+      className="relative flex w-full max-w-150 items-center gap-2 rounded-lg bg-surface p-2 dark:ring-1 dark:ring-forest/20"
     >
       <input
         type="text"
@@ -266,7 +266,7 @@ export default function SearchBox({
         aria-controls={listboxId}
         aria-autocomplete="list"
         aria-activedescendant={activeOptionId}
-        className="flex-1 rounded-lg p-2 text-sm text-forest focus:outline-none"
+        className="min-w-0 flex-1 truncate rounded-lg bg-transparent p-2 text-sm text-forest focus:outline-none"
         placeholder={t('search.placeholderShort')}
       />
       <button

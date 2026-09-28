@@ -33,7 +33,18 @@
     "noFeaturedCafes": "Belum ada kafe pilihan saat ini.",
     "exploreByDistrict": "Eksplor berdasarkan distrik",
     "districtUnavailable": "Distrik tidak tersedia saat ini. Silakan cek kembali nanti.",
-    "districtLinkTitleDescriber": "terdiri dari"
+    "districtLinkTitleDescriber": "terdiri dari",
+    "moodKicker": "Lagi mood buat…",
+    "moods": {
+      "wfc": "WFC",
+      "hangout": "Nongkrong",
+      "date": "Coffee date",
+      "read": "Baca buku"
+    },
+    "or": "atau",
+    "matchWeather": "Sesuai cuaca sekarang",
+    "surpriseMe": "Pilihin random",
+    "surpriseLoading": "Lagi milihin kafe…"
   },
   "search": {
     "placeholder": "Cari berdasarkan nama kafe, area, fasilitas, suasana, dan lainnya...",
