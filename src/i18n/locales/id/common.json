@@ -118,6 +118,10 @@
       "descTail": "Ulasan jujur dan skor nyata di BDGCafé membantumu menemukan tempat ngopi terbaik."
     }
   },
+  "closedCafes": {
+    "title": "Kafe yang telah tutup",
+    "subtitle": "Kafe yang telah tutup atau pindah tempat, semoga halaman ini menjaga kenangan mereka."
+  },
   "seo": {
     "homeTitle": "BDGCafe - Ulasan Jujur & Rekomendasi Kafe Bandung",
     "homeDesc": "Temukan coffee shop terbaik di Bandung. Ulasan jujur soal wifi, suasana, harga, kebisingan & lainnya untuk menemukan kafe atau tempat kerja idealmu.",
@@ -128,7 +132,9 @@
     "mitmTitle": "Meet in the Middle - Cari Kafe di antara beberapa titik lokasi | BDGCafe",
     "mitmDesc": "Pilih titik-titik lokasi di Bandung dan temukan coffee shop terbaik di antaranya - pas untuk janjian dengan teman di tengah jalan. Sebuah alat dari BDGCafe.",
     "privacyTitle": "Kebijakan Privasi - BDGCafe",
-    "privacyDesc": "Bagaimana BDGCafé mengumpulkan dan menggunakan data: analitik, performa, diagnostik error, dan pilihan yang kamu miliki. Kami tidak menjual datamu atau menampilkan iklan."
+    "privacyDesc": "Bagaimana BDGCafé mengumpulkan dan menggunakan data: analitik, performa, diagnostik error, dan pilihan yang kamu miliki. Kami tidak menjual datamu atau menampilkan iklan.",
+    "closedCafesTitle": "Kafe yang telah Tutup di Bandung - Coffee Shop Tutup & Pindah | BDGCafe",
+    "closedCafesDesc": "Mencari kafe di Bandung yang sudah tidak ada? Lihat daftar coffee shop yang telah tutup atau pindah tempat, lengkap dengan ulasan kami sebelumnya di BDGCafe."
   },
   "cafe": {
     "review": "Ulasan",
@@ -170,7 +176,10 @@
     "disclaimer": "Penilaian bersifat subjektif dan tidak akurat. Semua skor mencerminkan satu kali kunjungan dan preferensi pribadi. Pengalamanmu bisa berbeda.",
     "statusBannerTitle": "Kafe ini {{status}}.",
     "statusBannerBody": "Eksplor kafe lain di sekitarnya di bawah ini",
-    "similarRating": "Eksplor kafe lain dengan {{type}} {{name}}"
+    "similarRating": "Eksplor kafe lain dengan {{type}} {{name}}",
+    "statusLabel": {
+      "closed": "tutup"
+    }
   },
   "price": {
     "priceRange": "Kisaran Harga",

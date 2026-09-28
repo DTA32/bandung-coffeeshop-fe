@@ -57,9 +57,27 @@ export function mitmCrumbs(t: TFn, locale: Locale): Crumb[] {
   ]
 }
 
+export function closedCafesCrumbs(t: TFn, locale: Locale): Crumb[] {
+  return [
+    homeCrumb(t, locale),
+    {
+      name: t('closedCafes.title'),
+      path: localizedPath(locale, '/closed-cafes'),
+    },
+  ]
+}
+
 // Home › Explore › {District} › {Area} › {Cafe}. Locations are the cafe's
 // ancestor chain (district, area); each links to its explore path prefix.
+// Closed cafes are filtered out of explore, so they hang off the archive
+// instead: Home › Closed Cafes › {Cafe}.
 export function cafeCrumbs(cafe: CafeData, t: TFn, locale: Locale): Crumb[] {
+  if (cafe.status === 'closed') {
+    return [
+      ...closedCafesCrumbs(t, locale),
+      { name: cafe.name, path: localizedPath(locale, `/cafe/${cafe.id}`) },
+    ]
+  }
   const crumbs: Crumb[] = [
     homeCrumb(t, locale),
     {

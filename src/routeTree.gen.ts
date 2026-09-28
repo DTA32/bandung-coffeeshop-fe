@@ -13,6 +13,7 @@ import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$local
 import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$locale}/index'
 import { Route as Char123LocaleChar125PrivacyPolicyRouteImport } from './routes/{-$locale}/privacy-policy'
 import { Route as Char123LocaleChar125MeetInTheMiddleRouteImport } from './routes/{-$locale}/meet-in-the-middle'
+import { Route as Char123LocaleChar125ClosedCafesRouteImport } from './routes/{-$locale}/closed-cafes'
 import { Route as Char123LocaleChar125AboutRouteImport } from './routes/{-$locale}/about'
 import { Route as TelemetryVitalsRouteImport } from './routes/telemetry/vitals'
 import { Route as TelemetryNavRouteImport } from './routes/telemetry/nav'
@@ -46,6 +47,12 @@ const Char123LocaleChar125MeetInTheMiddleRoute =
   Char123LocaleChar125MeetInTheMiddleRouteImport.update({
     id: '/meet-in-the-middle',
     path: '/meet-in-the-middle',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
+  } as any)
+const Char123LocaleChar125ClosedCafesRoute =
+  Char123LocaleChar125ClosedCafesRouteImport.update({
+    id: '/closed-cafes',
+    path: '/closed-cafes',
     getParentRoute: () => Char123LocaleChar125RouteRoute,
   } as any)
 const Char123LocaleChar125AboutRoute =
@@ -112,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/telemetry/nav': typeof TelemetryNavRoute
   '/telemetry/vitals': typeof TelemetryVitalsRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
+  '/{-$locale}/closed-cafes': typeof Char123LocaleChar125ClosedCafesRoute
   '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
   '/{-$locale}/privacy-policy': typeof Char123LocaleChar125PrivacyPolicyRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
@@ -127,6 +135,7 @@ export interface FileRoutesByTo {
   '/telemetry/nav': typeof TelemetryNavRoute
   '/telemetry/vitals': typeof TelemetryVitalsRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
+  '/{-$locale}/closed-cafes': typeof Char123LocaleChar125ClosedCafesRoute
   '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
   '/{-$locale}/privacy-policy': typeof Char123LocaleChar125PrivacyPolicyRoute
   '/{-$locale}': typeof Char123LocaleChar125IndexRoute
@@ -144,6 +153,7 @@ export interface FileRoutesById {
   '/telemetry/nav': typeof TelemetryNavRoute
   '/telemetry/vitals': typeof TelemetryVitalsRoute
   '/{-$locale}/about': typeof Char123LocaleChar125AboutRoute
+  '/{-$locale}/closed-cafes': typeof Char123LocaleChar125ClosedCafesRoute
   '/{-$locale}/meet-in-the-middle': typeof Char123LocaleChar125MeetInTheMiddleRoute
   '/{-$locale}/privacy-policy': typeof Char123LocaleChar125PrivacyPolicyRoute
   '/{-$locale}/': typeof Char123LocaleChar125IndexRoute
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/telemetry/nav'
     | '/telemetry/vitals'
     | '/{-$locale}/about'
+    | '/{-$locale}/closed-cafes'
     | '/{-$locale}/meet-in-the-middle'
     | '/{-$locale}/privacy-policy'
     | '/{-$locale}/'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/telemetry/nav'
     | '/telemetry/vitals'
     | '/{-$locale}/about'
+    | '/{-$locale}/closed-cafes'
     | '/{-$locale}/meet-in-the-middle'
     | '/{-$locale}/privacy-policy'
     | '/{-$locale}'
@@ -193,6 +205,7 @@ export interface FileRouteTypes {
     | '/telemetry/nav'
     | '/telemetry/vitals'
     | '/{-$locale}/about'
+    | '/{-$locale}/closed-cafes'
     | '/{-$locale}/meet-in-the-middle'
     | '/{-$locale}/privacy-policy'
     | '/{-$locale}/'
@@ -239,6 +252,13 @@ declare module '@tanstack/react-router' {
       path: '/meet-in-the-middle'
       fullPath: '/{-$locale}/meet-in-the-middle'
       preLoaderRoute: typeof Char123LocaleChar125MeetInTheMiddleRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
+    }
+    '/{-$locale}/closed-cafes': {
+      id: '/{-$locale}/closed-cafes'
+      path: '/closed-cafes'
+      fullPath: '/{-$locale}/closed-cafes'
+      preLoaderRoute: typeof Char123LocaleChar125ClosedCafesRouteImport
       parentRoute: typeof Char123LocaleChar125RouteRoute
     }
     '/{-$locale}/about': {
@@ -316,6 +336,7 @@ declare module '@tanstack/react-router' {
 
 interface Char123LocaleChar125RouteRouteChildren {
   Char123LocaleChar125AboutRoute: typeof Char123LocaleChar125AboutRoute
+  Char123LocaleChar125ClosedCafesRoute: typeof Char123LocaleChar125ClosedCafesRoute
   Char123LocaleChar125MeetInTheMiddleRoute: typeof Char123LocaleChar125MeetInTheMiddleRoute
   Char123LocaleChar125PrivacyPolicyRoute: typeof Char123LocaleChar125PrivacyPolicyRoute
   Char123LocaleChar125IndexRoute: typeof Char123LocaleChar125IndexRoute
@@ -327,6 +348,7 @@ interface Char123LocaleChar125RouteRouteChildren {
 const Char123LocaleChar125RouteRouteChildren: Char123LocaleChar125RouteRouteChildren =
   {
     Char123LocaleChar125AboutRoute: Char123LocaleChar125AboutRoute,
+    Char123LocaleChar125ClosedCafesRoute: Char123LocaleChar125ClosedCafesRoute,
     Char123LocaleChar125MeetInTheMiddleRoute:
       Char123LocaleChar125MeetInTheMiddleRoute,
     Char123LocaleChar125PrivacyPolicyRoute:
