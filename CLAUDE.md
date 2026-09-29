@@ -51,8 +51,8 @@ auto-cleanup.
 ```ts
 vi.mock('@tanstack/react-router', async (importActual) => {
   const actual = await importActual<typeof import('@tanstack/react-router')>()
-  const {routerOverrides} = await import('@/test/router')
-  return {...actual, ...routerOverrides}
+  const { routerOverrides } = await import('@/test/router')
+  return { ...actual, ...routerOverrides }
 })
 beforeEach(resetRouter) // pathname defaults to '/en' → locale 'en'; setMockPathname('/') for 'id'
 ```
@@ -89,8 +89,8 @@ are three route groups:
 
 ### Internationalization (i18n)
 
-Locale config lives in `src/i18n/` (`SUPPORTED_LOCALES = ['id', 'en']`, default `'id'`). `createI18n(locale)` builds a *
-*fresh i18next instance per SSR request** (and per locale on the client) so request state never leaks between concurrent
+Locale config lives in `src/i18n/` (`SUPPORTED_LOCALES = ['id', 'en']`, default `'id'`). `createI18n(locale)` builds a \*
+\*fresh i18next instance per SSR request\*\* (and per locale on the client) so request state never leaks between concurrent
 renders. Translation resources are bundled (`locales/{en,id}/common.json`), so init is synchronous.
 
 - **Short UI strings** (nav labels, SEO title/description, card labels) → i18next (`useTranslation` / `i18n.t`).

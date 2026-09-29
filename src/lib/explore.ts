@@ -1,5 +1,9 @@
 import { z } from 'zod'
-import type { ExploreSearch, SearchCafesParams } from '@/lib/api/search'
+import type {
+  ExploreSearch,
+  SearchCafesParams,
+  WeatherCondition,
+} from '@/lib/api/search'
 
 import type { Location } from '@/lib/type'
 
@@ -32,6 +36,41 @@ export function parseRatingIds(raw: string | undefined): number[] {
 export function serializeRatingIds(ids: number[]): string | undefined {
   const cleaned = ids.filter((n) => Number.isInteger(n))
   return cleaned.length > 0 ? cleaned.join(',') : undefined
+}
+
+export const WEATHER_CURRENT = 'current'
+export const WEATHER_CONDITIONS: WeatherCondition[] = [
+  'clear',
+  'cloudy',
+  'rain',
+]
+
+export function parseWeather(raw: string | undefined): string[] {
+  const values = parseTags(raw)
+  if (values.includes(WEATHER_CURRENT)) return [WEATHER_CURRENT]
+  return values.filter((v) =>
+    WEATHER_CONDITIONS.includes(v as WeatherCondition),
+  )
+}
+
+export function joinWithOr(items: string[], or: string): string {
+  if (items.length <= 1) return items.join('')
+  return `${items.slice(0, -1).join(', ')} ${or} ${items[items.length - 1]}`
+}
+
+export function weatherPhrase(
+  conditions: string[],
+  t: (key: string) => string,
+): string {
+  const ordered = WEATHER_CONDITIONS.filter((c) => conditions.includes(c))
+  return joinWithOr(
+    ordered.map((c) => t(`explore.weather.adjective.${c}`)),
+    t('common.or'),
+  )
+}
+
+export function serializeWeather(values: string[]): string | undefined {
+  return serializeTags(values)
 }
 
 // Path depth → location type. Index 0 = first path segment.
@@ -102,6 +141,7 @@ export const ExploreSearchSchema = z.object({
   ratings: looseString,
   is_featured: flag,
   order: oneOf('asc', 'desc'),
+  weather: looseString,
 })
 
 // The `: ExploreSearch` return type makes TypeScript verify the schema's output
@@ -131,5 +171,6 @@ export function exploreLoaderDeps(search: ExploreSearch): SearchCafesParams {
     ratings: search.ratings,
     is_featured: search.is_featured,
     order: search.order,
+    weather: search.weather,
   }
 }

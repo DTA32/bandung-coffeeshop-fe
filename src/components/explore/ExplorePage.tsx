@@ -9,6 +9,7 @@ import LocationDescendants, {
   hasPoiDescendants,
 } from '@/components/explore/LocationDescendants'
 import Pagination from '@/components/explore/Pagination'
+import WeatherBanner from '@/components/explore/WeatherBanner'
 import { useExploreNavigation } from '@/components/explore/useExploreNavigation'
 import LocaleLink from '@/components/LocaleLink'
 import type { SrpContent } from '@/lib/srp'
@@ -19,6 +20,7 @@ import { cleanExploreSearch } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import type { LocationData } from '@/lib/api/location'
 import { cn } from '@/lib/cn'
+import { parseWeather, WEATHER_CURRENT, weatherPhrase } from '@/lib/explore'
 
 // Shared error UI for both explore routes.
 export function ExploreError() {
@@ -190,6 +192,19 @@ export default function ExplorePage({
   // path filters would double up as query params under the unchanged path.
   const effectiveSearch: ExploreSearch = { ...search, ...appliedFilters }
 
+  // Weather filter → results-header phrasing ("12 cafes match rainy weather").
+  // "current" reads the condition the backend resolved; explicit picks are
+  // joined as an "or" list ("cloudy or rainy").
+  const weatherValues = parseWeather(search.weather)
+  const isCurrentWeather = weatherValues[0] === WEATHER_CURRENT
+  const weatherConditions = isCurrentWeather
+    ? data.weather
+      ? [data.weather.condition]
+      : []
+    : weatherValues
+  const weatherLabel =
+    weatherConditions.length > 0 ? weatherPhrase(weatherConditions, t) : null
+
   const locationClause = srpLocationClause(data.formatted_location_name, t)
   const h1 = buildExploreH1(srpContent?.crumbs ?? [], locationClause, t, locale)
 
@@ -244,6 +259,9 @@ export default function ExplorePage({
         )}
         <div className="flex flex-col w-full max-w-screen-2xl">
           <h1 className="text-bark mb-4 font-medium">{h1}</h1>
+          {isCurrentWeather && data.weather && (
+            <WeatherBanner weather={data.weather} />
+          )}
           <div className="mb-6 flex items-center justify-between gap-2 md:text-center">
             {!isMobile && (
               <ViewToggle
@@ -256,7 +274,12 @@ export default function ExplorePage({
             )}
 
             <h2 className="text-sm text-bark">
-              {t('explore.cafesFound', { count: data.total })}
+              {weatherLabel
+                ? t('explore.cafesMatchWeather', {
+                    count: data.total,
+                    weather: weatherLabel,
+                  })
+                : t('explore.cafesFound', { count: data.total })}
             </h2>
 
             <div className="flex items-center gap-2 shrink-0">
