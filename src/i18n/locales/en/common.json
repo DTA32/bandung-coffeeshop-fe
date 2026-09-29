@@ -42,8 +42,8 @@
     "districtLinkTitleDescriber": "consists of",
     "moodKicker": "I'm in the mood to…",
     "moods": {
-      "wfc": "Work from a café",
-      "hangout": "Hang out",
+      "wfc": "Work from café",
+      "hangout": "Hangout",
       "date": "Coffee date",
       "read": "Read a book"
     },
