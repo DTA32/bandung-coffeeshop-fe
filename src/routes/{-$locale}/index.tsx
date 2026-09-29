@@ -43,8 +43,8 @@ function HomePage() {
   return (
     <main className="flex flex-col min-h-screen gap-8 mb-8">
       <Hero />
-      <FeaturedCafes cafes={featuredCafes.cafes} />
       <DistrictList districts={districts} />
+      <FeaturedCafes cafes={featuredCafes.cafes} />
     </main>
   )
 }
