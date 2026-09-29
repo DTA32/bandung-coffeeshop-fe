@@ -98,7 +98,6 @@ export interface RandomCafe {
   name: string
 }
 
-// A uniformly random active café, for the home "Surprise me" shortcut.
 export async function getRandomCafe(lang?: Locale): Promise<RandomCafe> {
   const res = await apiFetch('/v1/cafe/random', { lang })
   if (!res.ok) throw new Error('Failed to fetch a random cafe')

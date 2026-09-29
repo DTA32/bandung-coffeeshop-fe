@@ -38,10 +38,6 @@ export function serializeRatingIds(ids: number[]): string | undefined {
   return cleaned.length > 0 ? cleaned.join(',') : undefined
 }
 
-// --- Weather filter ----------------------------------------------------------
-// `weather` is either the literal "current" (resolved server-side to Bandung's
-// live condition) or a comma list of conditions. "current" never combines with
-// the explicit conditions.
 export const WEATHER_CURRENT = 'current'
 export const WEATHER_CONDITIONS: WeatherCondition[] = [
   'clear',
@@ -57,16 +53,11 @@ export function parseWeather(raw: string | undefined): string[] {
   )
 }
 
-// Joins labels into a localized "or" list for copy: "rainy",
-// "cloudy or rainy", "clear, cloudy or rainy". `or` is the translated
-// conjunction.
 export function joinWithOr(items: string[], or: string): string {
   if (items.length <= 1) return items.join('')
   return `${items.slice(0, -1).join(', ')} ${or} ${items[items.length - 1]}`
 }
 
-// Weather adjectives joined in canonical order (clear → cloudy → rain),
-// regardless of the order the user picked them in.
 export function weatherPhrase(
   conditions: string[],
   t: (key: string) => string,

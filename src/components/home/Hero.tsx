@@ -2,11 +2,6 @@ import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/SearchBox'
 import { DiscoveryActions, MoodChips, OrDivider } from './HeroShortcuts'
 
-// Hero with click-first shortcuts: mood chips → SRP pages, then an "or" group
-// with the search box (typing fallback) and the discovery actions. Desktop is
-// centred over the photo; mobile anchors everything to a bottom overlay. The
-// photo is light, so text is forest; dark mode lays a scrim over it and the
-// flipped tokens turn the text light.
 export default function Hero() {
   const { t } = useTranslation()
   return (

@@ -14,8 +14,6 @@ import { cn } from '@/lib/cn'
 import { WEATHER_CURRENT } from '@/lib/explore'
 import { useSurpriseCafe } from './useSurpriseCafe'
 
-// Mood → existing SRP pretty URL (/explore/<slug>, locale-prefixed by
-// LocaleLink). Two rows so the mobile layout can size them equally.
 const MOOD_ROWS: { key: string; slug: string; icon: LucideIcon }[][] = [
   [
     { key: 'wfc', slug: 'wfc-friendly', icon: Laptop },
@@ -27,8 +25,6 @@ const MOOD_ROWS: { key: string; slug: string; icon: LucideIcon }[][] = [
   ],
 ]
 
-// Frosted chip over the hero photo. Tokens flip under .dark, so the same
-// classes read as cream/forest in light mode and surface/light-ink in dark.
 export const heroChip =
   'inline-flex cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-forest/25 bg-cream/80 px-3.5 py-2 text-[13px] md:text-sm font-medium text-forest no-underline backdrop-blur-sm transition hover:bg-cream dark:bg-surface/80 dark:hover:bg-surface'
 
@@ -39,8 +35,6 @@ export function MoodChips() {
       <p className="m-0 text-[13px] md:text-[15px] font-medium text-forest/80 dark:text-bark">
         {t('home.moodKicker')}
       </p>
-      {/* inline-flex column: both rows stretch to the wider one on mobile;
-          on desktop the rows sit side by side as a single line of four. */}
       <div className="inline-flex flex-col gap-2 self-start md:flex-row md:gap-2.5 md:self-center">
         {MOOD_ROWS.map((row, i) => (
           <div key={i} className="flex gap-2 md:gap-2.5">

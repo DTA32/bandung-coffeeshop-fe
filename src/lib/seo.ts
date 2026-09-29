@@ -111,8 +111,6 @@ export interface SeoMeta {
   locale: Locale // the page's locale; drives og:locale + its alternate
   ogImage?: string // absolute content image; falls back to the site logo
   jsonLd?: object[]
-  // Keep the page out of the index (e.g. time-varying weather results) while
-  // still letting crawlers follow its links; the canonical stays as given.
   noindex?: boolean
 }
 

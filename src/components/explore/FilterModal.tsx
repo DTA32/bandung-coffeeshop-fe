@@ -37,8 +37,6 @@ const WEATHER_ICONS: Record<WeatherCondition, typeof Sun> = {
   rain: CloudRain,
 }
 
-// "Now" (the live Bandung condition, resolved server-side) is mutually
-// exclusive with the explicit conditions; the explicit ones combine freely.
 function toggleWeather(prev: string[], slug: string): string[] {
   if (slug === WEATHER_CURRENT) {
     return prev.includes(WEATHER_CURRENT) ? [] : [WEATHER_CURRENT]

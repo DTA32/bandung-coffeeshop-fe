@@ -4,10 +4,6 @@ import { getRandomCafe } from '@/lib/api/cafe'
 import type { RandomCafe } from '@/lib/api/cafe'
 import { localeParam, useLocale } from '@/lib/locale'
 
-// Backs the home "Surprise me" shortcut. A random café is prefetched on the
-// client as soon as the hero mounts, so the click navigates straight to its
-// detail page (client-side, no intermediate redirect route). If the prefetch
-// hasn't landed yet the click waits on it, exposing `pending` for a spinner.
 export function useSurpriseCafe() {
   const navigate = useNavigate()
   const locale = useLocale()

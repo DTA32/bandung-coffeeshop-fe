@@ -29,12 +29,10 @@ export interface CafeListing {
 
 export type WeatherCondition = 'clear' | 'cloudy' | 'rain'
 
-// The resolved current Bandung weather; only present when the search asked
-// for weather=current and the backend has a reading.
 export interface CurrentWeather {
   condition: WeatherCondition
   temp_c: number
-  observed_at: string // RFC3339
+  observed_at: string
 }
 
 export interface SearchCafesData {
@@ -88,7 +86,7 @@ export interface ExploreSearch {
   price_max?: number
   ratings?: string // comma-separated rating_category bucket ids
   is_featured?: boolean
-  weather?: string // "current" or comma-separated WeatherCondition values
+  weather?: string
   // Sorting/pagination
   sort?: string // absent / undefined → 'default'
   page?: number // absent / undefined → 1

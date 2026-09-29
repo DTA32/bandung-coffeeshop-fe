@@ -8,7 +8,6 @@ const ICONS: Record<WeatherCondition, typeof Sun> = {
   rain: CloudRain,
 }
 
-// Observation time in Bandung local time (WIB), e.g. "10:30".
 function formatWib(iso: string): string | null {
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return null
@@ -20,9 +19,6 @@ function formatWib(iso: string): string | null {
   }).format(date)
 }
 
-// Shown above the results header when the search matched Bandung's current
-// weather (weather=current). Informational only — the filter itself is
-// changed or cleared from the filter modal.
 export default function WeatherBanner({
   weather,
 }: {

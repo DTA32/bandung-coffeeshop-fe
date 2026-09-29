@@ -6,7 +6,6 @@ interface FilterChipProps {
   selected: boolean
   onToggle: () => void
   title?: string
-  // Optional leading icon, rendered left of the label.
   icon?: ReactNode
 }
 
