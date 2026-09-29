@@ -6,7 +6,7 @@ export default function FeaturedCafes({ cafes }: { cafes: CafeListing[] }) {
   const { t } = useTranslation()
   return (
     <section className="flex flex-1 flex-col gap-6 bg-cream px-6 md:px-20 w-full">
-      <h2 className="m-0 text-2xl md:text-3xl font-bold text-forest">
+      <h2 className="m-0 text-2xl font-bold text-forest">
         {t('home.featuredCafes')}
       </h2>
       <div className="flex overflow-scroll gap-5 pb-2">
