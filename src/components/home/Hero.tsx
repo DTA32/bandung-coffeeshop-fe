@@ -18,7 +18,7 @@ export default function Hero() {
       <div
         className="
           relative flex w-full max-w-240 flex-col gap-3 px-5 pt-16 pb-8 text-forest
-          bg-linear-to-b from-cream/0 via-cream/70 via-35% to-cream/95
+          bg-linear-to-b from-cream/0 via-cream/50 via-35% to-cream/95
           md:items-center md:gap-5 md:bg-none md:p-6
         "
       >
