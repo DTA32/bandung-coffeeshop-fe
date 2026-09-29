@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
 interface FilterChipProps {
@@ -5,6 +6,7 @@ interface FilterChipProps {
   selected: boolean
   onToggle: () => void
   title?: string
+  icon?: ReactNode
 }
 
 export default function FilterChip({
@@ -12,6 +14,7 @@ export default function FilterChip({
   selected,
   onToggle,
   title,
+  icon,
 }: FilterChipProps) {
   return (
     <button
@@ -20,12 +23,13 @@ export default function FilterChip({
       aria-pressed={selected}
       onClick={onToggle}
       className={cn(
-        'cursor-pointer rounded-full px-3 py-1.5 text-sm transition',
+        'inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition',
         selected
           ? 'bg-forest text-cream'
           : 'border border-grove-light bg-surface text-forest hover:bg-grove-light',
       )}
     >
+      {icon}
       {label}
     </button>
   )

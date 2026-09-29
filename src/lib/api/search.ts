@@ -27,6 +27,14 @@ export interface CafeListing {
   coordinates?: { lat: number; lng: number }
 }
 
+export type WeatherCondition = 'clear' | 'cloudy' | 'rain'
+
+export interface CurrentWeather {
+  condition: WeatherCondition
+  temp_c: number
+  observed_at: string
+}
+
 export interface SearchCafesData {
   total: number
   location_name: string
@@ -36,6 +44,7 @@ export interface SearchCafesData {
   size: number
   cafes: CafeListing[]
   locations?: Location[]
+  weather?: CurrentWeather | null
 }
 
 export interface SearchCafesParams {
@@ -55,6 +64,7 @@ export interface SearchCafesParams {
   is_featured?: boolean
   order?: string
   status?: 'active' | 'closed' // absent → 'active' (backend default)
+  weather?: string
 }
 
 // URL search state for the explore routes — all fields optional; absence = use default.
@@ -76,6 +86,7 @@ export interface ExploreSearch {
   price_max?: number
   ratings?: string // comma-separated rating_category bucket ids
   is_featured?: boolean
+  weather?: string
   // Sorting/pagination
   sort?: string // absent / undefined → 'default'
   page?: number // absent / undefined → 1
@@ -106,6 +117,7 @@ export function cleanExploreSearch(s: ExploreSearch): ExploreSearch {
     ...(s.ratings !== undefined && s.ratings !== '' && { ratings: s.ratings }),
     ...(s.is_featured ? { is_featured: true } : {}),
     ...(s.order !== undefined && { order: s.order }),
+    ...(s.weather !== undefined && s.weather !== '' && { weather: s.weather }),
   }
 }
 
@@ -143,6 +155,7 @@ function buildSearchParams(params: SearchCafesParams): URLSearchParams {
     sp.set('is_featured', String(params.is_featured))
   if (params.order) sp.set('order', params.order)
   if (params.status) sp.set('status', params.status)
+  if (params.weather) sp.set('weather', params.weather)
   return sp
 }
 

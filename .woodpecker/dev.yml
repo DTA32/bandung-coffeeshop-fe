@@ -14,8 +14,8 @@ steps:
       dockerfile: Dockerfile
       platforms: linux/amd64
       tags:
-        - "${CI_COMMIT_SHA:0:7}"
-        - "${CI_PIPELINE_CREATED}-${CI_COMMIT_SHA:0:7}"
+        - '${CI_COMMIT_SHA:0:7}'
+        - '${CI_PIPELINE_CREATED}-${CI_COMMIT_SHA:0:7}'
       build_args:
         VITE_API_BASE_URL: https://dev.bdgcafe.com/api
       cache_images:
@@ -27,7 +27,7 @@ steps:
 
   - name: discord success notification
     when:
-      status: [ success ]
+      status: [success]
     image: appleboy/drone-discord
     settings:
       webhook_id:
@@ -39,7 +39,7 @@ steps:
 
   - name: discord failure notification
     when:
-      status: [ failure ]
+      status: [failure]
     image: appleboy/drone-discord
     settings:
       webhook_id:

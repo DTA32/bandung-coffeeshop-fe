@@ -40,7 +40,10 @@ export default function LocationDetail({
         </div>
       )}
       {(!isMobile || !hasPoiDescendants(location)) && (
-        <LocationDescendants location={location} className={cn(!isMobile && "rounded-2xl")} />
+        <LocationDescendants
+          location={location}
+          className={cn(!isMobile && 'rounded-2xl')}
+        />
       )}
     </div>
   )

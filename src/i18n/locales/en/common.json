@@ -1,6 +1,9 @@
 {
   "brand": "BDGCafé",
   "skipToMain": "Skip to main content",
+  "common": {
+    "or": "or"
+  },
   "nav": {
     "home": "Home",
     "explore": "Explore",
@@ -36,7 +39,17 @@
     "noFeaturedCafes": "No featured cafes at the moment.",
     "exploreByDistrict": "Explore by district",
     "districtUnavailable": "District is unavailable at the moment. Please check back later.",
-    "districtLinkTitleDescriber": "consists of"
+    "districtLinkTitleDescriber": "consists of",
+    "moodKicker": "I'm in the mood to…",
+    "moods": {
+      "wfc": "Work from café",
+      "hangout": "Hangout",
+      "date": "Coffee date",
+      "read": "Read a book"
+    },
+    "matchWeather": "Match the weather",
+    "surpriseMe": "Surprise me",
+    "surpriseLoading": "Picking a café…"
   },
   "search": {
     "placeholder": "Search by cafe name, area, facility, vibe, and others...",
@@ -109,7 +122,12 @@
       "reset": "Reset",
       "loading": "Loading filters…",
       "loadError": "Couldn't load filters.",
-      "retry": "Retry"
+      "retry": "Retry",
+      "weatherTitle": "Weather",
+      "weatherNow": "Now",
+      "weatherNowCaption": "Matching Bandung's weather right now",
+      "weatherPickedCaption": "Showing cafes suited for {{weather}} weather",
+      "weatherHint": "Pick Now to match Bandung's current weather, or choose one or more"
     },
     "in": "in",
     "near": "near",
@@ -121,6 +139,27 @@
       "cafes": "cafes",
       "descLead": "Discover",
       "descTail": "Honest reviews and real scores on BDGCafé help you find your perfect coffee spot."
+    },
+    "cafesMatchWeather_one": "{{count}} cafe matches {{weather}} weather",
+    "cafesMatchWeather_other": "{{count}} cafes match {{weather}} weather",
+    "weather": {
+      "adjective": {
+        "clear": "clear",
+        "cloudy": "cloudy",
+        "rain": "rainy"
+      },
+      "title": {
+        "clear": "It's clear in Bandung · {{temp}}°C",
+        "cloudy": "It's cloudy in Bandung · {{temp}}°C",
+        "rain": "It's raining in Bandung · {{temp}}°C"
+      },
+      "subtitle": {
+        "clear": "Airy, bright spots made for a sunny day out.",
+        "cloudy": "Laid-back spots for a grey, easy afternoon.",
+        "rain": "Cozy indoor picks that stay comfortable when it pours."
+      },
+      "updated": "Updated {{time}} WIB",
+      "poweredBy": "Powered by WeatherAPI.com"
     }
   },
   "closedCafes": {
