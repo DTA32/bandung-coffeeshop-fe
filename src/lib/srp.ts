@@ -322,18 +322,18 @@ export function countSrpFilters(params: SrpFilterParams): number {
   return listCount(params.tags) + listCount(params.ratings) + (hasPrice ? 1 : 0)
 }
 
-// Whether an SRP should be indexed. Only page 1 of an optional location plus at
-// most one filter, with enough results to not be thin, is worth a search entry;
-// the 2–4 filter combinations are near-duplicates of each other. Every
-// other SRP is rendered noindex, follow so its cafe links are still crawled.
+// Whether an SRP should be indexed. Only an optional location plus at most one
+// filter, with enough results to not be thin, is worth a search entry; the 2–4
+// filter combinations are near-duplicates of each other. Every other SRP is
+// rendered noindex, follow so its cafe links are still crawled. Pagination
+// doesn't matter here: ?page=N keeps the page's verdict (it stays out of the
+// sitemap instead, see scripts/prune-sitemap.ts).
 export function isIndexableSrp({
   filterCount,
   resultCount,
-  page,
 }: {
   filterCount: number
   resultCount: number
-  page: number
 }): boolean {
-  return filterCount <= 1 && resultCount >= MIN_INDEXABLE_RESULTS && page === 1
+  return filterCount <= 1 && resultCount >= MIN_INDEXABLE_RESULTS
 }

@@ -52,11 +52,10 @@ export const Route = createFileRoute('/{-$locale}/explore/')({
     })
     // Weather results change with the live condition → never index them.
     if (deps.weather) seo.noindex = true
-    // Multi-filter, thin, or paginated SRPs are near-duplicates → noindex.
+    // Multi-filter or thin SRPs are near-duplicates → noindex.
     const indexable = isIndexableSrp({
       filterCount: countSrpFilters(deps),
       resultCount: searchData.total,
-      page,
     })
     if (!indexable) seo.noindex = true
     return { searchData, srpContent, seo, filterOptions }

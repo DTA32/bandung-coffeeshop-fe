@@ -8,7 +8,8 @@
 //               entries remain — the crawler registers a path before fetching
 //               it. A failed page never writes dist/client/<path>/index.html,
 //               so file absence identifies dead URLs.
-//   - paginated: any ?page= URL; page 1 is the only indexable page of an SRP.
+//   - paginated: any ?page= URL. Pages 2+ stay indexable (no noindex), but only
+//               page 1 is listed — Google finds the rest via pagination links.
 //   - noindex:  pages whose prerendered HTML carries a robots noindex meta
 //               (multi-filter / thin SRPs, see isIndexableSrp in src/lib/srp.ts).
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
