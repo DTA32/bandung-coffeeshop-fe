@@ -1,17 +1,23 @@
 // Post-build sitemap prune — run after `vite build` (see package.json).
 //
-// Prerender with failOnError:false swallows non-2xx pages (e.g. zero-result
-// /explore filter combos that 404) but their sitemap entries remain: the
-// crawler registers a path for the sitemap before fetching it. A failed page
-// never writes dist/client/<path>/index.html, so file absence identifies dead
-// URLs. Limitation: a query-string URL maps to its base page's file, so an
-// out-of-range ?page= that 404'd survives if the base page exists — the
-// pagination UI only links in-range pages.
+// The prerender crawler (crawlLinks: true) registers every path it finds for the
+// sitemap, so the raw sitemap lists every reachable page. This keeps only the
+// URLs worth indexing, dropping:
+//   - missing:  prerender with failOnError:false swallows non-2xx pages (e.g.
+//               zero-result /explore filter combos that 404) but their sitemap
+//               entries remain — the crawler registers a path before fetching
+//               it. A failed page never writes dist/client/<path>/index.html,
+//               so file absence identifies dead URLs.
+//   - paginated: any ?page= URL; page 1 is the only indexable page of an SRP.
+//   - noindex:  pages whose prerendered HTML carries a robots noindex meta
+//               (multi-filter / thin SRPs, see isIndexableSrp in src/lib/srp.ts).
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 
 const DIST = path.resolve(import.meta.dirname, '../dist/client')
 const SITEMAP = path.join(DIST, 'sitemap.xml')
+
+type PruneReason = 'missing' | 'paginated' | 'noindex'
 
 // Sitemap <loc> → the file prerender would have written for it: query/hash
 // dropped, trailing slash tolerated, autoSubfolderIndex layout.
@@ -23,19 +29,37 @@ export function locToHtmlFile(loc: string): string {
   return `${clean.slice(1)}/index.html`
 }
 
+// <meta name="robots" content="noindex, …">, in either attribute order.
+const NOINDEX_META =
+  /<meta(?=[^>]*\bname="robots")(?=[^>]*\bcontent="[^"]*noindex)[^>]*>/i
+
+// Why a sitemap URL should be dropped, or null to keep it. readPage returns the
+// prerendered HTML for a dist-relative path, or null when it wasn't written.
+export function pruneReason(
+  loc: string,
+  readPage: (relHtmlPath: string) => string | null,
+): PruneReason | null {
+  if (new URL(loc).searchParams.has('page')) return 'paginated'
+  const html = readPage(locToHtmlFile(loc))
+  if (html === null) return 'missing'
+  if (NOINDEX_META.test(html)) return 'noindex'
+  return null
+}
+
 export function pruneSitemap(
   xml: string,
-  pageExists: (relHtmlPath: string) => boolean,
-): { xml: string; kept: number; removed: Array<string> } {
-  const removed: Array<string> = []
+  readPage: (relHtmlPath: string) => string | null,
+): { xml: string; kept: number; removed: Array<[string, PruneReason]> } {
+  const removed: Array<[string, PruneReason]> = []
   let kept = 0
   const out = xml.replace(/[ \t]*<url>[\s\S]*?<\/url>\r?\n?/g, (block) => {
     const loc = block.match(/<loc>([^<]*)<\/loc>/)?.[1]?.replace(/&amp;/g, '&')
-    if (!loc || pageExists(locToHtmlFile(loc))) {
+    const reason = loc ? pruneReason(loc, readPage) : null
+    if (!loc || !reason) {
       kept += 1
       return block
     }
-    removed.push(loc)
+    removed.push([loc, reason])
     return ''
   })
   return { xml: out, kept, removed }
@@ -48,13 +72,27 @@ if (import.meta.main) {
   }
   const { xml, kept, removed } = pruneSitemap(
     readFileSync(SITEMAP, 'utf8'),
-    (rel) => existsSync(path.join(DIST, rel)),
+    (rel) => {
+      const file = path.join(DIST, rel)
+      return existsSync(file) ? readFileSync(file, 'utf8') : null
+    },
   )
   if (kept === 0 && removed.length === 0) {
     console.error('prune-sitemap: no <url> entries found — format change?')
     process.exit(1)
   }
-  for (const loc of removed) console.log(`prune-sitemap: removed ${loc}`)
+  const counts: Record<PruneReason, number> = {
+    missing: 0,
+    paginated: 0,
+    noindex: 0,
+  }
+  for (const [loc, reason] of removed) {
+    counts[reason] += 1
+    if (reason === 'missing') console.log(`prune-sitemap: removed ${loc} (404)`)
+  }
   if (removed.length > 0) writeFileSync(SITEMAP, xml)
-  console.log(`prune-sitemap: kept ${kept}, removed ${removed.length}`)
+  console.log(
+    `prune-sitemap: kept ${kept}, removed ${removed.length} ` +
+      `(missing ${counts.missing}, paginated ${counts.paginated}, noindex ${counts.noindex})`,
+  )
 }
