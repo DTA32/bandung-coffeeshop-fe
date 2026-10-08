@@ -8,7 +8,7 @@ import { searchCafes } from '@/lib/api/search'
 import type { SearchCafesData } from '@/lib/api/search'
 import { getFilterOptions } from '@/lib/api/filters'
 import type { FilterOptions } from '@/lib/api/filters'
-import { buildSrpContent } from '@/lib/srp'
+import { buildSrpContent, countSrpFilters, isIndexableSrp } from '@/lib/srp'
 import type { SrpContent } from '@/lib/srp'
 import { buildExploreSeo } from '@/lib/seoTemplate'
 import { seoHead, localizedPath } from '@/lib/seo'
@@ -52,6 +52,13 @@ export const Route = createFileRoute('/{-$locale}/explore/')({
     })
     // Weather results change with the live condition → never index them.
     if (deps.weather) seo.noindex = true
+    // Multi-filter, thin, or paginated SRPs are near-duplicates → noindex.
+    const indexable = isIndexableSrp({
+      filterCount: countSrpFilters(deps),
+      resultCount: searchData.total,
+      page,
+    })
+    if (!indexable) seo.noindex = true
     return { searchData, srpContent, seo, filterOptions }
   },
   errorComponent: ExploreError,

@@ -16,7 +16,13 @@ import { getLocation } from '@/lib/api/location'
 import type { LocationData } from '@/lib/api/location'
 import { getFilterOptions } from '@/lib/api/filters'
 import type { FilterOptions } from '@/lib/api/filters'
-import { buildSrpRegistry, resolveSrp, buildSrpContent } from '@/lib/srp'
+import {
+  buildSrpRegistry,
+  resolveSrp,
+  buildSrpContent,
+  countSrpFilters,
+  isIndexableSrp,
+} from '@/lib/srp'
 import type { SrpContent } from '@/lib/srp'
 import { buildExploreSeo } from '@/lib/seoTemplate'
 import { seoHead, localizedPath } from '@/lib/seo'
@@ -136,6 +142,13 @@ export const Route = createFileRoute('/{-$locale}/explore/$')({
     })
     // Weather results change with the live condition → never index them.
     if (deps.weather) seo.noindex = true
+    // Multi-filter, thin, or paginated SRPs are near-duplicates → noindex.
+    const indexable = isIndexableSrp({
+      filterCount: countSrpFilters({ ...deps, ...resolved.params }),
+      resultCount: searchData.total,
+      page,
+    })
+    if (!indexable) seo.noindex = true
 
     const toReturn = {
       searchData,
