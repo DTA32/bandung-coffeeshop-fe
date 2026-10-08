@@ -307,3 +307,33 @@ export function buildSrpContent(
 
   return { variants, crumbs, blurb }
 }
+
+// Fewest results an SRP needs to be worth indexing; below this it's thin content.
+export const MIN_INDEXABLE_RESULTS = 3
+
+// How many tag/price/rating filters a search applies (location doesn't count).
+// Each tag and rating bucket counts once; a price range counts once. Takes the
+// effective params (path filters merged over query ones), so a filter added via
+// the query string on top of a pretty URL is counted too.
+export function countSrpFilters(params: SrpFilterParams): number {
+  const listCount = (csv?: string) =>
+    csv ? csv.split(',').filter(Boolean).length : 0
+  const hasPrice = params.price_min != null || params.price_max != null
+  return listCount(params.tags) + listCount(params.ratings) + (hasPrice ? 1 : 0)
+}
+
+// Whether an SRP should be indexed. Only an optional location plus at most one
+// filter, with enough results to not be thin, is worth a search entry; the 2–4
+// filter combinations are near-duplicates of each other. Every other SRP is
+// rendered noindex, follow so its cafe links are still crawled. Pagination
+// doesn't matter here: ?page=N keeps the page's verdict (it stays out of the
+// sitemap instead, see scripts/prune-sitemap.ts).
+export function isIndexableSrp({
+  filterCount,
+  resultCount,
+}: {
+  filterCount: number
+  resultCount: number
+}): boolean {
+  return filterCount <= 1 && resultCount >= MIN_INDEXABLE_RESULTS
+}
