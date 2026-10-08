@@ -3,13 +3,18 @@
 // The prerender crawler (crawlLinks: true) registers every path it finds for the
 // sitemap, so the raw sitemap lists every reachable page. This keeps only the
 // URLs worth indexing, dropping:
+//   - locale:   /en pages. They're still prerendered, but each id page lists its
+//               /en twin as an <xhtml:link rel="alternate"> (vite.config.ts
+//               onSuccess) instead of the twin getting its own <url>.
 //   - missing:  prerender with failOnError:false swallows non-2xx pages (e.g.
 //               zero-result /explore filter combos that 404) but their sitemap
 //               entries remain — the crawler registers a path before fetching
 //               it. A failed page never writes dist/client/<path>/index.html,
 //               so file absence identifies dead URLs.
-//   - paginated: any ?page= URL. Pages 2+ stay indexable (no noindex), but only
-//               page 1 is listed — Google finds the rest via pagination links.
+//   - query:    any URL with a query string. ?page=N pages stay indexable (no
+//               noindex) but only page 1 is listed — Google finds the rest via
+//               pagination links; ?weather= pages are noindex, and the file
+//               check below can't see that (a query URL maps to its base page).
 //   - noindex:  pages whose prerendered HTML carries a robots noindex meta
 //               (multi-filter / thin SRPs, see isIndexableSrp in src/lib/srp.ts).
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
@@ -18,7 +23,7 @@ import path from 'node:path'
 const DIST = path.resolve(import.meta.dirname, '../dist/client')
 const SITEMAP = path.join(DIST, 'sitemap.xml')
 
-type PruneReason = 'missing' | 'paginated' | 'noindex'
+type PruneReason = 'locale' | 'query' | 'missing' | 'noindex'
 
 // Sitemap <loc> → the file prerender would have written for it: query/hash
 // dropped, trailing slash tolerated, autoSubfolderIndex layout.
@@ -40,7 +45,9 @@ export function pruneReason(
   loc: string,
   readPage: (relHtmlPath: string) => string | null,
 ): PruneReason | null {
-  if (new URL(loc).searchParams.has('page')) return 'paginated'
+  const url = new URL(loc)
+  if (/^\/en(?:\/|$)/.test(url.pathname)) return 'locale'
+  if (url.search) return 'query'
   const html = readPage(locToHtmlFile(loc))
   if (html === null) return 'missing'
   if (NOINDEX_META.test(html)) return 'noindex'
@@ -63,7 +70,16 @@ export function pruneSitemap(
     removed.push([loc, reason])
     return ''
   })
-  return { xml: out, kept, removed }
+  return { xml: fixNamespace(out), kept, removed }
+}
+
+// TanStack Start writes the sitemap namespace as https://, but the protocol's
+// namespace is the exact string http://www.sitemaps.org/schemas/sitemap/0.9.
+export function fixNamespace(xml: string): string {
+  return xml.replace(
+    'xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"',
+    'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
+  )
 }
 
 if (import.meta.main) {
@@ -83,17 +99,18 @@ if (import.meta.main) {
     process.exit(1)
   }
   const counts: Record<PruneReason, number> = {
+    locale: 0,
+    query: 0,
     missing: 0,
-    paginated: 0,
     noindex: 0,
   }
   for (const [loc, reason] of removed) {
     counts[reason] += 1
     if (reason === 'missing') console.log(`prune-sitemap: removed ${loc} (404)`)
   }
-  if (removed.length > 0) writeFileSync(SITEMAP, xml)
+  writeFileSync(SITEMAP, xml)
   console.log(
     `prune-sitemap: kept ${kept}, removed ${removed.length} ` +
-      `(missing ${counts.missing}, paginated ${counts.paginated}, noindex ${counts.noindex})`,
+      `(locale ${counts.locale}, query ${counts.query}, missing ${counts.missing}, noindex ${counts.noindex})`,
   )
 }
