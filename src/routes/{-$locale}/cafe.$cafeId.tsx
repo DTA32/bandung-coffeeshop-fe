@@ -32,6 +32,7 @@ import {
   breadcrumbJsonLd,
 } from '@/lib/seo'
 import type { SeoMeta } from '@/lib/seo'
+import { buildCafeMeta } from '@/lib/seoTemplate'
 import { createI18n, normalizeLocale } from '@/i18n'
 
 export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
@@ -55,14 +56,19 @@ export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
       getCafeFeed(params.cafeId).catch(() => []),
     ])
 
-    // SEO: title/description fold in the cafe name + its locality; og:image is the first cafe photo when present
+    // SEO: query-driven title/description built from the cafe's own data (see buildCafeMeta); og:image is the first cafe photo when present
     const i18n = createI18n(lang)
-    const locality = cafe.locations.at(-1)?.name
-    const location = locality ? `${locality}, Bandung` : 'Bandung'
+    const t = (k: string, o?: Record<string, unknown>) => i18n.t(k, o)
+    const { title, description } = buildCafeMeta({
+      cafe,
+      review,
+      t,
+      locale: lang,
+    })
     const canonicalPath = localizedPath(lang, `/cafe/${params.cafeId}`)
     const seo: SeoMeta = {
-      title: i18n.t('seo.cafeTitle', { name: cafe.name }),
-      description: i18n.t('seo.cafeDesc', { name: cafe.name, location }),
+      title,
+      description,
       canonicalPath,
       locale: lang,
       ogImage: cafe.images[0]?.url,

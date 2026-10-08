@@ -1,5 +1,6 @@
 import type { SrpItem } from '@/lib/srp'
 import type { CafeListing } from '@/lib/api/search'
+import type { CafeData, CafePrice, CafeReview } from '@/lib/api/cafe'
 import {
   breadcrumbJsonLd,
   cafeItemListJsonLd,
@@ -9,7 +10,7 @@ import {
 import type { Crumb, SeoMeta } from '@/lib/seo'
 import type { Locale } from '@/i18n'
 
-type TFn = (key: string) => string
+type TFn = (key: string, options?: Record<string, unknown>) => string
 type Labelable = { name: string; type: string; typeLabel?: string }
 
 // "dago" → "Dago". Title-cases location slugs and rating type suffixes.
@@ -197,5 +198,162 @@ export function buildClosedCafesSeo(args: {
       breadcrumbJsonLd(closedCafesCrumbs(t, locale)),
       cafeItemListJsonLd(cafes, locale),
     ],
+  }
+}
+
+// Cafe detail page (CDP) meta. Titles target the branded "<name> <area>
+// <intent>" queries (ulasan / menu / foto); descriptions are built from the
+// cafe's own data so no two read the same.
+export const CAFE_TITLE_MAX = 60
+export const CAFE_DESC_MAX = 155
+
+// Deciding tags for the description, most decisive first. Only one is used.
+const CAFE_DESC_TAGS = [
+  'indoor-smoking',
+  'wfc-friendly',
+  'air-conditioned-seating',
+] as const
+
+function hasPrice(price: CafePrice): boolean {
+  return [
+    price.price_range_min,
+    price.price_range_max,
+    price.coffee_price_min,
+    price.coffee_price_max,
+    price.snack_price_min,
+    price.snack_price_max,
+    price.food_price_min,
+    price.food_price_max,
+  ].some((v) => v !== null)
+}
+
+// "Ulasan, Harga Menu & Foto" / "Ulasan & Foto" / "Ulasan".
+function joinKeywords(words: string[]): string {
+  if (words.length < 2) return words.join('')
+  return `${words.slice(0, -1).join(', ')} & ${words.at(-1)}`
+}
+
+// The cafe's deepest location, unless the name already says it
+// ("Dreezel Coffee Tubagus Ismail" + "Tubagus Ismail" → no area).
+function cafeArea(cafe: CafeData): string | undefined {
+  const area = cafe.locations.at(-1)?.name
+  if (!area) return undefined
+  return cafe.name.toLowerCase().includes(area.toLowerCase()) ? undefined : area
+}
+
+// Title tiers, first that fits CAFE_TITLE_MAX wins (no brand suffix):
+// name + area + full keywords → without "Foto" → name + full keywords →
+// without "Foto" → name + area + "Ulasan" → name + "Ulasan".
+// "Harga Menu" needs price data, "Foto" needs at least one image.
+export function buildCafeTitle(cafe: CafeData, t: TFn): string {
+  const review = t('seo.cafe.kwReview')
+  const menu = hasPrice(cafe.price) ? t('seo.cafe.kwMenu') : undefined
+  const photos = cafe.images.length > 0 ? t('seo.cafe.kwPhotos') : undefined
+  const full = joinKeywords([review, menu, photos].filter(Boolean) as string[])
+  const noPhotos = joinKeywords([review, menu].filter(Boolean) as string[])
+
+  const area = cafeArea(cafe)
+  const withArea = area ? `${cafe.name} ${area}` : undefined
+  const tiers = [
+    withArea && `${withArea} - ${full}`,
+    withArea && `${withArea} - ${noPhotos}`,
+    `${cafe.name} - ${full}`,
+    `${cafe.name} - ${noPhotos}`,
+    withArea && `${withArea} - ${review}`,
+    `${cafe.name} - ${review}`,
+  ].filter(Boolean) as string[]
+  return tiers.find((x) => x.length <= CAFE_TITLE_MAX) ?? tiers.at(-1)!
+}
+
+function fmtK(n: number): string {
+  return `Rp ${Math.floor(n / 1000)}k`
+}
+
+// The headline price range (excl. food), falling back to the coffee range.
+function priceClause(price: CafePrice, t: TFn): string | undefined {
+  const pairs: [number | null, number | null][] = [
+    [price.price_range_min, price.price_range_max],
+    [price.coffee_price_min, price.coffee_price_max],
+  ]
+  const [min, max] = pairs.find(([a, b]) => a !== null || b !== null) ?? []
+  if (min != null && max != null) {
+    const range =
+      min === max ? fmtK(min) : `${fmtK(min)}–${Math.floor(max / 1000)}k`
+    return t('seo.cafe.descPrice', { range })
+  }
+  if (min != null) return t('seo.cafe.descPriceFrom', { price: fmtK(min) })
+  if (max != null) return t('seo.cafe.descPriceUpTo', { price: fmtK(max) })
+  return undefined
+}
+
+// Hours only for active cafes: a closed one's old hours would mislead.
+function hoursClause(cafe: CafeData, t: TFn): string | undefined {
+  const { status, open_hour: open, close_hour: close } = cafe
+  if (status !== 'active') return undefined
+  if (open === '00:00' && close === '23:59') return t('seo.cafe.desc24Hours')
+  if (open && close) return t('seo.cafe.descHours', { open, close })
+  if (open) return t('seo.cafe.descOpenFrom', { open })
+  if (close) return t('seo.cafe.descClosesAt', { close })
+  return undefined
+}
+
+// The WiFi range label the score falls in ("Cepat" / "Fast").
+function wifiClause(review: CafeReview, t: TFn): string | undefined {
+  const wifi = review.ratings.wifi
+  if (!wifi) return undefined
+  const range = wifi.range.find((r) => wifi.score <= r.upper_bound)
+  if (!range) return undefined
+  return t('seo.cafe.descWifi', { label: range.name.toLowerCase() })
+}
+
+function tagClause(review: CafeReview, t: TFn): string | undefined {
+  const slugs = new Set(review.tags.map((tag) => tag.slug))
+  const slug = CAFE_DESC_TAGS.find((s) => slugs.has(s))
+  return slug && t(`seo.cafe.descTag.${slug}`)
+}
+
+// "<name> di <area>, Bandung: <price>, <hours>, <wifi>, <tag>. <CTA>"
+// Clauses go in priority order and drop from the end (CTA first) until the
+// description fits CAFE_DESC_MAX. Missing data simply skips its clause.
+export function buildCafeDescription(
+  cafe: CafeData,
+  review: CafeReview,
+  t: TFn,
+): string {
+  const area = cafeArea(cafe)
+  const location = area ? `${area}, Bandung` : 'Bandung'
+  const lead = t('seo.cafe.descLead', { name: cafe.name, location })
+  const facts = [
+    priceClause(cafe.price, t),
+    hoursClause(cafe, t),
+    wifiClause(review, t),
+    tagClause(review, t),
+  ].filter(Boolean) as string[]
+  const cta = t('seo.cafe.descCta')
+
+  const compose = (n: number, withCta: boolean) => {
+    const head =
+      n > 0 ? `${lead}: ${facts.slice(0, n).join(', ')}.` : `${lead}.`
+    return withCta ? `${head} ${cta}` : head
+  }
+  const candidates = [
+    compose(facts.length, true),
+    ...facts.map((_, i) => compose(facts.length - i, false)),
+    compose(0, true),
+    compose(0, false),
+  ]
+  return candidates.find((x) => x.length <= CAFE_DESC_MAX) ?? candidates.at(-1)!
+}
+
+export function buildCafeMeta(args: {
+  cafe: CafeData
+  review: CafeReview
+  t: TFn
+  locale: Locale
+}): { title: string; description: string } {
+  const { cafe, review, t } = args
+  return {
+    title: buildCafeTitle(cafe, t),
+    description: buildCafeDescription(cafe, review, t),
   }
 }

@@ -169,8 +169,26 @@
   "seo": {
     "homeTitle": "BDGCafe - Honest Bandung Coffee Shop Reviews & Discovery",
     "homeDesc": "Discover the best coffee shops in Bandung. Honest reviews on wifi, vibe, price, noise & more to find your perfect café or work spot.",
-    "cafeTitle": "{{name}} - Review, Vibe, Wifi & Price | BDGCafe",
-    "cafeDesc": "{{name}} in {{location}}: our honest review of the wifi, vibe, noise, price & menu. See the full breakdown and nearby cafés on BDGCafe.",
+    "cafe": {
+      "kwReview": "Review",
+      "kwMenu": "Menu Prices",
+      "kwPhotos": "Photos",
+      "descLead": "{{name}} in {{location}}",
+      "descPrice": "prices {{range}}",
+      "descPriceFrom": "prices from {{price}}",
+      "descPriceUpTo": "prices up to {{price}}",
+      "desc24Hours": "open 24 hours",
+      "descHours": "open {{open}}–{{close}}",
+      "descOpenFrom": "opens at {{open}}",
+      "descClosesAt": "closes at {{close}}",
+      "descWifi": "{{label}} WiFi",
+      "descTag": {
+        "indoor-smoking": "indoor smoking allowed",
+        "wfc-friendly": "WFC-friendly",
+        "air-conditioned-seating": "air-conditioned seating"
+      },
+      "descCta": "Read our full review."
+    },
     "aboutTitle": "About BDGCafe - Bandung Coffee Shop Reviews",
     "aboutDesc": "BDGCafe is a personal guide to Bandung's coffee shops - honest reviews and discovery for finding your perfect café.",
     "mitmTitle": "Meet in the Middle - Find a Café Between Multiple Spots | BDGCafe",
