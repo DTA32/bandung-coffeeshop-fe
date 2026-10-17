@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Info } from 'lucide-react'
 import Image from '@/components/Image'
@@ -6,6 +6,7 @@ import ImageGallery from '@/components/ImageGallery'
 import MapPreview from './MapPreview'
 import ShareButton from './ShareButton'
 import type { LocationImage } from '@/lib/type'
+import { parseImageHash, setImageHash } from '@/lib/galleryHash'
 
 interface CafeHeroProps {
   id: string
@@ -26,7 +27,55 @@ function WithImage({
   gmapsId: string | null
 }) {
   const { t } = useTranslation()
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
+  // `nonce` remounts the gallery when the hash (not the gallery itself)
+  // requests a specific image.
+  const [open, setOpen] = useState<{ index: number; nonce: number } | null>(
+    null,
+  )
+  const count = image.length
+
+  const openFromHash = useCallback(
+    (index: number) =>
+      setOpen((cur) => ({ index, nonce: (cur?.nonce ?? 0) + 1 })),
+    [],
+  )
+
+  const openAt = (index: number) => {
+    setOpen((cur) => ({ index, nonce: (cur?.nonce ?? 0) + 1 }))
+    setImageHash(index)
+  }
+
+  const close = useCallback(() => {
+    setOpen(null)
+    setImageHash(null)
+  }, [])
+
+  // Deep links: #image-N on load (after hydration), on hashchange, and on
+  // clicks of in-page #image-N links (covers the hash already being set).
+  useEffect(() => {
+    const initial = parseImageHash(window.location.hash, count)
+    if (initial !== null) openFromHash(initial)
+
+    const onHashChange = () => {
+      const i = parseImageHash(window.location.hash, count)
+      if (i !== null) openFromHash(i)
+    }
+    const onClick = (e: MouseEvent) => {
+      if (!(e.target instanceof Element)) return
+      const a = e.target.closest('a[href^="#image-"]')
+      const i = parseImageHash(a?.getAttribute('href') ?? '', count)
+      if (i === null) return
+      e.preventDefault()
+      openFromHash(i)
+      setImageHash(i)
+    }
+    window.addEventListener('hashchange', onHashChange)
+    document.addEventListener('click', onClick)
+    return () => {
+      window.removeEventListener('hashchange', onHashChange)
+      document.removeEventListener('click', onClick)
+    }
+  }, [count, openFromHash])
 
   return (
     <div className="relative h-70 md:h-75 w-full">
@@ -37,7 +86,7 @@ function WithImage({
             <button
               key={index}
               type="button"
-              onClick={() => setOpenIndex(index)}
+              onClick={() => openAt(index)}
               aria-label={t('cafe.viewPhotosOf', { name })}
               className="flex-shrink-0 block cursor-pointer border-none bg-transparent p-0"
               style={{ width: imageWidth + '%' }}
@@ -69,11 +118,13 @@ function WithImage({
           withAlternateButton={true}
         />
       )}
-      {openIndex !== null && (
+      {open !== null && (
         <ImageGallery
+          key={open.nonce}
           images={image}
-          startIndex={openIndex}
-          onClose={() => setOpenIndex(null)}
+          startIndex={open.index}
+          onIndexChange={setImageHash}
+          onClose={close}
         />
       )}
     </div>

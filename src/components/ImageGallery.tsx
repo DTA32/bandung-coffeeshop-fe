@@ -10,6 +10,8 @@ import type { LocationImage } from '@/lib/type'
 interface ImageGalleryProps {
   images: LocationImage[]
   startIndex: number
+  // Called when the visible image changes after open (0-based).
+  onIndexChange?: (index: number) => void
   onClose: () => void
 }
 
@@ -18,6 +20,7 @@ const SWIPE_THRESHOLD = 50
 function ImageGalleryInternal({
   images,
   startIndex,
+  onIndexChange,
   onClose,
 }: ImageGalleryProps) {
   const { t } = useTranslation()
@@ -27,6 +30,13 @@ function ImageGalleryInternal({
 
   const prev = () => setIndex((i) => (i - 1 + images.length) % images.length)
   const next = () => setIndex((i) => (i + 1) % images.length)
+
+  const lastReported = useRef(startIndex)
+  useEffect(() => {
+    if (index === lastReported.current) return
+    lastReported.current = index
+    onIndexChange?.(index)
+  }, [index, onIndexChange])
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
