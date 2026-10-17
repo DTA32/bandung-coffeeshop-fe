@@ -9,6 +9,7 @@ import {
 } from '@/lib/seo'
 import type { Crumb, SeoMeta } from '@/lib/seo'
 import type { Locale } from '@/i18n'
+import { menuKind } from '@/lib/menu'
 
 type TFn = (key: string, options?: Record<string, unknown>) => string
 type Labelable = { name: string; type: string; typeLabel?: string }
@@ -214,6 +215,11 @@ const CAFE_DESC_TAGS = [
   'air-conditioned-seating',
 ] as const
 
+// A menu the page actually links to (external URL or a gallery photo).
+function hasMenu(cafe: CafeData): boolean {
+  return menuKind(cafe.menu) !== null
+}
+
 function hasPrice(price: CafePrice): boolean {
   return [
     price.price_range_min,
@@ -244,10 +250,11 @@ function cafeArea(cafe: CafeData): string | undefined {
 // Title tiers, first that fits CAFE_TITLE_MAX wins (no brand suffix):
 // name + area + full keywords → without "Foto" → name + full keywords →
 // without "Foto" → name + area + "Ulasan" → name + "Ulasan".
-// "Harga Menu" needs price data, "Foto" needs at least one image.
+// "Harga Menu" needs a menu or price data, "Foto" needs at least one image.
 export function buildCafeTitle(cafe: CafeData, t: TFn): string {
   const review = t('seo.cafe.kwReview')
-  const menu = hasPrice(cafe.price) ? t('seo.cafe.kwMenu') : undefined
+  const menu =
+    hasMenu(cafe) || hasPrice(cafe.price) ? t('seo.cafe.kwMenu') : undefined
   const photos = cafe.images.length > 0 ? t('seo.cafe.kwPhotos') : undefined
   const full = joinKeywords([review, menu, photos].filter(Boolean) as string[])
   const noPhotos = joinKeywords([review, menu].filter(Boolean) as string[])
@@ -313,6 +320,7 @@ function tagClause(review: CafeReview, t: TFn): string | undefined {
 }
 
 // "<name> di <area>, Bandung: <price>, <hours>, <wifi>, <tag>. <CTA>"
+// The CTA mentions the menu when the page links to one.
 // Clauses go in priority order and drop from the end (CTA first) until the
 // description fits CAFE_DESC_MAX. Missing data simply skips its clause.
 export function buildCafeDescription(
@@ -329,7 +337,7 @@ export function buildCafeDescription(
     wifiClause(review, t),
     tagClause(review, t),
   ].filter(Boolean) as string[]
-  const cta = t('seo.cafe.descCta')
+  const cta = t(hasMenu(cafe) ? 'seo.cafe.descCtaMenu' : 'seo.cafe.descCta')
 
   const compose = (n: number, withCta: boolean) => {
     const head =
