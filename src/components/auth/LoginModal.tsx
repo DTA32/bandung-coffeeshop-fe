@@ -116,7 +116,7 @@ export default function LoginModal({
         <Trans
           i18nKey="auth.legal"
           components={{
-            link: (
+            policy: (
               <LocaleLink
                 to="/{-$locale}/privacy-policy"
                 onClick={onClose}
