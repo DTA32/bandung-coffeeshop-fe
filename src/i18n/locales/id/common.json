@@ -14,7 +14,28 @@
     "primary": "Navigasi utama",
     "darkMode": "Ganti ke mode gelap",
     "lightMode": "Ganti ke mode terang",
-    "systemMode": "Ikuti tema perangkat"
+    "systemMode": "Ikuti tema perangkat",
+    "languageTitle": "Bahasa",
+    "theme": "Tema",
+    "more": "Opsi lainnya"
+  },
+  "theme": {
+    "auto": "Otomatis",
+    "light": "Terang",
+    "dark": "Gelap"
+  },
+  "auth": {
+    "login": "Masuk / Daftar",
+    "logout": "Keluar",
+    "continueWithGoogle": "Lanjut dengan Google",
+    "title": "Masuk atau daftar",
+    "titleReview": "Masuk untuk mengulas {{cafe}}",
+    "subtitle": "Bagikan pendapatmu soal kafe-kafe di Bandung. Baru di sini? Akunmu langsung dibuat otomatis.",
+    "legal": "Dengan melanjutkan, kamu menyetujui <link>Kebijakan Privasi</link> kami.",
+    "deactivated": "Akun ini sudah dinonaktifkan dan tidak bisa dipakai untuk masuk.",
+    "failed": "Terjadi kesalahan saat masuk. Coba lagi, ya.",
+    "close": "Tutup",
+    "accountMenu": "Menu akun"
   },
   "footer": {
     "tagline": "Temukan kafe terbaik di Bandung untuk kerja remote dan nongkrong bersama teman. Temukan tempat favoritmu hari ini!",

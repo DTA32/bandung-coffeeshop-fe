@@ -17,7 +17,28 @@
     "primary": "Primary navigation",
     "darkMode": "Switch to dark mode",
     "lightMode": "Switch to light mode",
-    "systemMode": "Use device theme"
+    "systemMode": "Use device theme",
+    "languageTitle": "Language",
+    "theme": "Theme",
+    "more": "More options"
+  },
+  "theme": {
+    "auto": "Auto",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "auth": {
+    "login": "Log in / Sign up",
+    "logout": "Log out",
+    "continueWithGoogle": "Continue with Google",
+    "title": "Log in or sign up",
+    "titleReview": "Log in to review {{cafe}}",
+    "subtitle": "Share your take on Bandung's cafés. New here? Your account is created automatically.",
+    "legal": "By continuing, you agree to our <link>Privacy Policy</link>.",
+    "deactivated": "This account has been deactivated and can't be used to log in.",
+    "failed": "Something went wrong while logging in. Please try again.",
+    "close": "Close",
+    "accountMenu": "Account menu"
   },
   "footer": {
     "tagline": "Discover the best cafes in Bandung for remote work and hanging out with friends. Find your perfect spot today!",
