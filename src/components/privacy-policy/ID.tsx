@@ -1,4 +1,4 @@
-const LAST_UPDATED = '27 September 2026'
+const LAST_UPDATED = '18 Oktober 2026'
 const LINK = 'font-medium underline underline-offset-2'
 
 export default function PrivacyPolicyID() {
@@ -51,7 +51,38 @@ export default function PrivacyPolicyID() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">2. Data lokasi (hanya dengan izinmu)</h2>
+        <h2 className="font-semibold">
+          2. Informasi yang kamu berikan saat masuk
+        </h2>
+        <p className="text-bark">
+          Login bersifat opsional; kamu hanya perlu akun untuk menulis ulasan.
+          Saat kamu masuk dengan Google, kami menerima dan menyimpan ID akun
+          Google, nama, alamat email, dan URL foto profilmu. Kami tidak pernah
+          menerima kata sandi Google-mu, dan kami tidak mengakses kontak, email,
+          file, atau hal lain di akun Google-mu.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h2 className="font-semibold">3. Ulasan yang kamu tulis</h2>
+        <p className="text-bark">
+          Saat kamu menulis ulasan, kami menyimpan skor, nama yang kamu pilih
+          untuk ditampilkan, deskripsi, bulan kunjungan, dan penilaian spesifik
+          yang kamu berikan, yang terhubung ke akunmu. Setiap ulasan kami
+          periksa sebelum ditayangkan. Ini bukan untuk menyeleksi review jelek
+          atau negatif (kamu boleh tulis ulasan seperti ini, kami tidak akan
+          menyembunyikannya, janji), tapi untuk mencegah adanya konten
+          membahayakan atau ilegal yang muncul di website ini. Setelah
+          disetujui, ulasan akan tampil secara publik di BDGCafé dan ikut
+          dihitung dalam skor kafe; alamat email dan detail akunmu tidak pernah
+          ditampilkan. Kamu bisa mengganti nama di setiap ulasan jika ingin
+          tetap anonim, dan kamu bisa mengubah atau menghapus ulasanmu kapan
+          saja.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h2 className="font-semibold">4. Data lokasi (hanya dengan izinmu)</h2>
         <p className="text-bark">
           Fitur seperti &quot;cari kafe terdekat&quot; dapat menggunakan lokasi
           perangkatmu. Browser-mu akan selalu meminta izin terlebih dahulu, dan
@@ -61,12 +92,18 @@ export default function PrivacyPolicyID() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">3. Cookie</h2>
+        <h2 className="font-semibold">5. Cookie</h2>
         <p className="text-bark">
           Google Analytics menyetel cookie untuk mengukur penggunaan. Analitik
           kami sendiri tidak menggunakan cookie. Kami tidak menggunakan cookie
           untuk iklan atau pelacakan lintas situs. Kamu bisa mengatur atau
           menghapus cookie di browser-mu (lihat &quot;Pilihanmu&quot; di bawah).
+        </p>
+        <p className="text-bark">
+          Saat kamu masuk, kami menyetel cookie sesi agar kamu tetap dalam
+          keadaan masuk. Cookie ini wajib untuk fitur masuk, hanya berisi
+          pengenal acak, dan terhapus saat kamu keluar (logout) atau saat masa
+          berlakunya habis.
         </p>
         <p className="text-bark">
           Kami juga menyimpan pilihan tema terang/gelap-mu di penyimpanan lokal
@@ -78,7 +115,7 @@ export default function PrivacyPolicyID() {
 
       <div className="flex flex-col gap-3">
         <h2 className="font-semibold">
-          4. Bagaimana kami menggunakan informasi ini
+          6. Bagaimana kami menggunakan informasi ini
         </h2>
         <p className="text-bark">
           Semua yang kami kumpulkan ditujukan untuk membuat BDGCafé lebih baik
@@ -88,12 +125,15 @@ export default function PrivacyPolicyID() {
           bagaimana situs benar-benar digunakan, sehingga menemukan kafe
           berikutnya menjadi sedikit lebih mudah setiap kali berkunjung. Kami
           juga menggunakannya untuk menjaga situs tetap aman. Kami tidak menjual
-          datamu, menampilkan iklan, atau membuat profil iklan.
+          datamu, menampilkan iklan, atau membuat profil iklan. Informasi akun
+          hanya digunakan untuk memasukkanmu ke akun, menghubungkan ulasan
+          dengan akunmu, dan menjaga situs dari penyalahgunaan. Kami tidak
+          pernah menampilkan alamat emailmu.
         </p>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">5. Layanan pihak ketiga</h2>
+        <h2 className="font-semibold">7. Layanan pihak ketiga</h2>
         <p className="text-bark">
           Kami mengandalkan beberapa penyedia tepercaya yang mungkin memproses
           data sebagai bagian dari penyajian situs. Masing-masing menangani data
@@ -124,21 +164,35 @@ export default function PrivacyPolicyID() {
               Pemberitahuan Privasi CARTO
             </a>
           </li>
+          <li>
+            <span className="font-medium text-forest">Google Sign-In</span>{' '}
+            (Google LLC) — masuk ke akun BDGCafé-mu.{' '}
+            <a className={LINK} href="https://policies.google.com/privacy">
+              Kebijakan Privasi Google
+            </a>
+          </li>
           <li>Gambar disajikan dari CDN kami sendiri (image.bdgcafe.com).</li>
         </ul>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">6. Penyimpanan data</h2>
+        <h2 className="font-semibold">8. Penyimpanan data</h2>
         <p className="text-bark">
           Kami menyimpan data analitik dan log hanya selama diperlukan untuk
           tujuan di atas; Google menyimpan data analitik sesuai pengaturan yang
           kami konfigurasikan dan kebijakannya sendiri.
         </p>
+        <p className="text-bark">
+          Kami menyimpan akun dan ulasanmu selama akunmu aktif. Saat kamu
+          menghapus ulasan, ulasan langsung hilang dari situs, tetapi mungkin
+          akan ada sisa-sisa data tersisa; email kami jika kamu ingin ulasan
+          tersebut dihapus sepenuhnya. Jika kami menonaktifkan akun karena
+          penyalahgunaan, ulasan dari akun tersebut disembunyikan dari situs.
+        </p>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">7. Pilihanmu</h2>
+        <h2 className="font-semibold">9. Pilihanmu</h2>
         <ul className="flex flex-col gap-2 text-bark list-disc pl-5">
           <li>Menolak atau menghapus cookie di browser-mu.</li>
           <li>
@@ -149,6 +203,21 @@ export default function PrivacyPolicyID() {
             dari Google.
           </li>
           <li>Menolak atau mencabut akses lokasi kapan saja di browser-mu.</li>
+          <li>Ubah atau hapus ulasanmu kapan saja dari halaman kafe.</li>
+          <li>
+            Cabut akses BDGCafé di{' '}
+            <a className={LINK} href="https://myaccount.google.com/permissions">
+              pengaturan Akun Google-mu
+            </a>
+            .
+          </li>
+          <li>
+            Email{' '}
+            <a className={LINK} href="mailto:contact@bdgcafe.com">
+              contact@bdgcafe.com
+            </a>{' '}
+            untuk menghapus akunmu beserta data yang terhubung dengannya.
+          </li>
           <li>
             Email{' '}
             <a className={LINK} href="mailto:contact@bdgcafe.com">
@@ -160,7 +229,7 @@ export default function PrivacyPolicyID() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">8. Privasi anak</h2>
+        <h2 className="font-semibold">10. Privasi anak</h2>
         <p className="text-bark">
           BDGCafé tidak ditujukan untuk anak-anak, dan kami tidak dengan sengaja
           mengumpulkan data mereka.
@@ -168,7 +237,7 @@ export default function PrivacyPolicyID() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">9. Perubahan</h2>
+        <h2 className="font-semibold">11. Perubahan</h2>
         <p className="text-bark">
           Kami dapat memperbarui kebijakan ini dari waktu ke waktu; tanggal
           &quot;terakhir diperbarui&quot; di atas mencerminkan versi saat ini.
@@ -176,7 +245,7 @@ export default function PrivacyPolicyID() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">10. Kontak</h2>
+        <h2 className="font-semibold">12. Kontak</h2>
         <p className="text-bark">
           Ada pertanyaan? Email{' '}
           <a className={LINK} href="mailto:contact@bdgcafe.com">
