@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import Image from '@/components/Image'
 import type { LocationImage } from '@/lib/type'
 
-interface CafeImageGalleryProps {
+interface ImageGalleryProps {
   images: LocationImage[]
   startIndex: number
   onClose: () => void
@@ -15,11 +15,11 @@ interface CafeImageGalleryProps {
 
 const SWIPE_THRESHOLD = 50
 
-function CafeImageGalleryInternal({
+function ImageGalleryInternal({
   images,
   startIndex,
   onClose,
-}: CafeImageGalleryProps) {
+}: ImageGalleryProps) {
   const { t } = useTranslation()
   const [index, setIndex] = useState(startIndex)
   const touchStartX = useRef<number | null>(null)
@@ -155,10 +155,10 @@ function CafeImageGalleryInternal({
   )
 }
 
-export default function CafeImageGallery(props: CafeImageGalleryProps) {
+export default function ImageGallery(props: ImageGalleryProps) {
   return (
     <ClientOnly>
-      <CafeImageGalleryInternal {...props} />
+      <ImageGalleryInternal {...props} />
     </ClientOnly>
   )
 }

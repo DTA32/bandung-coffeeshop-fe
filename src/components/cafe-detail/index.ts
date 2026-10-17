@@ -1,6 +1,5 @@
 // Café detail page components. Imported as a group by the /cafe/$cafeId route.
 export { default as CafeHero } from './CafeHero'
-export { default as CafeImageGallery } from './CafeImageGallery'
 export { default as CafeTitle } from './CafeTitle'
 export { default as Disclaimer } from './Disclaimer'
 export { default as MapPreview } from './MapPreview'

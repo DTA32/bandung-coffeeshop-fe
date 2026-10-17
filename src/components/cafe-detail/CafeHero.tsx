@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Info } from 'lucide-react'
 import Image from '@/components/Image'
-import CafeImageGallery from './CafeImageGallery'
+import ImageGallery from '@/components/ImageGallery'
 import MapPreview from './MapPreview'
 import ShareButton from './ShareButton'
 import type { LocationImage } from '@/lib/type'
@@ -70,7 +70,7 @@ function WithImage({
         />
       )}
       {openIndex !== null && (
-        <CafeImageGallery
+        <ImageGallery
           images={image}
           startIndex={openIndex}
           onClose={() => setOpenIndex(null)}
