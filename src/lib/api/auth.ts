@@ -2,7 +2,7 @@ import { PUBLIC_API_BASE, apiFetch } from '@/lib/api'
 import type { ApiResponse } from '@/lib/type'
 
 export interface Me {
-  id: string
+  id: number
   name: string
   email: string
   avatar_url: string | null
