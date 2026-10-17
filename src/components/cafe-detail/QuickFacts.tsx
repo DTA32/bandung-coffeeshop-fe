@@ -7,6 +7,7 @@ import type { Location } from '@/lib/type'
 
 interface QuickFactsProps {
   instagram: string | null
+  menu?: string | null
   locations: Location[]
   tags: CafeTags[]
   openHour: string | null
@@ -39,6 +40,7 @@ function LastLocation({ locations }: { locations: Location[] }) {
 
 export default function QuickFacts({
   instagram,
+  menu,
   locations,
   tags,
   openHour,
@@ -57,6 +59,13 @@ export default function QuickFacts({
   } else if (closeHour !== null) {
     hours = `${t('cafe.closesAt')} ${closeHour}`
   }
+  // http(s) => external link; `#image-N` => in-page gallery link; else hidden.
+  const menuKind =
+    menu && /^https?:\/\//i.test(menu)
+      ? 'external'
+      : menu && /^#image-[1-9][0-9]*$/.test(menu)
+        ? 'gallery'
+        : null
   const hasLastLocation = locations.length >= 1 && locations.length <= 2
 
   return (
@@ -79,6 +88,29 @@ export default function QuickFacts({
               >
                 @{instagram}
               </a>
+            </dd>
+          </div>
+        )}
+        {menu && menuKind !== null && (
+          <div className="col-span-2 grid grid-cols-subgrid items-center">
+            <dt className="text-xs text-bark whitespace-nowrap">
+              {t('cafe.menu')}
+            </dt>
+            <dd className="text-xs font-semibold text-forest text-right m-0">
+              {menuKind === 'external' ? (
+                <a
+                  href={menu}
+                  className="hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t('cafe.seeMenu')}
+                </a>
+              ) : (
+                <a href={menu} className="hover:underline">
+                  {t('cafe.seeMenu')}
+                </a>
+              )}
             </dd>
           </div>
         )}
@@ -123,11 +155,15 @@ export default function QuickFacts({
           </div>
         )}
       </dl>
-      {!instagram && !hasLastLocation && tags.length === 0 && hours === '' && (
-        <div className="flex justify-center items-center h-16">
-          <span className="text-xs text-bark">{t('cafe.noQuickFacts')}</span>
-        </div>
-      )}
+      {!instagram &&
+        menuKind === null &&
+        !hasLastLocation &&
+        tags.length === 0 &&
+        hours === '' && (
+          <div className="flex justify-center items-center h-16">
+            <span className="text-xs text-bark">{t('cafe.noQuickFacts')}</span>
+          </div>
+        )}
     </div>
   )
 }

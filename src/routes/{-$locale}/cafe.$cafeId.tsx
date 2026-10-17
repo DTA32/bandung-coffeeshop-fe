@@ -127,6 +127,7 @@ function Widgets(): JSX.Element {
         )}
         <QuickFacts
           instagram={cafe.instagram}
+          menu={cafe.menu ?? null}
           locations={cafe.locations}
           tags={review.tags}
           openHour={cafe.open_hour}
@@ -170,6 +171,7 @@ function Widgets(): JSX.Element {
       >
         <QuickFacts
           instagram={cafe.instagram}
+          menu={cafe.menu ?? null}
           locations={cafe.locations}
           tags={review.tags}
           openHour={cafe.open_hour}
