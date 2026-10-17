@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
 import type { CafeTags } from '@/lib/api/cafe'
 import { exploreSplat } from '@/lib/explore'
+import { menuKind } from '@/lib/menu'
 import type { Location } from '@/lib/type'
 
 interface QuickFactsProps {
@@ -59,13 +60,7 @@ export default function QuickFacts({
   } else if (closeHour !== null) {
     hours = `${t('cafe.closesAt')} ${closeHour}`
   }
-  // http(s) => external link; `#image-N` => in-page gallery link; else hidden.
-  const menuKind =
-    menu && /^https?:\/\//i.test(menu)
-      ? 'external'
-      : menu && /^#image-[1-9][0-9]*$/.test(menu)
-        ? 'gallery'
-        : null
+  const menuType = menuKind(menu)
   const hasLastLocation = locations.length >= 1 && locations.length <= 2
 
   return (
@@ -91,13 +86,13 @@ export default function QuickFacts({
             </dd>
           </div>
         )}
-        {menu && menuKind !== null && (
+        {menu && menuType !== null && (
           <div className="col-span-2 grid grid-cols-subgrid items-center">
             <dt className="text-xs text-bark whitespace-nowrap">
               {t('cafe.menu')}
             </dt>
             <dd className="text-xs font-semibold text-forest text-right m-0">
-              {menuKind === 'external' ? (
+              {menuType === 'external' ? (
                 <a
                   href={menu}
                   className="hover:underline"
@@ -156,7 +151,7 @@ export default function QuickFacts({
         )}
       </dl>
       {!instagram &&
-        menuKind === null &&
+        menuType === null &&
         !hasLastLocation &&
         tags.length === 0 &&
         hours === '' && (
