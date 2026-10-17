@@ -2,6 +2,7 @@
 export { default as CafeHero } from './CafeHero'
 export { default as CafeTitle } from './CafeTitle'
 export { default as Disclaimer } from './Disclaimer'
+export { default as LatestUpdatesWidget } from './LatestUpdatesWidget'
 export { default as MapPreview } from './MapPreview'
 export { default as NearbyCafe } from './NearbyCafe'
 export { default as PriceCard } from './PriceCard'
