@@ -7,19 +7,22 @@ import { useTranslation } from 'react-i18next'
 import Image from '@/components/Image'
 import type { LocationImage } from '@/lib/type'
 
-interface CafeImageGalleryProps {
+interface ImageGalleryProps {
   images: LocationImage[]
   startIndex: number
+  // Called when the visible image changes after open (0-based).
+  onIndexChange?: (index: number) => void
   onClose: () => void
 }
 
 const SWIPE_THRESHOLD = 50
 
-function CafeImageGalleryInternal({
+function ImageGalleryInternal({
   images,
   startIndex,
+  onIndexChange,
   onClose,
-}: CafeImageGalleryProps) {
+}: ImageGalleryProps) {
   const { t } = useTranslation()
   const [index, setIndex] = useState(startIndex)
   const touchStartX = useRef<number | null>(null)
@@ -27,6 +30,13 @@ function CafeImageGalleryInternal({
 
   const prev = () => setIndex((i) => (i - 1 + images.length) % images.length)
   const next = () => setIndex((i) => (i + 1) % images.length)
+
+  const lastReported = useRef(startIndex)
+  useEffect(() => {
+    if (index === lastReported.current) return
+    lastReported.current = index
+    onIndexChange?.(index)
+  }, [index, onIndexChange])
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -155,10 +165,10 @@ function CafeImageGalleryInternal({
   )
 }
 
-export default function CafeImageGallery(props: CafeImageGalleryProps) {
+export default function ImageGallery(props: ImageGalleryProps) {
   return (
     <ClientOnly>
-      <CafeImageGalleryInternal {...props} />
+      <ImageGalleryInternal {...props} />
     </ClientOnly>
   )
 }

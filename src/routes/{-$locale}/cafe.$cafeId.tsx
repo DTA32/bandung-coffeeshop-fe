@@ -3,12 +3,13 @@ import {
   notFound,
   useRouteContext,
 } from '@tanstack/react-router'
-import { getCafe, getCafeReview } from '@/lib/api/cafe'
+import { getCafe, getCafeReview, getCafeFeed } from '@/lib/api/cafe'
 import { getNearbyCafes } from '@/lib/api/search'
 import {
   CafeHero,
   CafeTitle,
   ReviewCard,
+  LatestUpdatesWidget,
   RatingsCard,
   Disclaimer,
   QuickFacts,
@@ -48,9 +49,10 @@ export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
       if (e.message === '404') throw notFound()
       throw e
     }
-    const [review, nearbyCafes] = await Promise.all([
+    const [review, nearbyCafes, feed] = await Promise.all([
       getCafeReview(params.cafeId, lang),
       getNearbyCafes(params.cafeId, lang),
+      getCafeFeed(params.cafeId).catch(() => []),
     ])
 
     // SEO: title/description fold in the cafe name + its locality; og:image is the first cafe photo when present
@@ -69,7 +71,7 @@ export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
         breadcrumbJsonLd(cafeCrumbs(cafe, (k) => i18n.t(k), lang)),
       ],
     }
-    return { cafe, review, nearbyCafes, seo }
+    return { cafe, review, nearbyCafes, feed, seo }
   },
   errorComponent: CafeErrorComponent,
   notFoundComponent: CafeNotFoundComponent,
@@ -109,7 +111,7 @@ function CafeNotFoundComponent() {
 }
 
 function Widgets(): JSX.Element {
-  const { cafe, review, nearbyCafes } = Route.useLoaderData()
+  const { cafe, review, nearbyCafes, feed } = Route.useLoaderData()
   const { ua } = useRouteContext({ from: '__root__' })
   const { t } = useTranslation()
   if (ua.isMobile) {
@@ -125,6 +127,7 @@ function Widgets(): JSX.Element {
         )}
         <QuickFacts
           instagram={cafe.instagram}
+          menu={cafe.menu ?? null}
           locations={cafe.locations}
           tags={review.tags}
           openHour={cafe.open_hour}
@@ -132,6 +135,7 @@ function Widgets(): JSX.Element {
         />
         <PriceCard price={cafe.price} />
         <ReviewCard content={review.content} visited_at={review.visited_at} />
+        <LatestUpdatesWidget items={feed} />
         <ScoreCard
           overallScore={review.overall_score}
           wfcScore={review.wfc_score}
@@ -157,6 +161,7 @@ function Widgets(): JSX.Element {
           />
         )}
         <ReviewCard content={review.content} visited_at={review.visited_at} />
+        <LatestUpdatesWidget items={feed} />
         <RatingsCard ratings={review.ratings} />
         <NearbyCafe cafes={nearbyCafes.cafes} />
       </div>
@@ -166,6 +171,7 @@ function Widgets(): JSX.Element {
       >
         <QuickFacts
           instagram={cafe.instagram}
+          menu={cafe.menu ?? null}
           locations={cafe.locations}
           tags={review.tags}
           openHour={cafe.open_hour}

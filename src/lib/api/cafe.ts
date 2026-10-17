@@ -31,6 +31,7 @@ export interface CafeData {
   gmaps_id: string | null
   locations: Location[]
   price: CafePrice
+  menu?: string | null
 }
 
 export interface RatingRange {
@@ -90,6 +91,22 @@ export async function getCafeReview(
   const res = await apiFetch(`/v1/cafe/${id}/review`, { lang })
   if (!res.ok) throw new Error('failed to fetch review')
   const json: ApiResponse<CafeReview> = await res.json()
+  return json.data
+}
+
+export interface CafeFeedItem {
+  id: number
+  content: string
+  images: string[]
+  author: string
+  link: string | null
+  published_at: string
+}
+
+export async function getCafeFeed(id: string): Promise<CafeFeedItem[]> {
+  const res = await apiFetch(`/v1/cafe/${id}/feed`)
+  if (!res.ok) throw new Error('failed to fetch feed')
+  const json: ApiResponse<CafeFeedItem[]> = await res.json()
   return json.data
 }
 
