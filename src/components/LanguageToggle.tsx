@@ -2,6 +2,7 @@ import { Link, useRouterState } from '@tanstack/react-router'
 import type { ReactElement } from 'react'
 import { Languages } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/cn'
 import { toggleLocalePath } from '@/lib/locale'
 
 // Link's `to` is typed to the static route tree, but the toggle target is a
@@ -13,17 +14,40 @@ const RawLink = Link as (props: Record<string, unknown>) => ReactElement
 // LanguageToggle links to the current page in the other language: Indonesian
 // (bare path) ⇄ English (`/en`), preserving the path, search params, and hash (so
 // deep-linked sections like /about#price-ranks land on the same section).
+// The `menu` variant renders it as a full-width row for the mobile nav menu.
 export default function LanguageToggle({
   className = '',
   languageHintClassName = '',
+  variant = 'default',
 }: {
   className?: string
   languageHintClassName?: string
+  variant?: 'default' | 'menu'
 }) {
   const { t } = useTranslation()
   const { pathname, search, hash } = useRouterState({
     select: (s) => s.location,
   })
+  if (variant === 'menu') {
+    return (
+      <RawLink
+        to={toggleLocalePath(pathname)}
+        search={search}
+        hash={hash || undefined}
+        title={t('nav.language')}
+        className={cn(
+          'flex h-11 w-full items-center gap-2.5 rounded-xl bg-forest-lighter px-3 text-sm text-forest no-underline',
+          className,
+        )}
+      >
+        <Languages size={18} aria-hidden="true" className="text-moss" />
+        <span className="font-bold">{t('nav.languageTitle')}</span>
+        <span className="ml-auto text-xs font-medium text-bark">
+          {t('nav.currentLanguage')}
+        </span>
+      </RawLink>
+    )
+  }
   return (
     <RawLink
       to={toggleLocalePath(pathname)}
