@@ -128,47 +128,46 @@ function NavMenu() {
           <Chevron size={16} aria-hidden="true" />
         </span>
       </button>
-
-      {open && (
-        <div
-          id={menuId}
-          className="absolute right-4 bottom-full mb-2 flex w-55 flex-col gap-2 rounded-2xl border border-grove-light bg-surface p-3.5 text-left text-sm shadow-lg"
-        >
-          <LanguageToggle variant="menu" />
-          <ThemeToggle variant="menu" />
-          {status === 'user' && me ? (
-            <>
-              <div className="flex flex-col gap-0.5 px-1 pt-1">
-                <span className="truncate font-bold text-forest">
-                  {me.name}
-                </span>
-                <span className="truncate text-xs text-bark">{me.email}</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false)
-                  void logout()
-                }}
-                className="flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-error-accent font-semibold text-error transition-colors hover:bg-error-bg"
-              >
-                <LogOut size={16} aria-hidden="true" />
-                {t('auth.logout')}
-              </button>
-            </>
-          ) : status === 'anon' ? (
-            <LoginButton
-              className="h-10 w-full"
-              onClick={() => setOpen(false)}
-            />
-          ) : (
-            <span
-              aria-hidden="true"
-              className="block h-10 w-full animate-pulse rounded-full bg-grove-light"
-            />
-          )}
-        </div>
-      )}
+      <div
+        id={menuId}
+        hidden={!open}
+        aria-hidden={!open}
+        className={
+          cn(
+            'absolute right-4 bottom-full mb-2 flex w-55 flex-col gap-2 rounded-2xl border border-grove-light bg-surface p-3.5 text-left text-sm shadow-lg',
+            open ? 'flex' : 'hidden'
+          )
+        }
+      >
+        <LanguageToggle variant="menu" />
+        <ThemeToggle variant="menu" />
+        {status === 'user' && me ? (
+          <>
+            <div className="flex flex-col gap-0.5 px-1 pt-1">
+              <span className="truncate font-bold text-forest">{me.name}</span>
+              <span className="truncate text-xs text-bark">{me.email}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false)
+                void logout()
+              }}
+              className="flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-error-accent font-semibold text-error transition-colors hover:bg-error-bg"
+            >
+              <LogOut size={16} aria-hidden="true" />
+              {t('auth.logout')}
+            </button>
+          </>
+        ) : status === 'anon' ? (
+          <LoginButton className="h-10 w-full" onClick={() => setOpen(false)} />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="block h-10 w-full animate-pulse rounded-full bg-grove-light"
+          />
+        )}
+      </div>
     </div>
   )
 }
