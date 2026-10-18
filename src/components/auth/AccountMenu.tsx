@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { ChevronDown, CircleUserRound, LogOut } from 'lucide-react'
+import { ChevronDown, LogOut } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/cn'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { useClickOutside } from '@/lib/hooks/useClickOutside'
 import { useEscapeKey } from '@/lib/hooks/useEscapeKey'
 
-// Desktop account pill: shows the user's name and opens a small menu with
+// Desktop account pill: shows the user's initial (as the mobile navbar does)
+// and name, and opens a small menu with
 // their email and a log out action.
 export default function AccountMenu() {
   const { t } = useTranslation()
@@ -42,9 +43,14 @@ export default function AccountMenu() {
         aria-controls={open ? menuId : undefined}
         title={t('auth.accountMenu')}
         onClick={() => setOpen((o) => !o)}
-        className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full border border-grove-light bg-surface px-3 text-[13px] font-semibold text-forest transition-colors hover:bg-forest-lighter"
+        className="flex h-8 cursor-pointer items-center gap-1.5 rounded-full border border-grove-light bg-surface pr-3 pl-1.5 text-[13px] font-semibold text-forest transition-colors hover:bg-forest-lighter"
       >
-        <CircleUserRound size={16} aria-hidden="true" className="text-moss" />
+        <span
+          aria-hidden="true"
+          className="flex size-5 items-center justify-center rounded-full bg-moss text-[10px] font-bold text-cream uppercase"
+        >
+          {me.name.charAt(0)}
+        </span>
         <span className="max-w-36 truncate">{me.name}</span>
         <ChevronDown
           size={14}
