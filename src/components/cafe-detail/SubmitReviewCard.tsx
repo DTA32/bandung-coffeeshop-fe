@@ -16,13 +16,15 @@ export default function SubmitReviewCard({
   const { t } = useTranslation()
   const [hover, setHover] = useState(0)
   return (
-    <div className="snap-start shrink-0 w-64 md:w-[calc((100%-2rem)/3)] min-h-60 flex flex-col items-center justify-center gap-4 rounded-2xl border border-grove-light bg-forest-lighter p-5 text-center">
+    <div className="snap-start shrink-0 w-66 md:w-74 min-h-[236px] flex flex-col items-center justify-center gap-4 rounded-2xl border border-[#B9D2A3] bg-[#F1F6EB] p-5 text-center dark:border-grove-light dark:bg-forest-lighter">
       <MessageSquareHeart size={28} className="text-grove" aria-hidden="true" />
       <div className="flex flex-col gap-1">
         <h3 className="m-0 text-[15px] font-bold text-forest">
           {t('reviews.submitTitle', { cafe: cafeName })}
         </h3>
-        <p className="m-0 text-[13px] text-bark">{t('reviews.submitSub')}</p>
+        <p className="m-0 text-[13px] text-[#7A8E70] dark:text-bark">
+          {t('reviews.submitSub')}
+        </p>
       </div>
       <div className="flex gap-2" onMouseLeave={() => setHover(0)}>
         {[1, 2, 3, 4, 5].map((n) => (
@@ -43,8 +45,8 @@ export default function SubmitReviewCard({
               className={cn(
                 'transition-colors',
                 n <= hover
-                  ? 'fill-amber-500 text-amber-500'
-                  : 'fill-surface text-forest-light',
+                  ? 'fill-[#E3A53B] text-[#E3A53B]'
+                  : 'fill-surface text-[#B9D2A3] dark:text-grove-light',
               )}
             />
           </button>

@@ -175,7 +175,7 @@ export default function ReviewsCard({
             >
               ·
             </span>
-            <span className="text-xs font-normal text-bark">
+            <span className="text-xs font-normal text-[#7A8E70] dark:text-bark">
               {t('reviews.count', { count: totalReviewCount })}
             </span>
           </>

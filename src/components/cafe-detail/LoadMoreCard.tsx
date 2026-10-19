@@ -39,12 +39,12 @@ export default function LoadMoreCard({
       ref={ref}
       type="button"
       onClick={onLoadMore}
-      className="snap-start shrink-0 w-34 min-h-60 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border border-grove-light bg-surface p-4 text-center hover:bg-forest-lighter"
+      className="snap-start shrink-0 w-30 md:w-35 min-h-[236px] flex cursor-pointer flex-col items-center justify-center gap-2.5 rounded-2xl border border-grove-light bg-surface p-4 text-center hover:bg-forest-lighter"
     >
-      <span className="flex size-10 items-center justify-center rounded-full bg-forest-lighter text-moss">
+      <span className="flex size-10 items-center justify-center rounded-full bg-[#E4EED9] text-moss dark:bg-forest-lighter">
         <ChevronsRight size={18} aria-hidden="true" />
       </span>
-      <span className="text-[13px] font-semibold text-moss">
+      <span className="text-[13px] leading-[1.4] font-semibold text-moss">
         {t('reviews.loadMore')}
       </span>
     </button>
