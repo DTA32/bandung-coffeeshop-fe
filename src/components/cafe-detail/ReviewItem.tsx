@@ -4,12 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StarDisplay } from './StarRating'
 import { useLocale, dateLocale } from '@/lib/locale'
 import { cn } from '@/lib/cn'
-import type {
-  CafeReviewItem,
-  MyReviewStatus,
-  RatingType,
-  RatingsResponse,
-} from '@/lib/api/cafe'
+import type { CafeReviewItem, MyReviewStatus } from '@/lib/api/cafe'
 
 // Content longer than this (or with many line breaks) gets the more/less toggle.
 const LONG_CONTENT_CHARS = 140
@@ -20,38 +15,20 @@ export const REVIEW_CARD_CLASS =
 
 interface ReviewItemProps {
   review: CafeReviewItem
-  // Bucket names for the rating chips (the cafe's aggregate ratings).
-  ratingNames: RatingsResponse
   // Set on the signed-in user's own review.
   own?: { status: MyReviewStatus; onEdit: () => void }
 }
 
-// "2024-11" → "November 2024" in the active locale.
+// "2026-10" → "Oct-26" ("Okt-26" in id): the visit is a month and year, so it
+// is shown as one rather than as a relative date.
 function formatVisit(visitedAt: string, locale: string): string | null {
   const [year, month] = visitedAt.split('-').map(Number)
   if (!year || !month) return null
-  return new Date(Date.UTC(year, month - 1, 1)).toLocaleString(locale, {
-    year: 'numeric',
-    month: 'long',
+  const name = new Date(Date.UTC(year, month - 1, 1)).toLocaleString(locale, {
+    month: 'short',
     timeZone: 'UTC',
   })
-}
-
-function ratingChips(
-  ratings: CafeReviewItem['ratings'],
-  names: RatingsResponse,
-): string[] {
-  const chips: string[] = []
-  for (const [type, score] of Object.entries(ratings)) {
-    const entry = names[type as RatingType]
-    if (!entry) continue
-    const bucket =
-      entry.range.find(
-        (r) => score >= r.lower_bound && score <= r.upper_bound,
-      ) ?? [...entry.range].reverse().find((r) => score >= r.lower_bound)
-    if (bucket) chips.push(`${entry.display_name}: ${bucket.name}`)
-  }
-  return chips
+  return `${name.replace('.', '')}-${String(year % 100).padStart(2, '0')}`
 }
 
 function linkHost(link: string): string {
@@ -62,11 +39,7 @@ function linkHost(link: string): string {
   }
 }
 
-export default function ReviewItem({
-  review,
-  ratingNames,
-  own,
-}: ReviewItemProps) {
+export default function ReviewItem({ review, own }: ReviewItemProps) {
   const { t } = useTranslation()
   const locale = useLocale()
   const [expanded, setExpanded] = useState(false)
@@ -82,7 +55,6 @@ export default function ReviewItem({
     visited && t('reviews.visited', { date: visited }),
     pending && t('reviews.pending'),
   ].filter(Boolean)
-  const chips = ratingChips(review.ratings, ratingNames)
 
   return (
     <article className={cn(REVIEW_CARD_CLASS, 'flex flex-col gap-2.5 p-4')}>
@@ -108,15 +80,10 @@ export default function ReviewItem({
         {review.overall_score != null && (
           <StarDisplay score={review.overall_score} />
         )}
-        {review.wfc_score != null && (
-          <span className="rounded-full bg-forest-lighter px-2 py-0.5 text-[11px] font-semibold text-moss">
-            {t('reviews.wfc', { score: review.wfc_score.toFixed(1) })}
-          </span>
+        {meta.length > 0 && (
+          <span className="text-xs text-bark">{meta.join(' · ')}</span>
         )}
       </div>
-      {meta.length > 0 && (
-        <p className="m-0 text-xs text-bark">{meta.join(' · ')}</p>
-      )}
       {content && (
         <p
           className={cn(
@@ -126,18 +93,6 @@ export default function ReviewItem({
         >
           {content}
         </p>
-      )}
-      {chips.length > 0 && (
-        <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
-          {chips.map((chip) => (
-            <li
-              key={chip}
-              className="rounded-full border border-grove-light px-2 py-0.5 text-[11px] text-moss-dark"
-            >
-              {chip}
-            </li>
-          ))}
-        </ul>
       )}
       {(isLong || review.external_url_link) && (
         <div className="mt-auto flex items-center justify-between gap-2 pt-1">

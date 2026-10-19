@@ -135,7 +135,6 @@ function Reviews(): JSX.Element {
       cafeId={cafe.id}
       cafeName={cafe.name}
       totalReviewCount={review.total_review_count}
-      ratings={review.ratings}
       autoOpen={reviewParam === 'open'}
       onAutoOpenHandled={clearReviewParam}
     />

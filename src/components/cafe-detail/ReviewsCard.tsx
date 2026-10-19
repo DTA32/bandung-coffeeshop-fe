@@ -7,14 +7,12 @@ import LoadMoreCard from './LoadMoreCard'
 import SkeletonReview from './SkeletonReview'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { getCafeReviews, getMyReview } from '@/lib/api/cafe'
-import type { CafeReviewItem, MyReview, RatingsResponse } from '@/lib/api/cafe'
+import type { CafeReviewItem, MyReview } from '@/lib/api/cafe'
 
 interface ReviewsCardProps {
   cafeId: string
   cafeName: string
   totalReviewCount: number
-  // The cafe's aggregate ratings, used to name the rating chips.
-  ratings: RatingsResponse
   // True when the page was opened with `review=open` (back from login with
   // the review intent): open the modal once signed in, then call
   // onAutoOpenHandled to drop the param.
@@ -35,7 +33,6 @@ export default function ReviewsCard({
   cafeId,
   cafeName,
   totalReviewCount,
-  ratings,
   autoOpen,
   onAutoOpenHandled,
 }: ReviewsCardProps) {
@@ -192,7 +189,6 @@ export default function ReviewsCard({
         {myReview ? (
           <ReviewItem
             review={myReview}
-            ratingNames={ratings}
             own={{ status: myReview.status, onEdit: () => openReview(null) }}
           />
         ) : (
@@ -206,7 +202,7 @@ export default function ReviewsCard({
           </>
         ) : (
           visible.map((review) => (
-            <ReviewItem key={review.id} review={review} ratingNames={ratings} />
+            <ReviewItem key={review.id} review={review} />
           ))
         )}
         {listStatus === 'loadingMore' && (
