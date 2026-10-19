@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ExternalLink, Pencil } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { StarDisplay } from './StarRating'
@@ -6,12 +6,8 @@ import { useLocale, dateLocale } from '@/lib/locale'
 import { cn } from '@/lib/cn'
 import type { CafeReviewItem, MyReviewStatus } from '@/lib/api/cafe'
 
-// Content longer than this (or with many line breaks) gets the more/less toggle.
-const LONG_CONTENT_CHARS = 140
-const LONG_CONTENT_LINES = 4
-
 export const REVIEW_CARD_CLASS =
-  'snap-start shrink-0 w-64 md:w-[calc((100%-2rem)/3)] min-h-60 rounded-2xl border border-grove-light bg-surface'
+  'snap-start shrink-0 w-66 md:w-74 min-h-[236px] rounded-2xl border border-grove-light bg-surface'
 
 interface ReviewItemProps {
   review: CafeReviewItem
@@ -43,10 +39,29 @@ export default function ReviewItem({ review, own }: ReviewItemProps) {
   const { t } = useTranslation()
   const locale = useLocale()
   const [expanded, setExpanded] = useState(false)
+  const [clamped, setClamped] = useState(false)
+  const textRef = useRef<HTMLParagraphElement>(null)
   const content = review.content ?? ''
-  const isLong =
-    content.length > LONG_CONTENT_CHARS ||
-    content.split('\n').length > LONG_CONTENT_LINES
+  // "See more" shows only when the clamped text actually overflows; it is
+  // re-measured when the card resizes and once web fonts have loaded.
+  useEffect(() => {
+    const el = textRef.current
+    if (!el || expanded) return
+    let active = true
+    const measure = () => {
+      if (active) setClamped(el.scrollHeight > el.clientHeight + 1)
+    }
+    measure()
+    void document.fonts.ready.then(measure)
+    const observer =
+      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
+    observer?.observe(el)
+    return () => {
+      active = false
+      observer?.disconnect()
+    }
+  }, [content, expanded])
+  const isLong = expanded || clamped
   const visited = review.visited_at
     ? formatVisit(review.visited_at, dateLocale(locale))
     : null
@@ -57,7 +72,14 @@ export default function ReviewItem({ review, own }: ReviewItemProps) {
   ].filter(Boolean)
 
   return (
-    <article className={cn(REVIEW_CARD_CLASS, 'flex flex-col gap-2.5 p-4')}>
+    <article
+      className={cn(
+        REVIEW_CARD_CLASS,
+        'flex flex-col gap-2.5 p-4',
+        own &&
+          'border-[#B9D2A3] bg-[#F1F6EB] dark:border-grove-light dark:bg-forest-lighter',
+      )}
+    >
       <div className="flex items-start justify-between gap-2">
         <h3 className="m-0 text-sm font-bold text-forest break-words">
           {own
@@ -70,7 +92,7 @@ export default function ReviewItem({ review, own }: ReviewItemProps) {
             onClick={own.onEdit}
             aria-label={t('reviews.edit')}
             title={t('reviews.edit')}
-            className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-grove-light bg-transparent text-moss hover:bg-forest-lighter"
+            className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-grove-light bg-surface text-moss hover:bg-forest-lighter"
           >
             <Pencil size={14} aria-hidden="true" />
           </button>
@@ -81,14 +103,17 @@ export default function ReviewItem({ review, own }: ReviewItemProps) {
           <StarDisplay score={review.overall_score} />
         )}
         {meta.length > 0 && (
-          <span className="text-xs text-bark">{meta.join(' · ')}</span>
+          <span className="text-xs text-[#7A8E70] dark:text-bark">
+            {meta.join(' · ')}
+          </span>
         )}
       </div>
       {content && (
         <p
+          ref={textRef}
           className={cn(
             'm-0 whitespace-pre-line text-[13px] leading-[1.6] text-moss-dark',
-            !expanded && 'line-clamp-4',
+            !expanded && 'line-clamp-6',
           )}
         >
           {content}
