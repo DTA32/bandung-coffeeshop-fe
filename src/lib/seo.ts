@@ -276,26 +276,16 @@ export function cafeJsonLd(
       closes: cafe.close_hour,
     }
   }
-  // Single-author review → schema.org Review, scored out of 5.
-  if (review.overall_score != null) {
+  // Aggregate of the visible user reviews, scored 1–5. Only emitted when at
+  // least one review carries an overall score.
+  if (review.overall_score != null && review.overall_review_count > 0) {
     node.aggregateRating = {
       '@type': 'AggregateRating',
       ratingValue: review.overall_score,
       bestRating: 5,
-      worstRating: 0,
-      ratingCount: 1,
-      reviewCount: 1,
-    }
-    node.review = {
-      '@type': 'Review',
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: review.overall_score,
-        bestRating: 5,
-        worstRating: 0,
-      },
-      author: { '@type': 'Organization', name: SITE_NAME },
-      dateModified: cafe.updated_at,
+      worstRating: 1,
+      ratingCount: review.overall_review_count,
+      reviewCount: review.total_review_count,
     }
   }
   return node
