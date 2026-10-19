@@ -251,7 +251,7 @@
     "count_other": "{{count}} ulasan",
     "you": "{{name}} (kamu)",
     "pending": "Menunggu persetujuan",
-    "visited": "Dikunjungi {{date}}",
+    "visited": "dikunjungi {{date}}",
     "seeMore": "Lihat selengkapnya",
     "seeLess": "Lebih sedikit",
     "readOn": "Baca di {{title}}",

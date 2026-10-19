@@ -256,7 +256,7 @@
     "count_other": "{{count}} reviews",
     "you": "{{name}} (you)",
     "pending": "Pending approval",
-    "visited": "Visited {{date}}",
+    "visited": "visited {{date}}",
     "seeMore": "See more",
     "seeLess": "See less",
     "readOn": "Read on {{title}}",
