@@ -186,7 +186,7 @@ function FilterModalInternal({
       open
       onClose={onClose}
       label={t('explore.filters.dialogLabel')}
-      className="flex max-h-[90vh] max-w-lg md:max-w-4xl flex-col md:mx-8"
+      className="flex max-h-[90vh] max-w-lg flex-col rounded-t-2xl bg-cream sm:rounded-2xl md:mx-8 md:max-w-4xl"
     >
       <div className="flex items-center justify-between border-b border-grove-light px-5 py-4">
         <div className="flex items-center gap-4">

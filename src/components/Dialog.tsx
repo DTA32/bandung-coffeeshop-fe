@@ -65,7 +65,7 @@ export default function Dialog({
       {variant === 'adaptive' ? (
         <div
           className={cn(
-            'w-full rounded-t-2xl bg-cream shadow-xl sm:rounded-2xl',
+            'w-full rounded-t-[20px] bg-surface shadow-xl sm:rounded-[20px]',
             className,
           )}
           onClick={(e) => e.stopPropagation()}
