@@ -12,9 +12,7 @@ export default function AboutCard({ about }: AboutCardProps) {
 
   return (
     <div className="bg-surface rounded-2xl p-5 flex flex-col gap-3 text-moss-dark antialiased">
-      <h2 className="text-base font-bold m-0 dark:text-forest">
-        {t('cafe.about')}
-      </h2>
+      <h2 className="text-base font-bold m-0 text-forest">{t('cafe.about')}</h2>
       <div className="flex flex-col gap-3 antialiased dark:text-bark">
         {paragraphs.length > 0 ? (
           paragraphs.map((para, i) => (
