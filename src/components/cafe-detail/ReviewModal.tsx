@@ -346,7 +346,9 @@ export default function ReviewModal({
                 ? t('reviews.result.removedSubtitle')
                 : t('reviews.result.successSubtitle')
             }
-            body={t('reviews.result.successBody')}
+            body={
+              view === 'removed' ? undefined : t('reviews.result.successBody')
+            }
           >
             <PrimaryButton onClick={onClose}>
               {t('reviews.result.done')}
