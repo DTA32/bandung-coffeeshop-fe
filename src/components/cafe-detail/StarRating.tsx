@@ -33,7 +33,7 @@ export function StarDisplay({ score, size = 14, className }: StarDisplayProps) {
             <Star
               size={size}
               aria-hidden="true"
-              className="absolute inset-0 fill-grove-light text-grove-light"
+              className="absolute inset-0 fill-[#E2E8DA] text-[#E2E8DA] dark:fill-grove-light dark:text-grove-light"
             />
             {fill > 0 && (
               <span
@@ -43,7 +43,7 @@ export function StarDisplay({ score, size = 14, className }: StarDisplayProps) {
                 <Star
                   size={size}
                   aria-hidden="true"
-                  className="fill-amber-500 text-amber-500"
+                  className="fill-[#E3A53B] text-[#E3A53B]"
                 />
               </span>
             )}
@@ -76,7 +76,7 @@ export function StarInput({
   onChange,
   label,
   labelledBy,
-  size = 32,
+  size = 36,
   showLabels = false,
   clearable = false,
   className,
@@ -117,7 +117,7 @@ export function StarInput({
       aria-labelledby={labelledBy}
       onKeyDown={onKeyDown}
       onMouseLeave={() => setHover(null)}
-      className={cn('flex items-start gap-2', className)}
+      className={cn('flex items-start gap-1.5', className)}
     >
       {STARS.map((n) => {
         const caption = t(`reviews.scale.${n}`)
@@ -136,7 +136,7 @@ export function StarInput({
             onClick={() =>
               clearable && selected === n ? onChange(null) : onChange(n)
             }
-            className="flex cursor-pointer flex-col items-center gap-1 rounded-md border-none bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+            className="flex w-13 cursor-pointer flex-col items-center gap-1.5 rounded-md border-none bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
           >
             <Star
               size={size}
@@ -145,8 +145,8 @@ export function StarInput({
               className={cn(
                 'transition-colors',
                 n <= shown
-                  ? 'fill-amber-500 text-amber-500'
-                  : 'fill-surface text-forest-light',
+                  ? 'fill-[#E3A53B] text-[#E3A53B]'
+                  : 'fill-surface text-[#B9D2A3] dark:text-grove-light',
               )}
             />
             {showLabels && (
@@ -154,7 +154,7 @@ export function StarInput({
                 className={cn(
                   'text-[11px] leading-none',
                   selected === n
-                    ? 'font-bold text-amber-700'
+                    ? 'font-bold text-[#A8741E] dark:text-amber-300'
                     : 'text-forest-light',
                 )}
               >
