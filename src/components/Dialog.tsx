@@ -21,7 +21,7 @@ interface DialogProps {
 
 const OVERLAY = {
   adaptive:
-    'fixed inset-0 z-60 flex items-end justify-center bg-black/50 sm:items-center shadow-md',
+    'fixed inset-0 z-60 flex items-end justify-center bg-[#1E2A18]/50 sm:items-center',
   fullscreen: 'fixed inset-0 z-60 flex flex-col bg-black/90',
 } as const
 
@@ -65,7 +65,7 @@ export default function Dialog({
       {variant === 'adaptive' ? (
         <div
           className={cn(
-            'w-full rounded-t-[20px] bg-surface shadow-xl sm:rounded-[20px]',
+            'w-full rounded-t-[20px] bg-surface shadow-[0_24px_60px_#1E2A1833] sm:rounded-[20px]',
             className,
           )}
           onClick={(e) => e.stopPropagation()}
