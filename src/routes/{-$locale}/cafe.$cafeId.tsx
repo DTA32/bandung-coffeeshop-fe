@@ -144,7 +144,7 @@ function Widgets(): JSX.Element {
         <NearbyCafe cafes={nearbyCafes.cafes} />
         <div className="flex flex-col">
           <Disclaimer />
-          <UpdatedAt updated_at={review.updated_at} />
+          <UpdatedAt updated_at={cafe.updated_at} />
         </div>
       </div>
     )
@@ -184,7 +184,7 @@ function Widgets(): JSX.Element {
         <PriceCard price={cafe.price} />
         <div className="flex flex-col">
           <Disclaimer />
-          <UpdatedAt updated_at={review.updated_at} />
+          <UpdatedAt updated_at={cafe.updated_at} />
         </div>
       </aside>
     </div>

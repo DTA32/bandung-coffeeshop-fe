@@ -247,7 +247,7 @@ export function cafeJsonLd(
     url: SITE_URL + canonicalPath,
     // Non-canonical on a Place (validators may warn) but ignored by Google;
     // also the anchor prerender reads to set sitemap <lastmod> (vite.config.ts).
-    dateModified: review.updated_at,
+    dateModified: cafe.updated_at,
     address: {
       '@type': 'PostalAddress',
       addressLocality: locality ?? 'Bandung',
@@ -295,7 +295,7 @@ export function cafeJsonLd(
         worstRating: 0,
       },
       author: { '@type': 'Organization', name: SITE_NAME },
-      dateModified: review.updated_at,
+      dateModified: cafe.updated_at,
     }
   }
   return node

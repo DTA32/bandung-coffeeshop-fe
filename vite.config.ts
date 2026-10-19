@@ -45,7 +45,7 @@ const config = defineConfig(({ mode }) => ({
           // so each id URL carries its /en twin (prune-sitemap then drops the
           // /en <url> entries themselves).
           const alternateRefs = hreflangLinks(html)
-          // Cafe pages: lift review.updated_at (rendered as JSON-LD
+          // Cafe pages: lift the cafe's updated_at (rendered as JSON-LD
           // "dateModified" by cafeJsonLd) into sitemap <lastmod>.
           const lastmod = /^\/cafe\//.test(page.path)
             ? html.match(/"dateModified":"([^"]+)"/)?.[1]

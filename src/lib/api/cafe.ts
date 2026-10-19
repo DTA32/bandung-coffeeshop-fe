@@ -32,6 +32,7 @@ export interface CafeData {
   locations: Location[]
   price: CafePrice
   menu?: string | null
+  updated_at: string
 }
 
 export interface RatingRange {
