@@ -164,8 +164,27 @@
   "seo": {
     "homeTitle": "BDGCafe - Ulasan Jujur & Rekomendasi Kafe Bandung",
     "homeDesc": "Temukan coffee shop terbaik di Bandung. Ulasan jujur soal wifi, suasana, harga, kebisingan & lainnya untuk menemukan kafe atau tempat kerja idealmu.",
-    "cafeTitle": "{{name}} - Ulasan, Suasana, Wifi & Harga | BDGCafe",
-    "cafeDesc": "{{name}} di {{location}}: ulasan jujur kami soal wifi, suasana, kebisingan, harga & menu. Lihat rincian lengkap dan kafe terdekat di BDGCafe.",
+    "cafe": {
+      "kwReview": "Ulasan",
+      "kwMenu": "Harga Menu",
+      "kwPhotos": "Foto",
+      "descLead": "{{name}} di {{location}}",
+      "descPrice": "harga {{range}}",
+      "descPriceFrom": "harga mulai {{price}}",
+      "descPriceUpTo": "harga hingga {{price}}",
+      "desc24Hours": "buka 24 jam",
+      "descHours": "buka {{open}}–{{close}}",
+      "descOpenFrom": "buka mulai {{open}}",
+      "descClosesAt": "tutup pukul {{close}}",
+      "descWifi": "WiFi {{label}}",
+      "descTag": {
+        "indoor-smoking": "bisa merokok di dalam",
+        "wfc-friendly": "cocok buat WFC",
+        "air-conditioned-seating": "ruangan ber-AC"
+      },
+      "descCta": "Cek ulasan lengkapnya.",
+      "descCtaMenu": "Cek ulasan & menunya."
+    },
     "aboutTitle": "Tentang BDGCafe - Ulasan Coffee Shop Bandung",
     "aboutDesc": "BDGCafe adalah panduan personal untuk coffee shop di Bandung - ulasan jujur dan discovery untuk menemukan kafe idealmu.",
     "mitmTitle": "Meet in the Middle - Cari Kafe di antara beberapa titik lokasi | BDGCafe",
