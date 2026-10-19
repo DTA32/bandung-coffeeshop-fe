@@ -162,8 +162,8 @@ Route-level pages are thin — they fetch via loaders and compose components. Sh
 page-specific components are colocated under `src/components/<page-name>/` (e.g. `cafe-detail/`, `explore/`,
 `meet-in-the-middle/`, `home/`, `map/`), most with a barrel `index.ts`.
 
-**Café Detail page** (`/cafe/$cafeId`): two-column layout on desktop — left column holds `CafeTitle`, `ReviewCard`,
-`RatingsCard`, `Disclaimer`; right sidebar holds `QuickFacts`, `ScoreCard`, `PriceCard`. `RatingsCard` renders a grid of
+**Café Detail page** (`/cafe/$cafeId`): two-column layout on desktop — left column holds `CafeTitle`, `AboutCard`,
+`LatestUpdatesWidget`, `RatingsCard`, `NearbyCafe`; right sidebar holds `QuickFacts`, `ScoreCard`, `PriceCard`, `UpdatedAt`. `RatingsCard` renders a grid of
 `RatingSlider` components driven by `RatingsResponse` (rating dimensions `price-rank`, `vibe`, `noise`, `wifi`, `meals`,
 `atmosphere`, `parking` — each a `RatingEntry` with named ranges and a 0–5 score).
 

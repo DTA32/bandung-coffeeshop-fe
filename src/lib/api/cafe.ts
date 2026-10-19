@@ -23,6 +23,7 @@ export interface CafeData {
   id: string
   name: string
   description: string | null
+  about: string | null
   status: string
   images: LocationImage[]
   instagram: string | null
@@ -66,14 +67,15 @@ export interface CafeTags {
   slug: string | null
 }
 
+// Aggregates over the cafe's visible reviews (zero counts / null scores when
+// it has none). The reviews themselves come from getCafeReviews.
 export interface CafeReview {
-  is_subjective: boolean
   overall_score: number | null
+  total_review_count: number
+  overall_review_count: number
   wfc_score: number | null
+  wfc_review_count: number
   tags: CafeTags[]
-  content: string | null
-  visited_at: string | null
-  updated_at: string
   ratings: RatingsResponse
 }
 
