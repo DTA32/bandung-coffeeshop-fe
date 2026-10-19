@@ -3,6 +3,7 @@ import {
   notFound,
   useRouteContext,
 } from '@tanstack/react-router'
+import { useCallback } from 'react'
 import { getCafe, getCafeReview, getCafeFeed } from '@/lib/api/cafe'
 import { getNearbyCafes } from '@/lib/api/search'
 import {
@@ -16,6 +17,7 @@ import {
   PriceCard,
   UpdatedAt,
   NearbyCafe,
+  ReviewsCard,
 } from '@/components/cafe-detail'
 import LocaleLink from '@/components/LocaleLink'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -33,7 +35,15 @@ import {
 import type { SeoMeta } from '@/lib/seo'
 import { createI18n, normalizeLocale } from '@/i18n'
 
+interface CafeSearch {
+  // `open` reopens the review modal after the login round-trip (LoginModal's
+  // review intent). Client-only: never part of the canonical URL.
+  review?: 'open'
+}
+
 export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
+  validateSearch: (search: Record<string, unknown>): CafeSearch =>
+    search.review === 'open' ? { review: 'open' } : {},
   // ctx typed `any`: see explore.$ for the head↔loader inference caveat.
   head: (ctx: any) => {
     const loaderData = ctx.loaderData as { seo?: SeoMeta } | undefined
@@ -109,6 +119,29 @@ function CafeNotFoundComponent() {
   )
 }
 
+function Reviews(): JSX.Element {
+  const { cafe, review } = Route.useLoaderData()
+  const { review: reviewParam } = Route.useSearch()
+  const navigate = Route.useNavigate()
+  const clearReviewParam = useCallback(() => {
+    void navigate({
+      search: (prev) => ({ ...prev, review: undefined }),
+      replace: true,
+      resetScroll: false,
+    })
+  }, [navigate])
+  return (
+    <ReviewsCard
+      cafeId={cafe.id}
+      cafeName={cafe.name}
+      totalReviewCount={review.total_review_count}
+      ratings={review.ratings}
+      autoOpen={reviewParam === 'open'}
+      onAutoOpenHandled={clearReviewParam}
+    />
+  )
+}
+
 function Widgets(): JSX.Element {
   const { cafe, review, nearbyCafes, feed } = Route.useLoaderData()
   const { ua } = useRouteContext({ from: '__root__' })
@@ -136,6 +169,7 @@ function Widgets(): JSX.Element {
           overallReviewCount={review.overall_review_count}
           wfcReviewCount={review.wfc_review_count}
         />
+        <Reviews />
         <RatingsCard ratings={review.ratings} />
         <NearbyCafe cafes={nearbyCafes.cafes} />
         <UpdatedAt updated_at={cafe.updated_at} />
@@ -150,6 +184,7 @@ function Widgets(): JSX.Element {
         )}
         <AboutCard about={cafe.about} />
         <LatestUpdatesWidget items={feed} />
+        <Reviews />
         <RatingsCard ratings={review.ratings} />
         <NearbyCafe cafes={nearbyCafes.cafes} />
       </div>
