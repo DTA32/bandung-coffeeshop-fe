@@ -29,14 +29,14 @@ export default function ScoreCard({
       <div className="flex justify-between gap-4">
         {hasOverall && (
           <div className="flex flex-col gap-2">
-            <span className="text-xs font-semibold text-bark">
+            <span className="text-xs font-semibold text-[#7A8E70] dark:text-bark">
               {t('cafe.overallScore')}
             </span>
             <span className="text-[28px] font-bold text-forest leading-none">
               {fmt(overallScore)} {t('cafe.outOfFive')}
             </span>
             {overallReviewCount > 1 && (
-              <span className="text-xs text-bark">
+              <span className="text-[11px] text-forest-light">
                 {t('cafe.fromReviews', { count: overallReviewCount })}
               </span>
             )}
@@ -49,14 +49,14 @@ export default function ScoreCard({
               hasOverall ? 'items-end' : 'items-start',
             )}
           >
-            <span className="text-xs font-semibold text-bark">
+            <span className="text-xs font-semibold text-[#7A8E70] dark:text-bark">
               {t('cafe.wfcScore')}
             </span>
             <span className="text-[28px] font-bold text-grove leading-none">
               {fmt(wfcScore)} {t('cafe.outOfFive')}
             </span>
             {wfcReviewCount > 1 && (
-              <span className="text-xs text-bark">
+              <span className="text-[11px] text-forest-light">
                 {t('cafe.fromReviews', { count: wfcReviewCount })}
               </span>
             )}
