@@ -17,11 +17,17 @@ export function formatRelativeTime(
   now: Date = new Date(),
 ): string {
   const seconds = Math.round((date.getTime() - now.getTime()) / 1000)
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
   for (const [unit, size] of UNITS) {
     if (Math.abs(seconds) >= size) {
-      return rtf.format(Math.trunc(seconds / size), unit)
+      const n = Math.trunc(seconds / size)
+      // 'auto' only for ±1 ("yesterday", "minggu lalu"): beyond that CLDR has
+      // locale-specific words like id "kemarin dulu" that read oddly here.
+      const numeric = Math.abs(n) <= 1 ? 'auto' : 'always'
+      return new Intl.RelativeTimeFormat(locale, { numeric }).format(n, unit)
     }
   }
-  return rtf.format(0, 'second')
+  return new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(
+    0,
+    'second',
+  )
 }
