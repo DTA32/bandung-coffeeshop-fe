@@ -108,7 +108,8 @@ Data comes from a **real REST backend**, reached through thin `fetch` wrappers i
 
 - `api/index.ts` — `API_BASE` (from `VITE_API_BASE_URL`, default `http://localhost:8080`) and `langHeaders(lang)`, which
   sends the active locale to the backend via the `Accept-Language` header for content negotiation.
-- `api/cafe.ts` — café detail + review (`getCafe`, `getCafeReview`); defines `CafeData`, `CafeReview`,
+- `api/cafe.ts` — café detail + review aggregates (`getCafe`, `getCafeReview`) and user reviews (`getCafeReviews`,
+  `getMyReview`, `createReview`/`updateReview`/`deleteReview`, browser-only); defines `CafeData`, `CafeReview`,
   `RatingsResponse`, etc.
 - `api/search.ts` — listing/search (`searchCafes`, `quickSearch`, `getFeaturedCafes`, `getNearbyCafes`) + the pure
   `cleanExploreSearch` helper.
@@ -162,8 +163,8 @@ Route-level pages are thin — they fetch via loaders and compose components. Sh
 page-specific components are colocated under `src/components/<page-name>/` (e.g. `cafe-detail/`, `explore/`,
 `meet-in-the-middle/`, `home/`, `map/`), most with a barrel `index.ts`.
 
-**Café Detail page** (`/cafe/$cafeId`): two-column layout on desktop — left column holds `CafeTitle`, `ReviewCard`,
-`RatingsCard`, `Disclaimer`; right sidebar holds `QuickFacts`, `ScoreCard`, `PriceCard`. `RatingsCard` renders a grid of
+**Café Detail page** (`/cafe/$cafeId`): two-column layout on desktop — left column holds `CafeTitle`, `AboutCard`,
+`LatestUpdatesWidget`, `ReviewsCard`, `RatingsCard`, `NearbyCafe`; right sidebar holds `QuickFacts`, `ScoreCard`, `PriceCard`, `UpdatedAt`. `RatingsCard` renders a grid of
 `RatingSlider` components driven by `RatingsResponse` (rating dimensions `price-rank`, `vibe`, `noise`, `wifi`, `meals`,
 `atmosphere`, `parking` — each a `RatingEntry` with named ranges and a 0–5 score).
 

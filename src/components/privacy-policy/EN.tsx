@@ -1,4 +1,4 @@
-const LAST_UPDATED = '27 September 2026'
+const LAST_UPDATED = '18 October 2026'
 const LINK = 'font-medium underline underline-offset-2'
 
 export default function PrivacyPolicyEN() {
@@ -52,7 +52,37 @@ export default function PrivacyPolicyEN() {
 
       <div className="flex flex-col gap-3">
         <h2 className="font-semibold">
-          2. Location data (only with your permission)
+          2. Information you give us when you log in
+        </h2>
+        <p className="text-bark">
+          Logging in is optional; you only need an account to write reviews.
+          When you log in with Google, we receive and store your Google account
+          ID, name, email address and profile picture URL. We never receive your
+          Google password, and we don&apos;t access your contacts, email, files
+          or anything else in your Google account.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h2 className="font-semibold">3. Reviews you write</h2>
+        <p className="text-bark">
+          When you write a review, we store your scores, the name you choose to
+          show, your description, the month you visited and any specific
+          ratings, linked to your account. Every review is checked before
+          it&apos;s published. This is not for filtering bad or negative reviews
+          (you may submit these reviews, we won&apos;t hide them, promise), but
+          to prevent any harmful or illegal content from showing on this
+          website. Once approved, the review is public on BDGCafé and counts
+          toward the café&apos;s scores; your email address and account details
+          are never shown. You can change the name on each review if you&apos;d
+          rather stay anonymous, and you can edit or remove your review at any
+          time.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h2 className="font-semibold">
+          4. Location data (only with your permission)
         </h2>
         <p className="text-bark">
           Features like &quot;find nearby cafés&quot; can use your device
@@ -63,12 +93,17 @@ export default function PrivacyPolicyEN() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">3. Cookies</h2>
+        <h2 className="font-semibold">5. Cookies</h2>
         <p className="text-bark">
           Google Analytics sets cookies to measure usage. Our own analytics
           doesn&apos;t use cookies. We don&apos;t use cookies for advertising or
           cross-site tracking. You can control or clear cookies in your browser
           (see &quot;Your choices&quot; below).
+        </p>
+        <p className="text-bark">
+          When you log in, we set a session cookie to keep you logged in.
+          It&apos;s essential for logging in, holds only a random identifier,
+          and is removed when you log out or when it expires.
         </p>
         <p className="text-bark">
           We also keep your light/dark theme choice in your browser&apos;s local
@@ -79,7 +114,7 @@ export default function PrivacyPolicyEN() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">4. How we use this information</h2>
+        <h2 className="font-semibold">6. How we use this information</h2>
         <p className="text-bark">
           Everything we collect goes toward making BDGCafé better for you:
           seeing which cafés and features people actually find useful, keeping
@@ -87,12 +122,14 @@ export default function PrivacyPolicyEN() {
           around how the site is really used, so finding your next café gets a
           little easier each visit. We also use it to keep the site safe and
           secure. We don&apos;t sell your data, show ads, or build advertising
-          profiles.
+          profiles. Account information is used only to log you in, link your
+          reviews to you, and keep the site free from abuse. We never display
+          your email address.
         </p>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">5. Third-party services</h2>
+        <h2 className="font-semibold">7. Third-party services</h2>
         <p className="text-bark">
           We rely on a few trusted providers that may process data as part of
           delivering the site. Each handles data under its own policy.
@@ -122,21 +159,34 @@ export default function PrivacyPolicyEN() {
               CARTO Privacy Notice
             </a>
           </li>
+          <li>
+            <span className="font-medium text-forest">Google Sign-In</span>{' '}
+            (Google LLC) — logging in to your BDGCafé account.{' '}
+            <a className={LINK} href="https://policies.google.com/privacy">
+              Google Privacy Policy
+            </a>
+          </li>
           <li>Images are served from our own CDN (image.bdgcafe.com).</li>
         </ul>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">6. Data retention</h2>
+        <h2 className="font-semibold">8. Data retention</h2>
         <p className="text-bark">
           We keep analytics and log data only as long as needed for the purposes
           above; Google retains analytics data according to our configured
           settings and its own policies.
         </p>
+        <p className="text-bark">
+          We keep your account and reviews while your account is active. When
+          you remove a review, it disappears from the site straight away, but
+          there might be some footprints left; email us if you want it erased
+          completely.
+        </p>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">7. Your choices</h2>
+        <h2 className="font-semibold">9. Your choices</h2>
         <ul className="flex flex-col gap-2 text-bark list-disc pl-5">
           <li>Decline or clear cookies in your browser.</li>
           <li>
@@ -148,6 +198,23 @@ export default function PrivacyPolicyEN() {
           </li>
           <li>Deny or revoke location access anytime in your browser.</li>
           <li>
+            Edit or remove your reviews anytime from the café&apos;s page.
+          </li>
+          <li>
+            Revoke BDGCafé&apos;s access in your{' '}
+            <a className={LINK} href="https://myaccount.google.com/permissions">
+              Google Account settings
+            </a>
+            .
+          </li>
+          <li>
+            Email{' '}
+            <a className={LINK} href="mailto:contact@bdgcafe.com">
+              contact@bdgcafe.com
+            </a>{' '}
+            to delete your account and the data linked to it.
+          </li>
+          <li>
             Email{' '}
             <a className={LINK} href="mailto:contact@bdgcafe.com">
               contact@bdgcafe.com
@@ -158,7 +225,7 @@ export default function PrivacyPolicyEN() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">8. Children&apos;s privacy</h2>
+        <h2 className="font-semibold">10. Children&apos;s privacy</h2>
         <p className="text-bark">
           BDGCafé isn&apos;t directed to children, and we don&apos;t knowingly
           collect their data.
@@ -166,7 +233,7 @@ export default function PrivacyPolicyEN() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">9. Changes</h2>
+        <h2 className="font-semibold">11. Changes</h2>
         <p className="text-bark">
           We may update this policy from time to time; the &quot;last
           updated&quot; date above reflects the current version.
@@ -174,7 +241,7 @@ export default function PrivacyPolicyEN() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-semibold">10. Contact</h2>
+        <h2 className="font-semibold">12. Contact</h2>
         <p className="text-bark">
           Questions? Email{' '}
           <a className={LINK} href="mailto:contact@bdgcafe.com">

@@ -14,6 +14,7 @@ import LocaleLink from '@/components/LocaleLink'
 import TelemetryClient, {
   reportClientError,
 } from '@/components/TelemetryClient'
+import AuthProvider from '@/lib/auth/AuthProvider'
 import { getUserAgentInfo } from '@/lib/helper'
 import { localeFromPathname } from '@/lib/locale'
 import { requestLogger } from '@/lib/middleware'
@@ -114,25 +115,27 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className={'m-0 bg-cream flex flex-col min-h-screen'}>
         <I18nextProvider i18n={i18n}>
-          <TelemetryClient />
-          <SkipLink />
-          <Header />
-          <div id="main" className="contents">
-            {children}
-          </div>
-          {import.meta.env.PROD ? null : (
-            <TanStackDevtools
-              config={{ position: 'bottom-right' }}
-              plugins={[
-                {
-                  name: 'Tanstack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-              ]}
-            />
-          )}
-          <Navbar />
-          <Footer />
+          <AuthProvider>
+            <TelemetryClient />
+            <SkipLink />
+            <Header />
+            <div id="main" className="contents">
+              {children}
+            </div>
+            {import.meta.env.PROD ? null : (
+              <TanStackDevtools
+                config={{ position: 'bottom-right' }}
+                plugins={[
+                  {
+                    name: 'Tanstack Router',
+                    render: <TanStackRouterDevtoolsPanel />,
+                  },
+                ]}
+              />
+            )}
+            <Navbar />
+            <Footer />
+          </AuthProvider>
         </I18nextProvider>
         <Scripts />
       </body>

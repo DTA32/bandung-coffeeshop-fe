@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import type { TouchEvent } from 'react'
-import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { ClientOnly } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import Dialog from '@/components/Dialog'
 import Image from '@/components/Image'
 import type { LocationImage } from '@/lib/type'
 
@@ -38,23 +38,15 @@ function ImageGalleryInternal({
     onIndexChange?.(index)
   }, [index, onIndexChange])
 
+  // Escape is handled by Dialog; arrow keys step through the images.
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
-      else if (e.key === 'ArrowLeft') prev()
+      if (e.key === 'ArrowLeft') prev()
       else if (e.key === 'ArrowRight') next()
     }
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
-  }, [images.length, onClose])
-
-  useEffect(() => {
-    const previous = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = previous
-    }
-  }, [])
+  }, [images.length])
 
   function handleTouchStart(e: TouchEvent) {
     touchStartX.current = e.touches[0].clientX
@@ -70,13 +62,12 @@ function ImageGalleryInternal({
     touchStartX.current = null
   }
 
-  return createPortal(
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={t('cafe.imageGallery')}
-      className="fixed inset-0 z-60 flex flex-col bg-black/90"
-      onClick={onClose}
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      label={t('cafe.imageGallery')}
+      variant="fullscreen"
     >
       <div className="flex items-center justify-between p-4 text-white">
         <span className="text-sm font-semibold select-none">
@@ -160,8 +151,7 @@ function ImageGalleryInternal({
           ))}
         </div>
       )}
-    </div>,
-    document.body,
+    </Dialog>
   )
 }
 

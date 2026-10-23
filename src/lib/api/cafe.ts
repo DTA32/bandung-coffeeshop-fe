@@ -23,6 +23,7 @@ export interface CafeData {
   id: string
   name: string
   description: string | null
+  about: string | null
   status: string
   images: LocationImage[]
   instagram: string | null
@@ -32,6 +33,7 @@ export interface CafeData {
   locations: Location[]
   price: CafePrice
   menu?: string | null
+  updated_at: string
 }
 
 export interface RatingRange {
@@ -65,14 +67,15 @@ export interface CafeTags {
   slug: string | null
 }
 
+// Aggregates over the cafe's visible reviews (zero counts / null scores when
+// it has none). The reviews themselves come from getCafeReviews.
 export interface CafeReview {
-  is_subjective: boolean
   overall_score: number | null
+  total_review_count: number
+  overall_review_count: number
   wfc_score: number | null
+  wfc_review_count: number
   tags: CafeTags[]
-  content: string | null
-  visited_at: string | null
-  updated_at: string
   ratings: RatingsResponse
 }
 
@@ -120,4 +123,124 @@ export async function getRandomCafe(lang?: Locale): Promise<RandomCafe> {
   if (!res.ok) throw new Error('Failed to fetch a random cafe')
   const json: ApiResponse<RandomCafe> = await res.json()
   return json.data
+}
+
+// ---- User reviews (BCF-30) ----
+// Browser-only: these are fetched after hydration, never in a loader, so the
+// prerendered page stays anonymous and the session cookie is sent.
+
+export interface CafeReviewItem {
+  id: number
+  reviewer_name: string
+  overall_score: number | null
+  wfc_score: number | null
+  content: string | null
+  visited_at: string | null // "YYYY-MM"
+  created_at: string
+  updated_at: string
+  external_url_title: string | null
+  external_url_link: string | null
+  ratings: Partial<Record<RatingType, number>>
+}
+
+export interface CafeReviewPage {
+  items: CafeReviewItem[]
+  next_cursor: string | null
+}
+
+export type MyReviewStatus = 'pending' | 'approved' | 'rejected'
+
+export interface MyReview extends CafeReviewItem {
+  status: MyReviewStatus
+}
+
+export interface ReviewPayload {
+  overall_score: number
+  wfc_score: number | null
+  reviewer_name: string
+  visited_at: string | null // "YYYY-MM"
+  content: string | null
+  ratings: Partial<Record<RatingType, number>>
+}
+
+// ApiError carries the backend's status and `error` message so the failure
+// dialog can say what went wrong.
+export class ApiError extends Error {
+  status: number
+
+  constructor(status: number, message: string) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+  }
+}
+
+async function apiError(res: Response, fallback: string): Promise<ApiError> {
+  let message = fallback
+  try {
+    const body: { error?: unknown } = await res.json()
+    if (typeof body.error === 'string' && body.error) message = body.error
+  } catch {
+    // Non-JSON error body: keep the fallback.
+  }
+  return new ApiError(res.status, message)
+}
+
+export async function getCafeReviews(
+  id: string,
+  cursor?: string,
+): Promise<CafeReviewPage> {
+  const params = cursor ? new URLSearchParams({ cursor }) : undefined
+  const res = await apiFetch(`/v1/cafe/${id}/reviews`, { params })
+  if (!res.ok) throw await apiError(res, 'failed to fetch reviews')
+  const json: ApiResponse<CafeReviewPage> = await res.json()
+  return json.data
+}
+
+// getMyReview returns the signed-in user's review of the cafe, or null when
+// they have none.
+export async function getMyReview(id: string): Promise<MyReview | null> {
+  const res = await apiFetch(`/v1/cafe/${id}/reviews/mine`, {
+    cache: 'no-store',
+  })
+  if (res.status === 404) return null
+  if (!res.ok) throw await apiError(res, 'failed to fetch review')
+  const json: ApiResponse<MyReview> = await res.json()
+  return json.data
+}
+
+async function saveReview(
+  id: string,
+  method: 'POST' | 'PUT',
+  payload: ReviewPayload,
+): Promise<MyReview> {
+  const res = await apiFetch(`/v1/cafe/${id}/reviews/mine`, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) throw await apiError(res, 'failed to save review')
+  const json: ApiResponse<MyReview> = await res.json()
+  return json.data
+}
+
+export function createReview(
+  id: string,
+  payload: ReviewPayload,
+): Promise<MyReview> {
+  return saveReview(id, 'POST', payload)
+}
+
+export function updateReview(
+  id: string,
+  payload: ReviewPayload,
+): Promise<MyReview> {
+  return saveReview(id, 'PUT', payload)
+}
+
+export async function deleteReview(id: string): Promise<void> {
+  const res = await apiFetch(`/v1/cafe/${id}/reviews/mine`, {
+    method: 'DELETE',
+  })
+  if (!res.ok) throw await apiError(res, 'failed to delete review')
 }

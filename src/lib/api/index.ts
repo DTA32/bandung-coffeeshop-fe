@@ -1,12 +1,18 @@
 import { createIsomorphicFn } from '@tanstack/react-start'
 import type { Locale } from '@/i18n'
 
-const PUBLIC_API_BASE =
+export const PUBLIC_API_BASE =
   import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080'
 
 export const apiBase = createIsomorphicFn()
   .server(() => process.env.API_INTERNAL_URL || PUBLIC_API_BASE)
   .client(() => PUBLIC_API_BASE)
+
+// The session cookie only exists in the browser, so only client requests send
+// credentials; SSR fetches stay anonymous (and prerender-safe).
+const apiCredentials = createIsomorphicFn()
+  .server((): RequestCredentials | undefined => undefined)
+  .client((): RequestCredentials | undefined => 'include')
 
 // langHeaders builds the request headers carrying the active locale to the
 // backend for content negotiation. Locale is sent via the Accept-Language
@@ -30,6 +36,7 @@ export function apiFetch(
   const query = params?.toString()
   const url = `${apiBase()}${path}${query ? `?${query}` : ''}`
   return fetch(url, {
+    credentials: apiCredentials(),
     ...init,
     headers: { ...langHeaders(lang), ...headers },
   })

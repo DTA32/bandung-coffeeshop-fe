@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Info } from 'lucide-react'
 import Image from '@/components/Image'
 import ImageGallery from '@/components/ImageGallery'
 import MapPreview from './MapPreview'
@@ -12,7 +11,6 @@ interface CafeHeroProps {
   id: string
   name: string
   address: string | null
-  isSubjective: boolean
   image: LocationImage[] | null
   gmapsId: string | null
 }
@@ -135,13 +133,8 @@ function WithoutImage({
   id,
   name,
   address,
-  isSubjective,
   gmapsId,
-}: Pick<
-  CafeHeroProps,
-  'id' | 'name' | 'address' | 'isSubjective' | 'gmapsId'
->) {
-  const { t } = useTranslation()
+}: Pick<CafeHeroProps, 'id' | 'name' | 'address' | 'gmapsId'>) {
   return (
     <div className="h-fit md:h-75 w-full flex flex-col md:flex-row px-6 md:px-16 mt-8 md:mt-0 gap-8">
       <div className="flex flex-col md:flex-row items-center gap-2 h-full w-full">
@@ -149,12 +142,6 @@ function WithoutImage({
           <h1 className="text-3xl font-bold text-forest m-0">{name}</h1>
           {address && <p className="text-sm text-bark m-0">{address}</p>}
           <div className="flex gap-2 min-w-fit">
-            {isSubjective && (
-              <div className="flex items-center gap-1.5 bg-warning-bg text-warning text-xs font-semibold px-3 py-1.5 rounded-md shrink-0">
-                <Info size={13} aria-hidden="true" />
-                <span>{t('cafe.highlySubjective')}</span>
-              </div>
-            )}
             <ShareButton id={id} hideOnMobile={false} />
           </div>
         </div>
@@ -177,19 +164,13 @@ function WithoutImage({
 }
 
 export default function CafeHero(props: CafeHeroProps) {
-  const { id, name, address, isSubjective, image, gmapsId } = props
+  const { id, name, address, image, gmapsId } = props
 
   if (image && image.length > 0) {
     return <WithImage image={image} name={name} gmapsId={gmapsId} />
   } else {
     return (
-      <WithoutImage
-        id={id}
-        name={name}
-        address={address}
-        isSubjective={isSubjective}
-        gmapsId={gmapsId}
-      />
+      <WithoutImage id={id} name={name} address={address} gmapsId={gmapsId} />
     )
   }
 }

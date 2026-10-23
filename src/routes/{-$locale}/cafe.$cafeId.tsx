@@ -3,20 +3,21 @@ import {
   notFound,
   useRouteContext,
 } from '@tanstack/react-router'
+import { useCallback } from 'react'
 import { getCafe, getCafeReview, getCafeFeed } from '@/lib/api/cafe'
 import { getNearbyCafes } from '@/lib/api/search'
 import {
   CafeHero,
   CafeTitle,
-  ReviewCard,
+  AboutCard,
   LatestUpdatesWidget,
   RatingsCard,
-  Disclaimer,
   QuickFacts,
   ScoreCard,
   PriceCard,
   UpdatedAt,
   NearbyCafe,
+  ReviewsCard,
 } from '@/components/cafe-detail'
 import LocaleLink from '@/components/LocaleLink'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -35,7 +36,15 @@ import type { SeoMeta } from '@/lib/seo'
 import { buildCafeMeta } from '@/lib/seoTemplate'
 import { createI18n, normalizeLocale } from '@/i18n'
 
+interface CafeSearch {
+  // `open` reopens the review modal after the login round-trip (LoginModal's
+  // review intent). Client-only: never part of the canonical URL.
+  review?: 'open'
+}
+
 export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
+  validateSearch: (search: Record<string, unknown>): CafeSearch =>
+    search.review === 'open' ? { review: 'open' } : {},
   // ctx typed `any`: see explore.$ for the head↔loader inference caveat.
   head: (ctx: any) => {
     const loaderData = ctx.loaderData as { seo?: SeoMeta } | undefined
@@ -116,6 +125,28 @@ function CafeNotFoundComponent() {
   )
 }
 
+function Reviews(): JSX.Element {
+  const { cafe, review } = Route.useLoaderData()
+  const { review: reviewParam } = Route.useSearch()
+  const navigate = Route.useNavigate()
+  const clearReviewParam = useCallback(() => {
+    void navigate({
+      search: (prev) => ({ ...prev, review: undefined }),
+      replace: true,
+      resetScroll: false,
+    })
+  }, [navigate])
+  return (
+    <ReviewsCard
+      cafeId={cafe.id}
+      cafeName={cafe.name}
+      totalReviewCount={review.total_review_count}
+      autoOpen={reviewParam === 'open'}
+      onAutoOpenHandled={clearReviewParam}
+    />
+  )
+}
+
 function Widgets(): JSX.Element {
   const { cafe, review, nearbyCafes, feed } = Route.useLoaderData()
   const { ua } = useRouteContext({ from: '__root__' })
@@ -124,12 +155,7 @@ function Widgets(): JSX.Element {
     return (
       <div className="flex flex-col gap-y-4 mx-6 my-9 flex-1 min-w-0 shrink-0">
         {cafe.images.length > 0 && (
-          <CafeTitle
-            id={cafe.id}
-            name={cafe.name}
-            address={cafe.description}
-            isSubjective={review.is_subjective}
-          />
+          <CafeTitle id={cafe.id} name={cafe.name} address={cafe.description} />
         )}
         <QuickFacts
           instagram={cafe.instagram}
@@ -140,18 +166,18 @@ function Widgets(): JSX.Element {
           closeHour={cafe.close_hour}
         />
         <PriceCard price={cafe.price} />
-        <ReviewCard content={review.content} visited_at={review.visited_at} />
+        <AboutCard about={cafe.about} />
         <LatestUpdatesWidget items={feed} />
         <ScoreCard
           overallScore={review.overall_score}
           wfcScore={review.wfc_score}
+          overallReviewCount={review.overall_review_count}
+          wfcReviewCount={review.wfc_review_count}
         />
+        <Reviews />
         <RatingsCard ratings={review.ratings} />
         <NearbyCafe cafes={nearbyCafes.cafes} />
-        <div className="flex flex-col">
-          <Disclaimer />
-          <UpdatedAt updated_at={review.updated_at} />
-        </div>
+        <UpdatedAt updated_at={cafe.updated_at} />
       </div>
     )
   }
@@ -159,15 +185,11 @@ function Widgets(): JSX.Element {
     <div className="flex flex-col md:flex-row gap-x-8 gap-y-4 mx-6 md:mx-16 py-8">
       <div className="flex flex-col gap-6 flex-1 min-w-0">
         {cafe.images.length > 0 && (
-          <CafeTitle
-            id={cafe.id}
-            name={cafe.name}
-            address={cafe.description}
-            isSubjective={review.is_subjective}
-          />
+          <CafeTitle id={cafe.id} name={cafe.name} address={cafe.description} />
         )}
-        <ReviewCard content={review.content} visited_at={review.visited_at} />
+        <AboutCard about={cafe.about} />
         <LatestUpdatesWidget items={feed} />
+        <Reviews />
         <RatingsCard ratings={review.ratings} />
         <NearbyCafe cafes={nearbyCafes.cafes} />
       </div>
@@ -186,12 +208,11 @@ function Widgets(): JSX.Element {
         <ScoreCard
           overallScore={review.overall_score}
           wfcScore={review.wfc_score}
+          overallReviewCount={review.overall_review_count}
+          wfcReviewCount={review.wfc_review_count}
         />
         <PriceCard price={cafe.price} />
-        <div className="flex flex-col">
-          <Disclaimer />
-          <UpdatedAt updated_at={review.updated_at} />
-        </div>
+        <UpdatedAt updated_at={cafe.updated_at} />
       </aside>
     </div>
   )
@@ -225,7 +246,7 @@ function CafeStatusBanner({ status }: { status: string }) {
 }
 
 function CafeDetailPage() {
-  const { cafe, review } = Route.useLoaderData()
+  const { cafe } = Route.useLoaderData()
   const { t } = useTranslation()
   const locale = useLocale()
 
@@ -236,7 +257,6 @@ function CafeDetailPage() {
         name={cafe.name}
         address={cafe.description}
         image={cafe.images}
-        isSubjective={review.is_subjective}
         gmapsId={cafe.gmaps_id}
       />
       {cafe.status !== 'active' && <CafeStatusBanner status={cafe.status} />}
