@@ -9,7 +9,7 @@ export const apiBase = createIsomorphicFn()
   .client(() => PUBLIC_API_BASE)
 
 // The session cookie only exists in the browser, so only client requests send
-// credentials; SSR fetches stay anonymous (and prerender-safe).
+// credentials; SSR fetches stay anonymous.
 const apiCredentials = createIsomorphicFn()
   .server((): RequestCredentials | undefined => undefined)
   .client((): RequestCredentials | undefined => 'include')

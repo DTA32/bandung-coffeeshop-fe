@@ -39,7 +39,7 @@ Service address, so SSR bypasses the public edge. Unset, the server falls back t
 
 ```bash
 bun dev               # Dev server on port 3000
-bun run build         # Production build (SSR + prerender + sitemap)
+bun run build         # Production build (SSR; /sitemap.xml is a server route)
 bun run start         # Serve the production build with the Bun server (server.ts)
 bun run test          # Run all tests once
 bun run test:watch    # Tests in watch mode

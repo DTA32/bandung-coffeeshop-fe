@@ -12,7 +12,7 @@ This project uses **bun** as the package manager.
 
 ```bash
 bun dev               # Start dev server on port 3000
-bun run build         # Production build (SSR + prerender + sitemap)
+bun run build         # Production build (SSR; /sitemap.xml is a server route)
 bun run start         # Serve the production build via the Bun server (server.ts)
 #bun run test          # Run all tests once (Vitest)
 #bun run test:watch    # Vitest in watch mode
@@ -33,7 +33,7 @@ Run a single test file:
 Currently in feat/test branch, not merged to main yet.
 
 **Stack:** Vitest 4 + React Testing Library + jsdom. Config lives in a **standalone `vitest.config.ts`** (intentionally
-_not_ the app `vite.config.ts` — that runs `tanstackStart()`, which boots SSR/prerender/sitemap and breaks jsdom tests).
+_not_ the app `vite.config.ts` — that runs `tanstackStart()`, which boots SSR and breaks jsdom tests).
 Tests are colocated next to source as `*.test.ts(x)`. Global setup (`src/test/setup.ts`) registers jest-dom matchers and
 auto-cleanup.
 
@@ -77,7 +77,7 @@ config lives in `src/router.tsx`; `src/routeTree.gen.ts` is auto-generated — n
 Add a file to `src/routes/` and TanStack auto-registers it. Dynamic segments use `$` notation (`cafe.$cafeId.tsx` →
 `/cafe/:cafeId`). The root layout (`src/routes/__root.tsx`) wraps every route via `shellComponent`, mounts the
 request-logging middleware, and renders the persistent chrome (`Header`, `Navbar`, `Footer`, telemetry client). There
-are three route groups:
+are three route groups, plus the top-level `sitemap[.]xml` server route:
 
 - **`{-$locale}/`** — the user-facing pages, under an **optional locale segment**. Bare paths are Indonesian (the
   default); English is served under a visible `/en` prefix. The layout `{-$locale}/route.tsx` redirects the redundant
@@ -86,6 +86,7 @@ are three route groups:
   sibling of `explore`, never under `/explore/`), `meet-in-the-middle`, `about`, `privacy-policy`.
 - **`telemetry/`** — POST beacon sinks for real-user data: `vitals`, `nav`, `error`. No UI.
 - **`(monitoring)/`** — pathless group of infra endpoints: `health`, `ready`, `metrics` (Prometheus scrape).
+- **`sitemap[.]xml`** — `/sitemap.xml`, see SEO below.
 
 ### Internationalization (i18n)
 
@@ -130,6 +131,13 @@ axes (`location × tag × price × rating`) into one canonical SEO URL, with a f
 redirect). The backend's `/v1/filters` metadata **is** the slug registry — slugs are never hand-maintained here. See
 `docs/srp-filter-taxonomy.md` for the taxonomy and combination rules. `src/lib/explore.ts` owns the explore
 search-param (de)serialization and validation that bridges the URL and the search API.
+
+**Sitemap.** There is no prerender: `/sitemap.xml` is a server route (`src/routes/sitemap[.]xml.ts`) generated from the
+backend's `/v1/sitemap` (cafes plus a result count per SRP location × filter) and cached in memory for an hour; a failed
+rebuild serves the last good copy, or 503 with none. `src/lib/sitemap.ts` turns those facts into URLs through the same
+`resolveSrp` / `countSrpFilters` / `isIndexableSrp` the SRP loader uses, so a listed SRP never redirects or renders
+noindex. Only bare (Indonesian) URLs get a `<url>`; each carries its `/en` twin as an hreflang `<xhtml:link>`. Closed
+cafés stay listed.
 
 ### Observability
 
