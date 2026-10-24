@@ -1,6 +1,12 @@
 import type { Locale } from '@/i18n'
 import { localePrefix } from '@/lib/locale'
-import type { CafeData, CafeReview } from '@/lib/api/cafe'
+import type {
+  CafeData,
+  CafeReview,
+  HourRange,
+  RegularDayHours,
+  Weekday,
+} from '@/lib/api/cafe'
 import type { CafeListing } from '@/lib/api/search'
 
 export const SITE_URL = 'https://bdgcafe.com'
@@ -233,6 +239,38 @@ export function webApplicationJsonLd(name: string, path: string): object {
   }
 }
 
+const SCHEMA_DAYS: Record<Weekday, string> = {
+  mon: 'Monday',
+  tue: 'Tuesday',
+  wed: 'Wednesday',
+  thu: 'Thursday',
+  fri: 'Friday',
+  sat: 'Saturday',
+  sun: 'Sunday',
+}
+
+// One OpeningHoursSpecification per open range of the regular week, days that
+// share the same range grouped into one dayOfWeek list. Closed and unknown
+// days are left out (an absent day reads as closed).
+function openingHoursSpecification(week: RegularDayHours[]): object[] {
+  const byRange = new Map<string, { range: HourRange; days: string[] }>()
+  for (const { day, closed, ranges } of week) {
+    if (closed) continue
+    for (const range of ranges) {
+      const key = `${range.open}-${range.close}`
+      const entry = byRange.get(key) ?? { range, days: [] }
+      entry.days.push(SCHEMA_DAYS[day])
+      byRange.set(key, entry)
+    }
+  }
+  return [...byRange.values()].map(({ range, days }) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: days,
+    opens: range.open,
+    closes: range.close,
+  }))
+}
+
 // Cafe detail: the place + our single, opinionated review of it.
 export function cafeJsonLd(
   cafe: CafeData,
@@ -260,22 +298,8 @@ export function cafeJsonLd(
     node.sameAs = `https://www.instagram.com/${cafe.instagram}`
   const priceRange = cafe.price.rank?.label
   if (priceRange) node.priceRange = priceRange
-  if (cafe.open_hour && cafe.close_hour) {
-    node.openingHoursSpecification = {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday',
-      ],
-      opens: cafe.open_hour,
-      closes: cafe.close_hour,
-    }
-  }
+  const openingHours = openingHoursSpecification(cafe.regular_hours)
+  if (openingHours.length > 0) node.openingHoursSpecification = openingHours
   // Aggregate of the visible user reviews, scored 1–5. Only emitted when at
   // least one review carries an overall score.
   if (review.overall_score != null && review.overall_review_count > 0) {

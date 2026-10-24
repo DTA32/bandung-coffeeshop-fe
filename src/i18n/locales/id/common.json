@@ -195,8 +195,6 @@
       "descPriceUpTo": "harga hingga {{price}}",
       "desc24Hours": "buka 24 jam",
       "descHours": "buka {{open}}–{{close}}",
-      "descOpenFrom": "buka mulai {{open}}",
-      "descClosesAt": "tutup pukul {{close}}",
       "descWifi": "WiFi {{label}}",
       "descTag": {
         "indoor-smoking": "bisa merokok di dalam",

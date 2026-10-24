@@ -19,6 +19,34 @@ export interface CafeRank {
   label: string
 }
 
+export type Weekday = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'
+
+// One opening range, 24-hour "HH:MM". close < open is overnight (closes the
+// next day); open 24 hours is 00:00–23:59.
+export interface HourRange {
+  open: string
+  close: string
+}
+
+// A resolved day in the 7-day schedule. closed days have no ranges; unknown
+// hours are closed = false with no ranges. special = holiday / special-event
+// hours (a dated row).
+export interface DayHours {
+  date: string // YYYY-MM-DD (Jakarta)
+  day: Weekday
+  closed: boolean
+  special: boolean
+  ranges: HourRange[]
+}
+
+// A day of the regular week (undated rows only), same closed / ranges
+// semantics as DayHours.
+export interface RegularDayHours {
+  day: Weekday
+  closed: boolean
+  ranges: HourRange[]
+}
+
 export interface CafeData {
   id: string
   name: string
@@ -29,6 +57,8 @@ export interface CafeData {
   instagram: string | null
   open_hour: string | null
   close_hour: string | null
+  hours: DayHours[] // 7 days starting today (Jakarta)
+  regular_hours: RegularDayHours[] // always 7 entries, mon → sun
   gmaps_id: string | null
   locations: Location[]
   price: CafePrice

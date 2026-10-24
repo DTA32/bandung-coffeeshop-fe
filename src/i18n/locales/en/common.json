@@ -200,8 +200,6 @@
       "descPriceUpTo": "prices up to {{price}}",
       "desc24Hours": "open 24 hours",
       "descHours": "open {{open}}–{{close}}",
-      "descOpenFrom": "opens at {{open}}",
-      "descClosesAt": "closes at {{close}}",
       "descWifi": "{{label}} WiFi",
       "descTag": {
         "indoor-smoking": "indoor smoking allowed",

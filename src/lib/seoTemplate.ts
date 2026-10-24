@@ -10,6 +10,7 @@ import {
 import type { Crumb, SeoMeta } from '@/lib/seo'
 import type { Locale } from '@/i18n'
 import { menuKind } from '@/lib/menu'
+import { isAllDay } from '@/lib/hours'
 
 type TFn = (key: string, options?: Record<string, unknown>) => string
 type Labelable = { name: string; type: string; typeLabel?: string }
@@ -293,15 +294,24 @@ function priceClause(price: CafePrice, t: TFn): string | undefined {
   return undefined
 }
 
-// Hours only for active cafes: a closed one's old hours would mislead.
+// Hours only for active cafes (a closed one's old hours would mislead), and
+// only when every open day of the regular week has the same single range.
 function hoursClause(cafe: CafeData, t: TFn): string | undefined {
-  const { status, open_hour: open, close_hour: close } = cafe
-  if (status !== 'active') return undefined
-  if (open === '00:00' && close === '23:59') return t('seo.cafe.desc24Hours')
-  if (open && close) return t('seo.cafe.descHours', { open, close })
-  if (open) return t('seo.cafe.descOpenFrom', { open })
-  if (close) return t('seo.cafe.descClosesAt', { close })
-  return undefined
+  if (cafe.status !== 'active') return undefined
+  const open = cafe.regular_hours.filter(
+    (d) => !d.closed && d.ranges.length > 0,
+  )
+  if (open.length === 0) return undefined
+  const range = open[0].ranges[0]
+  const uniform = open.every(
+    (d) =>
+      d.ranges.length === 1 &&
+      d.ranges[0].open === range.open &&
+      d.ranges[0].close === range.close,
+  )
+  if (!uniform) return undefined
+  if (isAllDay(range)) return t('seo.cafe.desc24Hours')
+  return t('seo.cafe.descHours', { open: range.open, close: range.close })
 }
 
 // The WiFi range label the score falls in ("Cepat" / "Fast").
