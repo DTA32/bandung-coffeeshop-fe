@@ -25157,7 +25157,7 @@
                     {
                       "type": "frame",
                       "id": "s4mw0",
-                      "x": 143.30772183160548,
+                      "x": 143.31519174404596,
                       "y": 0,
                       "name": "chipRead",
                       "fill": "#F7F5EECC",
@@ -28458,7 +28458,7 @@
                     {
                       "type": "frame",
                       "id": "zlUhm",
-                      "x": 143.30772183160548,
+                      "x": 143.31519174404596,
                       "y": 0,
                       "name": "chipRead",
                       "fill": "#1E251ACC",
@@ -37471,20 +37471,39 @@
                           "id": "vdmS6",
                           "name": "qL3",
                           "fill": "#7A8E70",
-                          "content": "Opens",
+                          "content": "Opening hours",
                           "fontFamily": "Inter",
                           "fontSize": 12,
                           "fontWeight": "normal"
                         },
                         {
-                          "type": "text",
-                          "id": "sU3eD",
-                          "name": "qV3",
-                          "fill": "#2A3D22",
-                          "content": "08:00 - 22:00",
-                          "fontFamily": "Inter",
-                          "fontSize": 12,
-                          "fontWeight": "600"
+                          "type": "frame",
+                          "id": "dlOp4",
+                          "name": "hoursValue",
+                          "gap": 4,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "sU3eD",
+                              "name": "todayHours",
+                              "fill": "#2A3D22",
+                              "content": "08:00 - 22:00",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "erel4",
+                              "name": "chevron",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "chevron-up",
+                              "library": "lucide",
+                              "fill": "#7A8E70"
+                            }
+                          ]
                         }
                       ]
                     }
@@ -43077,20 +43096,39 @@
                       "id": "o6K4k",
                       "name": "qL3",
                       "fill": "#7A8E70",
-                      "content": "Opens",
+                      "content": "Opening hours",
                       "fontFamily": "Inter",
                       "fontSize": 12,
                       "fontWeight": "normal"
                     },
                     {
-                      "type": "text",
-                      "id": "v7S4U",
-                      "name": "qV3",
-                      "fill": "#2A3D22",
-                      "content": "08:00 - 22:00",
-                      "fontFamily": "Inter",
-                      "fontSize": 12,
-                      "fontWeight": "600"
+                      "type": "frame",
+                      "id": "mpEOV",
+                      "name": "hoursValue",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "v7S4U",
+                          "name": "todayHours",
+                          "fill": "#2A3D22",
+                          "content": "08:00 - 22:00",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "VMG0k",
+                          "name": "chevron",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "chevron-up",
+                          "library": "lucide",
+                          "fill": "#7A8E70"
+                        }
+                      ]
                     }
                   ]
                 }
@@ -49208,6 +49246,738 @@
               "fontFamily": "Inter",
               "fontSize": 11,
               "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "kdVS8",
+      "x": 2548,
+      "y": 10100,
+      "name": "HoursPopover",
+      "width": 300,
+      "fill": "#FFFFFF",
+      "cornerRadius": 12,
+      "stroke": "#D4E3C5",
+      "strokeWidth": 1,
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#2A3D2224",
+        "offset": {
+          "x": 0,
+          "y": 8
+        },
+        "blur": 24
+      },
+      "layout": "vertical",
+      "gap": 2,
+      "padding": 6,
+      "children": [
+        {
+          "type": "frame",
+          "id": "i1VM9Z",
+          "name": "dayRow – today",
+          "width": "fill_container",
+          "fill": "#EAF3DE",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "H2uMg",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CAubB",
+                  "name": "dayDate",
+                  "fill": "#2A3D22",
+                  "content": "Sat 25 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "ZL656",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "08:00 - 22:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CaiOZ",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "yZED2",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vAB3m",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Sun 26 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "BGRCe",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "09:00 - 23:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Ryb7h",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "e09Ug",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "M07UX7",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Mon 27 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "qSquB",
+              "name": "dayHours",
+              "fill": "#E5453A",
+              "content": "Closed",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "h7g9iy",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "OBqEP",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "dUtm3",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Tue 28 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "t5YTeF",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "08:00 - 14:00, 17:00 - 22:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "tkw6p",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "QjbjB",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "YO1Ta",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Wed 29 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "o6lby",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "08:00 - 22:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "joMrg",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "qaEC6",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "WL1Lo",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Thu 30 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "i3T3D",
+                  "name": "specialChip",
+                  "fill": "#FFF3E0",
+                  "cornerRadius": 999,
+                  "padding": [
+                    2,
+                    6
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZOww1",
+                      "name": "specialLabel",
+                      "fill": "#C97B2A",
+                      "content": "Special hours",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "uSC7b",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "10:00 - 18:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "k3pF0",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "j2h7S",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "M9xMP",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Fri 31 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "l8VSTU",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "08:00 - 22:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "FV7mU",
+      "x": 5680,
+      "y": 10100,
+      "name": "HoursPopover",
+      "width": 310,
+      "fill": "#FFFFFF",
+      "cornerRadius": 12,
+      "stroke": "#D4E3C5",
+      "strokeWidth": 1,
+      "effect": {
+        "type": "shadow",
+        "shadowType": "outer",
+        "color": "#2A3D2224",
+        "offset": {
+          "x": 0,
+          "y": 8
+        },
+        "blur": 24
+      },
+      "layout": "vertical",
+      "gap": 2,
+      "padding": 6,
+      "children": [
+        {
+          "type": "frame",
+          "id": "pkiN6",
+          "name": "dayRow – today",
+          "width": "fill_container",
+          "fill": "#EAF3DE",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "ZheXS",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "bHTxs",
+                  "name": "dayDate",
+                  "fill": "#2A3D22",
+                  "content": "Sat 25 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "bOBQ8",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "08:00 - 22:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Tj8wB",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "zioZV",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "zpl4q",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Sun 26 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "K7xGyl",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "09:00 - 23:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bQdLL",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Y6C6P",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rWaKl",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Mon 27 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "ZWzXh",
+              "name": "dayHours",
+              "fill": "#E5453A",
+              "content": "Closed",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gbQHr",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "hkiWk",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "AwoCs",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Tue 28 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "pqxZ0",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "08:00 - 14:00, 17:00 - 22:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lkHTf",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "kpVGq",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "nI7IR",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Wed 29 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "IM7w8",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "08:00 - 22:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "EJaSI",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "tnjZz",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "zfrbQ",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Thu 30 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "yA8Xz",
+                  "name": "specialChip",
+                  "fill": "#FFF3E0",
+                  "cornerRadius": 999,
+                  "padding": [
+                    2,
+                    6
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "F33V2Z",
+                      "name": "specialLabel",
+                      "fill": "#C97B2A",
+                      "content": "Special hours",
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "bZ4wR",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "10:00 - 18:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vRVDG",
+          "name": "dayRow",
+          "width": "fill_container",
+          "cornerRadius": 8,
+          "gap": 8,
+          "padding": [
+            7,
+            10
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "w2aL9",
+              "name": "dayLabel",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "PXoTL",
+                  "name": "dayDate",
+                  "fill": "#4A5A38",
+                  "content": "Fri 31 Oct",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "JMfYB",
+              "name": "dayHours",
+              "fill": "#2A3D22",
+              "content": "08:00 - 22:00",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "600"
             }
           ]
         }
