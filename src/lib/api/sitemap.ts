@@ -1,9 +1,9 @@
 import { apiFetch } from '@/lib/api/index'
 import type { ApiResponse } from '@/lib/type'
 
+// Every cafe with a public page, active or closed alike.
 export interface SitemapCafe {
   id: string
-  status: 'active' | 'closed'
   updated_at: string
 }
 
