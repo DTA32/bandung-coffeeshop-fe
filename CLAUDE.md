@@ -167,7 +167,7 @@ page-specific components are colocated under `src/components/<page-name>/` (e.g.
 `meet-in-the-middle/`, `home/`, `map/`), most with a barrel `index.ts`.
 
 **Café Detail page** (`/cafe/$cafeId`): two-column layout on desktop — left column holds `CafeTitle`, `AboutCard`,
-`LatestUpdatesWidget`, `ReviewWidget` (wraps `ReviewsCard` with the `review=open` search param), `RatingsCard`, `NearbyCafe`; right sidebar holds `QuickFacts`, `ScoreCard`, `PriceCard`, `UpdatedAt`. `RatingsCard` renders a grid of
+`LatestUpdatesWidget`, `ReviewWidget` (user-reviews carousel; also handles the `review=open` search param; its parts — `ReviewCard`, `ReviewModal`, `SubmitReviewCard`, `LoadMoreCard`, `SkeletonReview`, `StarRating` — live in `cafe-detail/reviews/`), `RatingsCard`, `NearbyCafe`; right sidebar holds `QuickFacts`, `ScoreCard`, `PriceCard`, `UpdatedAt`. `RatingsCard` renders a grid of
 `RatingSlider` components driven by `RatingsResponse` (rating dimensions `price-rank`, `vibe`, `noise`, `wifi`, `meals`,
 `atmosphere`, `parking` — each a `RatingEntry` with named ranges and a 0–5 score).
 

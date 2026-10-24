@@ -1,5 +1,5 @@
 import { cn } from '@/lib/cn'
-import { REVIEW_CARD_CLASS } from './ReviewItem'
+import { REVIEW_CARD_CLASS } from './ReviewCard'
 
 // SkeletonReview is a placeholder review card shown while reviews load.
 export default function SkeletonReview() {

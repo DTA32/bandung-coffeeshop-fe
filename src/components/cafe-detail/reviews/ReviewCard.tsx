@@ -9,7 +9,7 @@ import type { CafeReviewItem, MyReviewStatus } from '@/lib/api/cafe'
 export const REVIEW_CARD_CLASS =
   'snap-start shrink-0 w-66 md:w-74 min-h-59 rounded-2xl border border-grove-light bg-surface'
 
-interface ReviewItemProps {
+interface ReviewCardProps {
   review: CafeReviewItem
   // Set on the signed-in user's own review.
   own?: { status: MyReviewStatus; onEdit: () => void }
@@ -35,7 +35,7 @@ function linkHost(link: string): string {
   }
 }
 
-export default function ReviewItem({ review, own }: ReviewItemProps) {
+export default function ReviewCard({ review, own }: ReviewCardProps) {
   const { t } = useTranslation()
   const locale = useLocale()
   const [expanded, setExpanded] = useState(false)
@@ -139,7 +139,7 @@ export default function ReviewItem({ review, own }: ReviewItemProps) {
             >
               <span className="truncate">
                 {review.external_url_title
-                  ? t('reviews.readOn', { title: review.external_url_title })
+                  ? review.external_url_title
                   : linkHost(review.external_url_link)}
               </span>
               <ExternalLink size={12} aria-hidden="true" className="shrink-0" />
