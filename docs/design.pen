@@ -25157,7 +25157,7 @@
                     {
                       "type": "frame",
                       "id": "s4mw0",
-                      "x": 143.31519174404596,
+                      "x": 143.31681085274684,
                       "y": 0,
                       "name": "chipRead",
                       "fill": "#F7F5EECC",
@@ -28458,7 +28458,7 @@
                     {
                       "type": "frame",
                       "id": "zlUhm",
-                      "x": 143.31519174404596,
+                      "x": 143.31681085274684,
                       "y": 0,
                       "name": "chipRead",
                       "fill": "#1E251ACC",
@@ -49303,7 +49303,7 @@
                   "id": "CAubB",
                   "name": "dayDate",
                   "fill": "#2A3D22",
-                  "content": "Sat 25 Oct",
+                  "content": "Saturday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "700"
@@ -49348,7 +49348,7 @@
                   "id": "vAB3m",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Sun 26 Oct",
+                  "content": "Sunday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49393,7 +49393,7 @@
                   "id": "M07UX7",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Mon 27 Oct",
+                  "content": "Monday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49438,7 +49438,7 @@
                   "id": "dUtm3",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Tue 28 Oct",
+                  "content": "Tuesday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49483,7 +49483,7 @@
                   "id": "YO1Ta",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Wed 29 Oct",
+                  "content": "Wednesday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49528,7 +49528,7 @@
                   "id": "WL1Lo",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Thu 30 Oct",
+                  "content": "Thursday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49596,7 +49596,7 @@
                   "id": "M9xMP",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Fri 31 Oct",
+                  "content": "Friday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49669,7 +49669,7 @@
                   "id": "bHTxs",
                   "name": "dayDate",
                   "fill": "#2A3D22",
-                  "content": "Sat 25 Oct",
+                  "content": "Saturday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "700"
@@ -49714,7 +49714,7 @@
                   "id": "zpl4q",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Sun 26 Oct",
+                  "content": "Sunday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49759,7 +49759,7 @@
                   "id": "rWaKl",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Mon 27 Oct",
+                  "content": "Monday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49804,7 +49804,7 @@
                   "id": "AwoCs",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Tue 28 Oct",
+                  "content": "Tuesday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49849,7 +49849,7 @@
                   "id": "nI7IR",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Wed 29 Oct",
+                  "content": "Wednesday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49894,7 +49894,7 @@
                   "id": "zfrbQ",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Thu 30 Oct",
+                  "content": "Thursday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -49962,7 +49962,7 @@
                   "id": "PXoTL",
                   "name": "dayDate",
                   "fill": "#4A5A38",
-                  "content": "Fri 31 Oct",
+                  "content": "Friday",
                   "fontFamily": "Inter",
                   "fontSize": 12,
                   "fontWeight": "normal"

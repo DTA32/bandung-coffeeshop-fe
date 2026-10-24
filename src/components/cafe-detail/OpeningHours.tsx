@@ -5,7 +5,6 @@ import type { TFunction } from 'i18next'
 import type { DayHours } from '@/lib/api/cafe'
 import { cn } from '@/lib/cn'
 import { formatRanges, isAllDay } from '@/lib/hours'
-import { dateLocale, useLocale } from '@/lib/locale'
 import { useClickOutside } from '@/lib/hooks/useClickOutside'
 import { useEscapeKey } from '@/lib/hooks/useEscapeKey'
 
@@ -18,20 +17,6 @@ export function dayHoursText(day: DayHours, t: TFunction): string {
   return formatRanges(day.ranges)
 }
 
-// "Sat 25 Oct" / "Sab 25 Okt". The date is a plain YYYY-MM-DD (Jakarta), so it
-// is read and formatted in UTC to keep the calendar day as is.
-function useDayLabel() {
-  const { t } = useTranslation()
-  const locale = useLocale()
-  const fmt = new Intl.DateTimeFormat(dateLocale(locale), {
-    day: 'numeric',
-    month: 'short',
-    timeZone: 'UTC',
-  })
-  return (day: DayHours) =>
-    `${t(`cafe.weekdays.${day.day}`)} ${fmt.format(new Date(`${day.date}T00:00:00Z`))}`
-}
-
 interface OpeningHoursProps {
   hours: DayHours[] // hours[0] is today; callers hide the row when unknown
   todayText: string
@@ -42,7 +27,6 @@ interface OpeningHoursProps {
 // focus stays on the button; Esc and outside clicks close it).
 export default function OpeningHours({ hours, todayText }: OpeningHoursProps) {
   const { t } = useTranslation()
-  const dayLabel = useDayLabel()
   const [open, setOpen] = useState(false)
   const popoverId = useId()
   const rootRef = useRef<HTMLElement>(null)
@@ -99,7 +83,7 @@ export default function OpeningHours({ hours, todayText }: OpeningHoursProps) {
                       today ? 'font-bold text-forest' : 'text-moss-dark'
                     }
                   >
-                    {dayLabel(day)}
+                    {t(`cafe.weekdays.${day.day}`)}
                   </span>
                   {day.special && (
                     <span className="rounded-full bg-warning-bg px-1.5 py-0.5 text-[10px] font-semibold text-warning">

@@ -241,13 +241,13 @@
     "closed": "Tutup",
     "specialHours": "Jam khusus",
     "weekdays": {
-      "mon": "Sen",
-      "tue": "Sel",
-      "wed": "Rab",
-      "thu": "Kam",
-      "fri": "Jum",
-      "sat": "Sab",
-      "sun": "Min"
+      "mon": "Senin",
+      "tue": "Selasa",
+      "wed": "Rabu",
+      "thu": "Kamis",
+      "fri": "Jumat",
+      "sat": "Sabtu",
+      "sun": "Minggu"
     },
     "lastUpdatedOn": "Terakhir diperbarui pada",
     "otherCafesNearby": "Kafe lain di sekitar",
