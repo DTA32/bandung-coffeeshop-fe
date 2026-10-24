@@ -67,7 +67,10 @@ export default function OpeningHours({ hours, todayText }: OpeningHoursProps) {
         aria-controls={open ? popoverId : undefined}
         aria-label={`${t('cafe.openingHours')}: ${todayText}`}
         onClick={() => setOpen((o) => !o)}
-        className="flex cursor-pointer items-center gap-1 text-right text-xs font-semibold text-forest"
+        className={cn(
+          'flex cursor-pointer items-center gap-1 text-right text-xs font-semibold',
+          hours[0].closed ? 'text-error-accent' : 'text-forest',
+        )}
       >
         {todayText}
         <Chevron size={14} aria-hidden="true" className="shrink-0 text-bark" />
