@@ -114,7 +114,7 @@ export default function OpeningHours({ hours, todayText }: OpeningHoursProps) {
                     day.closed ? 'text-error-accent' : 'text-forest',
                   )}
                 >
-                  {dayHoursText(day, t)}
+                  {dayHoursText(day, t) || '–'}
                 </span>
               </li>
             )
