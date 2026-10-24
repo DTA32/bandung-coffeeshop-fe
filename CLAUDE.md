@@ -133,8 +133,8 @@ redirect). The backend's `/v1/filters` metadata **is** the slug registry — slu
 search-param (de)serialization and validation that bridges the URL and the search API.
 
 **Sitemap.** There is no prerender: `/sitemap.xml` is a server route (`src/routes/sitemap[.]xml.ts`) generated from the
-backend's `/v1/sitemap` (cafes plus a result count per SRP location × filter) and cached in memory for an hour; a failed
-rebuild serves the last good copy, or 503 with none. `src/lib/sitemap.ts` turns those facts into URLs through the same
+backend's `/v1/sitemap` (cafes plus a result count per SRP location × filter) on every request; the backend owns the
+caching. A backend failure is a 503, never an empty or partial sitemap. `src/lib/sitemap.ts` turns those facts into URLs through the same
 `resolveSrp` / `countSrpFilters` / `isIndexableSrp` the SRP loader uses, so a listed SRP never redirects or renders
 noindex. Only bare (Indonesian) URLs get a `<url>`; each carries its `/en` twin as an hreflang `<xhtml:link>`. Closed
 cafés stay listed.
