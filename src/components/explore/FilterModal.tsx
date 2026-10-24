@@ -25,7 +25,7 @@ import {
 } from '@/lib/explore'
 import { useLocale } from '@/lib/locale'
 import { cn } from '@/lib/cn'
-import Dialog from '@/components/Dialog'
+import Dialog from '@/components/shared/Dialog'
 import FilterChip from '@/components/FilterChip'
 import OpenHoursControl from './OpenHoursControl'
 import PriceTierSelector from './PriceTierSelector'

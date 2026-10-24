@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import Image from '@/components/Image'
 import ImageGallery from '@/components/ImageGallery'
 import { useLocale, dateLocale } from '@/lib/locale'
-import { formatRelativeTime } from '@/lib/relativeTime'
+import { formatRelativeTime } from '@/lib/time'
 import type { CafeFeedItem } from '@/lib/api/cafe'
 
 interface LatestUpdatesWidgetProps {
@@ -43,7 +43,7 @@ function FeedCard({ item }: { item: CafeFeedItem }) {
   const galleryImages = item.images.map((url) => ({ url, description: '' }))
 
   return (
-    <article className="snap-start shrink-0 w-60 md:w-[calc((100%-2rem)/3)] flex flex-col overflow-hidden rounded-2xl border border-grove-light bg-surface">
+    <article className="snap-start shrink-0 w-74 flex flex-col overflow-hidden rounded-2xl border border-grove-light bg-surface">
       {item.images.length > 0 && (
         <button
           type="button"

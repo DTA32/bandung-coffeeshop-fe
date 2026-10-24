@@ -155,16 +155,19 @@ Tailwind CSS v4 via `@tailwindcss/vite`. Custom design tokens are defined in `sr
 - Background of the app is `bg-cream`; primary text colors are `text-forest` (dark) and `text-bark` (muted)
 
 Compose conditional/merged class lists with `cn()` from `src/lib/cn.ts` (clsx + tailwind-merge). Prefer the standard
-Tailwind scale; use arbitrary values only when a design calls for a value no standard step fits.
+Tailwind scale (v4 spacing takes any 0.25rem step, e.g. `min-h-59` for 236px); use arbitrary values only when a design calls
+for a value no standard step fits. Colours never use arbitrary hex values: reuse a token when the design colour is close to
+one, otherwise add a token to `@theme` in `src/styles.css` (with a `.dark` value when it needs one).
 
 ### Component organisation
 
-Route-level pages are thin — they fetch via loaders and compose components. Shared primitives go in `src/components/`;
+Route-level pages are thin — they fetch via loaders and compose components. Reusable UI primitives (`Dialog`, `Select`,
+`PrimaryButton`, `SecondaryButton`) live in `src/components/shared/`; other shared components go in `src/components/`;
 page-specific components are colocated under `src/components/<page-name>/` (e.g. `cafe-detail/`, `explore/`,
 `meet-in-the-middle/`, `home/`, `map/`), most with a barrel `index.ts`.
 
 **Café Detail page** (`/cafe/$cafeId`): two-column layout on desktop — left column holds `CafeTitle`, `AboutCard`,
-`LatestUpdatesWidget`, `ReviewsCard`, `RatingsCard`, `NearbyCafe`; right sidebar holds `QuickFacts`, `ScoreCard`, `PriceCard`, `UpdatedAt`. `RatingsCard` renders a grid of
+`LatestUpdatesWidget`, `ReviewWidget` (wraps `ReviewsCard` with the `review=open` search param), `RatingsCard`, `NearbyCafe`; right sidebar holds `QuickFacts`, `ScoreCard`, `PriceCard`, `UpdatedAt`. `RatingsCard` renders a grid of
 `RatingSlider` components driven by `RatingsResponse` (rating dimensions `price-rank`, `vibe`, `noise`, `wifi`, `meals`,
 `atmosphere`, `parking` — each a `RatingEntry` with named ranges and a 0–5 score).
 

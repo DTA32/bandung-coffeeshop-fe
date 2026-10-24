@@ -7,7 +7,7 @@ import { cn } from '@/lib/cn'
 import type { CafeReviewItem, MyReviewStatus } from '@/lib/api/cafe'
 
 export const REVIEW_CARD_CLASS =
-  'snap-start shrink-0 w-66 md:w-74 min-h-[236px] rounded-2xl border border-grove-light bg-surface'
+  'snap-start shrink-0 w-66 md:w-74 min-h-59 rounded-2xl border border-grove-light bg-surface'
 
 interface ReviewItemProps {
   review: CafeReviewItem
@@ -76,8 +76,7 @@ export default function ReviewItem({ review, own }: ReviewItemProps) {
       className={cn(
         REVIEW_CARD_CLASS,
         'flex flex-col gap-2.5 p-4',
-        own &&
-          'border-[#B9D2A3] bg-[#F1F6EB] dark:border-grove-light dark:bg-forest-lighter',
+        own && 'border-grove-light bg-forest-lighter',
       )}
     >
       <div className="flex items-start justify-between gap-2">
@@ -103,9 +102,7 @@ export default function ReviewItem({ review, own }: ReviewItemProps) {
           <StarDisplay score={review.overall_score} />
         )}
         {meta.length > 0 && (
-          <span className="text-xs text-[#7A8E70] dark:text-bark">
-            {meta.join(' · ')}
-          </span>
+          <span className="text-xs text-bark">{meta.join(' · ')}</span>
         )}
       </div>
       {content && (

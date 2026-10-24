@@ -1,8 +1,11 @@
 import { useEffect, useId, useMemo, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
-import { Check, ChevronDown, Globe, Plus, Trash2, X } from 'lucide-react'
+import { Check, Globe, Plus, Trash2, X } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
-import Dialog from '@/components/Dialog'
+import Dialog from '@/components/shared/Dialog'
+import Select from '@/components/shared/Select'
+import PrimaryButton from '@/components/shared/PrimaryButton'
+import SecondaryButton from '@/components/shared/SecondaryButton'
 import LocaleLink from '@/components/LocaleLink'
 import { StarInput } from './StarRating'
 import { useAuth } from '@/lib/hooks/useAuth'
@@ -12,6 +15,7 @@ import { getFilterOptions } from '@/lib/api/filters'
 import type { FilterOptions } from '@/lib/api/filters'
 import { createReview, deleteReview, updateReview } from '@/lib/api/cafe'
 import type { MyReview, RatingType, ReviewPayload } from '@/lib/api/cafe'
+import { currentMonthWIB } from '@/lib/time'
 
 const NAME_MAX = 50
 const CONTENT_MAX = 2000
@@ -75,19 +79,6 @@ function bucketFor(
       (o) => score >= o.lower && (o.upper == null || score <= o.upper),
     ) ?? [...options].reverse().find((o) => score >= o.lower)
   )
-}
-
-// The current year and month in WIB, which is what the API validates
-// `visited_at` against.
-function currentMonthWIB(): { year: number; month: number } {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'Asia/Jakarta',
-    year: 'numeric',
-    month: 'numeric',
-  }).formatToParts(new Date())
-  const get = (type: string) =>
-    Number(parts.find((p) => p.type === type)?.value)
-  return { year: get('year'), month: get('month') }
 }
 
 type View = 'form' | 'confirmRemove' | 'success' | 'removed' | 'error'
@@ -304,7 +295,7 @@ export default function ReviewModal({
               type="button"
               onClick={() => void run('remove')}
               disabled={busy}
-              className="h-11 cursor-pointer rounded-full border-none bg-[#B5473A] px-6 text-sm font-bold text-white hover:bg-[#9C3D32] disabled:cursor-default disabled:opacity-60"
+              className="h-11 cursor-pointer rounded-full border-none bg-red-700 px-6 text-sm font-bold text-white hover:bg-red-700/90 disabled:cursor-default disabled:opacity-60"
             >
               {busy
                 ? t('reviews.modal.saving')
@@ -385,7 +376,7 @@ export default function ReviewModal({
           type="button"
           aria-label={t('reviews.modal.close')}
           onClick={onClose}
-          className="flex cursor-pointer rounded-full border-none bg-transparent p-0 text-[#7A8E70] hover:text-forest dark:text-bark"
+          className="flex cursor-pointer rounded-full border-none bg-transparent p-0 text-bark hover:text-forest"
         >
           <X size={20} aria-hidden="true" />
         </button>
@@ -396,14 +387,14 @@ export default function ReviewModal({
         onSubmit={onSubmit}
         className="flex min-h-0 flex-1 flex-col"
       >
-        <div className="flex min-h-0 flex-1 flex-col gap-[22px] overflow-y-auto p-5 sm:gap-6 sm:px-7 sm:py-6">
+        <div className="flex min-h-0 flex-1 flex-col gap-5.5 overflow-y-auto p-5 sm:gap-6 sm:px-7 sm:py-6">
           <div className="flex flex-col gap-3 sm:grid sm:grid-cols-2 sm:gap-4">
             <div
               className={cn(
-                'flex flex-col items-center gap-3.5 rounded-2xl border bg-[#F1F6EB] px-4 py-5 text-center dark:bg-forest-lighter',
+                'flex flex-col items-center gap-3.5 rounded-2xl border bg-forest-lighter px-4 py-5 text-center',
                 showErrors && errors.overall
                   ? 'border-error-accent'
-                  : 'border-[#B9D2A3] dark:border-grove-light',
+                  : 'border-grove-light',
               )}
             >
               <p
@@ -440,7 +431,7 @@ export default function ReviewModal({
             </div>
           </div>
 
-          <div className="flex flex-col gap-[22px] sm:grid sm:grid-cols-2 sm:gap-4">
+          <div className="flex flex-col gap-5.5 sm:grid sm:grid-cols-2 sm:gap-4">
             <div className="flex flex-col gap-2">
               <label
                 htmlFor={ids.name}
@@ -566,7 +557,7 @@ export default function ReviewModal({
                     >
                       <span
                         id={`${ids.content}-${cat.type}`}
-                        className="text-[13px] font-semibold text-forest sm:w-[150px] sm:shrink-0"
+                        className="text-[13px] font-semibold text-forest sm:w-37.5 sm:shrink-0"
                       >
                         {cat.name}
                       </span>
@@ -582,7 +573,7 @@ export default function ReviewModal({
                             aria-pressed={selected === o.key}
                             onClick={() => pickOption(cat.type, o)}
                             className={cn(
-                              'min-h-[34px] min-w-0 flex-1 cursor-pointer rounded-full border px-2 py-1 text-xs leading-tight',
+                              'min-h-8.5 min-w-0 flex-1 cursor-pointer rounded-full border px-2 py-1 text-xs leading-tight',
                               selected === o.key
                                 ? 'border-moss bg-moss font-semibold text-white'
                                 : 'border-grove-light bg-surface text-moss-dark hover:border-moss',
@@ -598,7 +589,7 @@ export default function ReviewModal({
                           name: cat.name,
                         })}
                         onClick={() => collapse(cat.type)}
-                        className="absolute top-3 right-6 flex shrink-0 cursor-pointer border-none bg-transparent p-0 text-[#7A8E70] hover:text-forest sm:static dark:text-bark"
+                        className="absolute top-3 right-6 flex shrink-0 cursor-pointer border-none bg-transparent p-0 text-bark hover:text-forest sm:static"
                       >
                         <X size={16} aria-hidden="true" />
                       </button>
@@ -617,7 +608,7 @@ export default function ReviewModal({
                     aria-label={t('reviews.modal.addCategory', {
                       name: cat.name,
                     })}
-                    className="flex h-8 cursor-pointer items-center gap-1 rounded-full border border-[#B9D2A3] bg-transparent px-3 text-xs font-medium text-moss hover:bg-forest-lighter dark:border-grove-light"
+                    className="flex h-8 cursor-pointer items-center gap-1 rounded-full border border-grove-light bg-transparent px-3 text-xs font-medium text-moss hover:bg-forest-lighter"
                   >
                     <Plus size={14} aria-hidden="true" />
                     {cat.name}
@@ -633,9 +624,9 @@ export default function ReviewModal({
             <Globe
               size={14}
               aria-hidden="true"
-              className="mt-0.5 shrink-0 text-[#7A8E70] dark:text-bark"
+              className="mt-0.5 shrink-0 text-bark"
             />
-            <p className="m-0 text-xs leading-normal text-[#7A8E70] dark:text-bark">
+            <p className="m-0 text-xs leading-normal text-bark">
               <Trans
                 i18nKey="reviews.modal.notice"
                 components={{
@@ -656,7 +647,7 @@ export default function ReviewModal({
                 type="button"
                 onClick={() => setView('confirmRemove')}
                 disabled={busy}
-                className="flex h-11 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#E4B4AC] bg-transparent px-5 text-sm font-semibold text-[#B5473A] hover:bg-error-bg disabled:cursor-default disabled:opacity-60 dark:border-red-900 dark:text-error"
+                className="flex h-11 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-red-200 bg-transparent px-5 text-sm font-semibold text-error hover:bg-error-bg disabled:cursor-default disabled:opacity-60 dark:border-red-900"
               >
                 <Trash2 size={16} aria-hidden="true" />
                 {t('reviews.modal.remove')}
@@ -697,99 +688,17 @@ function FieldError({ children }: { children: ReactNode }) {
   )
 }
 
-function Select({
-  label,
-  value,
-  onChange,
-  invalid,
-  className,
-  children,
-}: {
-  label: string
-  value: string
-  onChange: (value: string) => void
-  invalid?: boolean
-  className?: string
-  children: ReactNode
-}) {
-  return (
-    <div className={cn('relative', className)}>
-      <select
-        aria-label={label}
-        aria-invalid={invalid}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className={cn(
-          'h-11 w-full cursor-pointer appearance-none rounded-[10px] border bg-surface pr-9 pl-3.5 text-sm text-forest outline-none focus:border-moss',
-          invalid ? 'border-error-accent' : 'border-grove-light',
-          !value && 'text-forest-light',
-        )}
-      >
-        <option value="">{label}</option>
-        {children}
-      </select>
-      <ChevronDown
-        size={16}
-        aria-hidden="true"
-        className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-[#7A8E70] dark:text-bark"
-      />
-    </div>
-  )
-}
-
-function PrimaryButton({
-  onClick,
-  disabled,
-  children,
-}: {
-  onClick: () => void
-  disabled?: boolean
-  children: ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="h-11 cursor-pointer rounded-full border-none bg-moss px-6 text-sm font-bold text-white hover:bg-forest disabled:cursor-default disabled:opacity-60"
-    >
-      {children}
-    </button>
-  )
-}
-
-function SecondaryButton({
-  onClick,
-  disabled,
-  children,
-}: {
-  onClick: () => void
-  disabled?: boolean
-  children: ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="h-11 cursor-pointer rounded-full border border-grove-light bg-transparent px-5 text-sm font-semibold text-moss hover:bg-forest-lighter disabled:cursor-default disabled:opacity-60"
-    >
-      {children}
-    </button>
-  )
-}
-
 const BADGE = {
   success: {
-    className: 'bg-[#E4EED9] text-moss dark:bg-forest-lighter',
+    className: 'bg-forest-lighter text-moss',
     Icon: Check,
   },
   error: {
-    className: 'bg-[#F8E1DD] text-[#B5473A] dark:bg-error-bg dark:text-error',
+    className: 'bg-error-bg text-error',
     Icon: X,
   },
   remove: {
-    className: 'bg-[#F8E1DD] text-[#B5473A] dark:bg-error-bg dark:text-error',
+    className: 'bg-error-bg text-error',
     Icon: Trash2,
   },
 } as const
@@ -824,9 +733,7 @@ function ResultContent({
         <h2 id={titleId} className="m-0 text-xl font-bold text-forest">
           {title}
         </h2>
-        <p className="m-0 text-sm leading-normal text-[#7A8E70] dark:text-bark">
-          {subtitle}
-        </p>
+        <p className="m-0 text-sm leading-normal text-bark">{subtitle}</p>
       </div>
       {body && (
         <p className="m-0 text-[13px] leading-[1.6] text-moss-dark">{body}</p>

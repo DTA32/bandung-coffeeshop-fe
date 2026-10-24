@@ -3,7 +3,7 @@ import type { TouchEvent } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { ClientOnly } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import Dialog from '@/components/Dialog'
+import Dialog from '@/components/shared/Dialog'
 import Image from '@/components/Image'
 import type { LocationImage } from '@/lib/type'
 

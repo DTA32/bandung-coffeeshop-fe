@@ -14,6 +14,8 @@
   --color-surface: #ffffff;
   --color-forest-light: #a0b090;
   --color-forest-lighter: #eaf3de;
+  --color-star: #e3a53b;
+  --color-scrim: #1e2a18;
 
   /* Utility colors */
   --color-warning: var(--color-amber-700);
@@ -27,6 +29,8 @@
   --color-price-high-bg: var(--color-red-100);
   --color-muted: var(--color-gray-600);
   --color-muted-bg: var(--color-gray-100);
+
+  --shadow-dialog: 0 24px 60px rgb(30 42 24 / 0.2);
 
   --font-sans: 'Plus Jakarta Sans Variable', sans-serif;
 }

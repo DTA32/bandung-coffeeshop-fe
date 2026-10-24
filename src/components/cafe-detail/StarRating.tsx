@@ -33,7 +33,7 @@ export function StarDisplay({ score, size = 14, className }: StarDisplayProps) {
             <Star
               size={size}
               aria-hidden="true"
-              className="absolute inset-0 fill-[#E2E8DA] text-[#E2E8DA] dark:fill-grove-light dark:text-grove-light"
+              className="absolute inset-0 fill-grove-light text-grove-light"
             />
             {fill > 0 && (
               <span
@@ -43,7 +43,7 @@ export function StarDisplay({ score, size = 14, className }: StarDisplayProps) {
                 <Star
                   size={size}
                   aria-hidden="true"
-                  className="fill-[#E3A53B] text-[#E3A53B]"
+                  className="fill-star text-star"
                 />
               </span>
             )}
@@ -145,8 +145,8 @@ export function StarInput({
               className={cn(
                 'transition-colors',
                 n <= shown
-                  ? 'fill-[#E3A53B] text-[#E3A53B]'
-                  : 'fill-surface text-[#B9D2A3] dark:text-grove-light',
+                  ? 'fill-star text-star'
+                  : 'fill-surface text-grove-light',
               )}
             />
             {showLabels && (
@@ -154,7 +154,7 @@ export function StarInput({
                 className={cn(
                   'text-[11px] leading-none',
                   selected === n
-                    ? 'font-bold text-[#A8741E] dark:text-amber-300'
+                    ? 'font-bold text-warning'
                     : 'text-forest-light',
                 )}
               >

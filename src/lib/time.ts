@@ -31,3 +31,16 @@ export function formatRelativeTime(
     'second',
   )
 }
+
+// The current year and month in WIB, which is what the API validates
+// `visited_at` against.
+export function currentMonthWIB(): { year: number; month: number } {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: 'numeric',
+  }).formatToParts(new Date())
+  const get = (type: string) =>
+    Number(parts.find((p) => p.type === type)?.value)
+  return { year: get('year'), month: get('month') }
+}

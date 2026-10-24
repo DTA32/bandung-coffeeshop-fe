@@ -29,7 +29,7 @@ export default function ScoreCard({
       <div className="flex justify-between gap-4">
         {hasOverall && (
           <div className="flex flex-col gap-2">
-            <span className="text-xs font-semibold text-[#7A8E70] dark:text-bark">
+            <span className="text-xs font-semibold text-bark">
               {t('cafe.overallScore')}
             </span>
             <span className="text-[28px] font-bold text-forest leading-none">
@@ -49,7 +49,7 @@ export default function ScoreCard({
               hasOverall ? 'items-end' : 'items-start',
             )}
           >
-            <span className="text-xs font-semibold text-[#7A8E70] dark:text-bark">
+            <span className="text-xs font-semibold text-bark">
               {t('cafe.wfcScore')}
             </span>
             <span className="text-[28px] font-bold text-grove leading-none">

@@ -2,7 +2,7 @@ import { useId } from 'react'
 import { useRouterState } from '@tanstack/react-router'
 import { CircleAlert, X } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
-import Dialog from '@/components/Dialog'
+import Dialog from '@/components/shared/Dialog'
 import LocaleLink from '@/components/LocaleLink'
 import { loginUrl } from '@/lib/api/auth'
 
