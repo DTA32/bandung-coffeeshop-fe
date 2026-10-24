@@ -246,13 +246,13 @@
     "closed": "Closed",
     "specialHours": "Special hours",
     "weekdays": {
-      "mon": "Mon",
-      "tue": "Tue",
-      "wed": "Wed",
-      "thu": "Thu",
-      "fri": "Fri",
-      "sat": "Sat",
-      "sun": "Sun"
+      "mon": "Monday",
+      "tue": "Tuesday",
+      "wed": "Wednesday",
+      "thu": "Thursday",
+      "fri": "Friday",
+      "sat": "Saturday",
+      "sun": "Sunday"
     },
     "lastUpdatedOn": "Last updated on",
     "otherCafesNearby": "Other cafes nearby",
