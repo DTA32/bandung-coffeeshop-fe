@@ -1,7 +1,8 @@
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import LocaleLink from '@/components/LocaleLink'
-import type { CafeTags } from '@/lib/api/cafe'
+import OpeningHours, { dayHoursText } from './OpeningHours'
+import type { CafeTags, DayHours } from '@/lib/api/cafe'
 import { exploreSplat } from '@/lib/explore'
 import { menuKind } from '@/lib/menu'
 import type { Location } from '@/lib/type'
@@ -11,8 +12,7 @@ interface QuickFactsProps {
   menu?: string | null
   locations: Location[]
   tags: CafeTags[]
-  openHour: string | null
-  closeHour: string | null
+  hours: DayHours[] // 7 days starting today
 }
 
 // Renders the deepest location (district/area) as a link. Callers gate this on
@@ -44,22 +44,12 @@ export default function QuickFacts({
   menu,
   locations,
   tags,
-  openHour,
-  closeHour,
+  hours,
 }: QuickFactsProps) {
   const { t } = useTranslation()
-  let hours = ''
-  if (openHour !== null && closeHour !== null) {
-    if (openHour === '00:00' && closeHour === '23:59') {
-      hours = t('cafe.open24Hours')
-    } else {
-      hours = `${openHour} - ${closeHour}`
-    }
-  } else if (openHour !== null) {
-    hours = `${t('cafe.openFrom')} ${openHour}`
-  } else if (closeHour !== null) {
-    hours = `${t('cafe.closesAt')} ${closeHour}`
-  }
+  // Today's hours; '' (row hidden) when unknown.
+  const today = hours.at(0)
+  const todayText = today ? dayHoursText(today, t) : ''
   const menuType = menuKind(menu)
   const hasLastLocation = locations.length >= 1 && locations.length <= 2
 
@@ -139,14 +129,12 @@ export default function QuickFacts({
             </dd>
           </div>
         )}
-        {hours !== '' && (
-          <div className="col-span-2 grid grid-cols-subgrid items-center">
+        {todayText !== '' && (
+          <div className="relative col-span-2 grid grid-cols-subgrid items-center">
             <dt className="text-xs text-bark whitespace-nowrap">
-              {t('cafe.opens')}
+              {t('cafe.openingHours')}
             </dt>
-            <dd className="text-xs font-semibold text-forest text-right m-0">
-              {hours}
-            </dd>
+            <OpeningHours hours={hours} todayText={todayText} />
           </div>
         )}
       </dl>
@@ -154,7 +142,7 @@ export default function QuickFacts({
         menuType === null &&
         !hasLastLocation &&
         tags.length === 0 &&
-        hours === '' && (
+        todayText === '' && (
           <div className="flex justify-center items-center h-16">
             <span className="text-xs text-bark">{t('cafe.noQuickFacts')}</span>
           </div>

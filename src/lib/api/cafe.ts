@@ -55,8 +55,6 @@ export interface CafeData {
   status: string
   images: LocationImage[]
   instagram: string | null
-  open_hour: string | null
-  close_hour: string | null
   hours: DayHours[] // 7 days starting today (Jakarta)
   regular_hours: RegularDayHours[] // always 7 entries, mon → sun
   gmaps_id: string | null

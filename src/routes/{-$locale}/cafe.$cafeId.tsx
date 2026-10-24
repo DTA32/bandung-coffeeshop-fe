@@ -139,8 +139,7 @@ function Widgets(): JSX.Element {
           menu={cafe.menu ?? null}
           locations={cafe.locations}
           tags={review.tags}
-          openHour={cafe.open_hour}
-          closeHour={cafe.close_hour}
+          hours={cafe.hours}
         />
         <PriceCard price={cafe.price} />
         <AboutCard about={cafe.about} />
@@ -187,8 +186,7 @@ function Widgets(): JSX.Element {
           menu={cafe.menu ?? null}
           locations={cafe.locations}
           tags={review.tags}
-          openHour={cafe.open_hour}
-          closeHour={cafe.close_hour}
+          hours={cafe.hours}
         />
         <ScoreCard
           overallScore={review.overall_score}
