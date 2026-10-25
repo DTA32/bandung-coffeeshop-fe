@@ -117,13 +117,13 @@ export default function ReviewCard({ review, own }: ReviewCardProps) {
         </p>
       )}
       {(isLong || review.external_url_link) && (
-        <div className="mt-auto flex items-center justify-between gap-2 pt-1">
+        <div className="mt-auto flex flex-col gap-2 pt-1">
           {isLong ? (
             <button
               type="button"
               onClick={() => setExpanded((v) => !v)}
               aria-expanded={expanded}
-              className="cursor-pointer border-none bg-transparent p-0 text-xs font-semibold text-moss hover:underline"
+              className="text-start cursor-pointer border-none bg-transparent p-0 text-xs font-semibold text-moss hover:underline"
             >
               {expanded ? t('reviews.seeLess') : t('reviews.seeMore')}
             </button>
