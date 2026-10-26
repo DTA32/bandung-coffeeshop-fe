@@ -2,7 +2,9 @@
   "brand": "BDGCafé",
   "skipToMain": "Lewati ke konten utama",
   "common": {
-    "or": "atau"
+    "or": "atau",
+    "seeMore": "Lihat selengkapnya",
+    "seeLess": "Lihat lebih sedikit"
   },
   "nav": {
     "home": "Beranda",
@@ -233,8 +235,6 @@
     "seeMenu": "Lihat menu",
     "latestUpdates": "Update terbaru",
     "viewOriginalPost": "Lihat postingan asli",
-    "more": "selengkapnya",
-    "less": "lebih sedikit",
     "tags": "Tag",
     "openingHours": "Jam buka",
     "open24Hours": "Buka 24 jam",
@@ -278,8 +278,6 @@
     "you": "{{name}} (kamu)",
     "pending": "Menunggu persetujuan",
     "visited": "dikunjungi {{date}}",
-    "seeMore": "Lihat selengkapnya",
-    "seeLess": "Lihat lebih sedikit",
     "edit": "Ubah ulasanmu",
     "starsLabel": "{{score}} dari 5 bintang",
     "rateStars_one": "Beri {{count}} bintang",

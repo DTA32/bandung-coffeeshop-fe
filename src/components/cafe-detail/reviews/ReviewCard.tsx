@@ -125,7 +125,7 @@ export default function ReviewCard({ review, own }: ReviewCardProps) {
               aria-expanded={expanded}
               className="text-start cursor-pointer border-none bg-transparent p-0 text-xs font-semibold text-moss hover:underline"
             >
-              {expanded ? t('reviews.seeLess') : t('reviews.seeMore')}
+              {expanded ? t('common.seeLess') : t('common.seeMore')}
             </button>
           ) : (
             <span />
