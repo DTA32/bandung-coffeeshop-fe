@@ -309,10 +309,10 @@ export default function ExplorePage({
             ) : view === 'grid' ? (
               <div
                 className={cn(
-                  'grid gap-6 grid-cols-2',
+                  'grid gap-6 grid-cols-1',
                   mapView || (location && location.type !== 'poi')
-                    ? 'xl:grid-cols-3'
-                    : 'md:grid-cols-3 lg:grid-cols-4',
+                    ? 'md:grid-cols-2 xl:grid-cols-3'
+                    : 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
                 )}
               >
                 {data.cafes.map((cafe) => (

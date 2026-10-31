@@ -6,12 +6,10 @@ import type { CafeListing } from '@/lib/api/search'
 
 export default function CafeListItem({
   cafe,
-  smallVersion = false,
   withBorder = false,
   openNewTab = false,
 }: {
   cafe: CafeListing
-  smallVersion?: boolean
   withBorder?: boolean
   openNewTab?: boolean
 }) {
@@ -43,41 +41,36 @@ export default function CafeListItem({
       target={openNewTab ? '_blank' : undefined}
       params={{ cafeId: cafe.id }}
       className={cn(
-        'flex gap-4 rounded-xl bg-surface no-underline transition hover:bg-grove-light/20',
-        smallVersion ? 'h-20' : 'h-25',
+        'flex gap-4 rounded-xl bg-surface no-underline transition hover:bg-grove-light/20 h-20 md:h-25',
         withBorder && 'border border-grove-light',
       )}
       title={linkTitle}
     >
       <div
-        className={cn(
-          smallVersion ? 'w-20 h-20' : 'w-35',
-          'shrink-0 overflow-hidden rounded-l-lg bg-grove-light',
-        )}
+        className={'w-20 h-20 md:w-35 md:h-auto shrink-0 overflow-hidden rounded-l-lg bg-grove-light'}
       >
         {cafe.thumbnail && (
           <Image
             src={cafe.thumbnail}
             alt={cafe.name}
             layout="fixed"
-            width={smallVersion ? 80 : 140}
-            height={smallVersion ? 80 : 100}
-            className="h-full w-full object-cover"
+            width={140}
+            height={100}
+            className="h-20 w-20 md:h-25 md:w-35 object-cover"
           />
         )}
       </div>
       <div className="flex flex-col justify-center gap-1">
         <h3
           className={cn(
-            'font-semibold text-forest m-0',
-            smallVersion && 'text-sm',
+            'font-semibold text-forest m-0 text-sm md:text-base line-clamp-1 mr-1',
           )}
         >
           {cafe.name}
         </h3>
         {distanceStr && (
           <span
-            className={cn(smallVersion ? 'text-xs' : 'text-sm', 'text-moss')}
+            className={cn('text-xs md:text-sm text-moss')}
           >
             {t('explore.distanceAway', { distance: distanceStr })}
           </span>
@@ -85,8 +78,7 @@ export default function CafeListItem({
         {!distanceStr && description && (
           <span
             className={cn(
-              smallVersion ? 'text-xs' : 'text-sm',
-              'text-bark line-clamp-1',
+              'text-xs md:text-sm text-bark line-clamp-1',
             )}
           >
             {description}
@@ -95,8 +87,7 @@ export default function CafeListItem({
         {formattedRemark && (
           <span
             className={cn(
-              smallVersion ? 'text-xs' : 'text-sm',
-              'text-bark line-clamp-1',
+              'text-xs md:text-sm text-bark line-clamp-1',
             )}
           >
             {formattedRemark}
