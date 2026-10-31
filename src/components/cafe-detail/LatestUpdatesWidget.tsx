@@ -32,7 +32,7 @@ function FeedCard({ item }: { item: CafeFeedItem }) {
       timeZone: 'Asia/Jakarta',
     },
   )
-  // Relative time ("2 days ago") is client-only: the server/prerender pass and
+  // Relative time ("2 days ago") is client-only: the SSR pass and
   // the first client render show the absolute date so hydration matches.
   const [relative, setRelative] = useState<string | null>(null)
   useEffect(() => {

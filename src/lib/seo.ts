@@ -136,7 +136,8 @@ function barePath(path: string): string {
 // hreflang alternates for a page: the id (bare) and en (/en) URLs, plus
 // x-default → id (the default locale). Each page advertises the full set,
 // including itself. Built from the canonical path by toggling the locale prefix.
-function alternateLinks(canonicalPath: string) {
+// Also the sitemap's <xhtml:link> alternates (src/lib/sitemap.ts).
+export function alternateLinks(canonicalPath: string) {
   const bare = barePath(canonicalPath)
   const idHref = SITE_URL + bare
   const enHref = SITE_URL + (bare === '/' ? '/en' : '/en' + bare)
@@ -283,8 +284,7 @@ export function cafeJsonLd(
     '@type': 'CafeOrCoffeeShop',
     name: cafe.name,
     url: SITE_URL + canonicalPath,
-    // Non-canonical on a Place (validators may warn) but ignored by Google;
-    // also the anchor prerender reads to set sitemap <lastmod> (vite.config.ts).
+    // Non-canonical on a Place (validators may warn) but ignored by Google.
     dateModified: cafe.updated_at,
     address: {
       '@type': 'PostalAddress',

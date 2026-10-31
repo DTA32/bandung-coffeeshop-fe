@@ -28,8 +28,8 @@ const AUTH_ERRORS: ReadonlyArray<LoginError> = ['deactivated', 'failed']
 
 type LoginState = LoginOptions & { error?: LoginError }
 
-// AuthProvider owns the session state for the whole app. Pages are SSR'd and
-// prerendered anonymously, so every render starts as 'loading' and the session
+// AuthProvider owns the session state for the whole app. Pages are SSR'd
+// anonymously, so every render starts as 'loading' and the session
 // is resolved in the browser after hydration; any failure (no backend, 401,
 // network) just means 'anon'. It also hosts the single login modal.
 export default function AuthProvider({ children }: { children: ReactNode }) {
