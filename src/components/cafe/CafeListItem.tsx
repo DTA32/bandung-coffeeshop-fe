@@ -47,7 +47,7 @@ export default function CafeListItem({
       title={linkTitle}
     >
       <div
-        className={'w-20 h-20 md:w-35 md:h-auto shrink-0 overflow-hidden rounded-l-lg bg-grove-light'}
+        className="w-20 h-20 md:w-35 md:h-auto shrink-0 overflow-hidden rounded-l-lg bg-grove-light"
       >
         {cafe.thumbnail && (
           <Image
@@ -61,35 +61,21 @@ export default function CafeListItem({
         )}
       </div>
       <div className="flex flex-col justify-center gap-1">
-        <h3
-          className={cn(
-            'font-semibold text-forest m-0 text-sm md:text-base line-clamp-1 mr-1',
-          )}
-        >
+        <h3 className="font-semibold text-forest m-0 text-sm md:text-base line-clamp-1 mr-1">
           {cafe.name}
         </h3>
         {distanceStr && (
-          <span
-            className={cn('text-xs md:text-sm text-moss')}
-          >
+          <span className="text-xs md:text-sm text-moss">
             {t('explore.distanceAway', { distance: distanceStr })}
           </span>
         )}
         {!distanceStr && description && (
-          <span
-            className={cn(
-              'text-xs md:text-sm text-bark line-clamp-1',
-            )}
-          >
+          <span className="text-xs md:text-sm text-bark line-clamp-1">
             {description}
           </span>
         )}
         {formattedRemark && (
-          <span
-            className={cn(
-              'text-xs md:text-sm text-bark line-clamp-1',
-            )}
-          >
+          <span className="text-xs md:text-sm text-bark line-clamp-1">
             {formattedRemark}
           </span>
         )}

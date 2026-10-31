@@ -316,7 +316,16 @@ export default function ExplorePage({
                 )}
               >
                 {data.cafes.map((cafe) => (
-                  <CafeCard key={cafe.id} cafe={cafe} small={false} />
+                  <CafeCard
+                    key={cafe.id}
+                    cafe={cafe}
+                    small={false}
+                    imageSizes={
+                      mapView || (location && location.type !== 'poi')
+                        ? '(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw'
+                        : undefined
+                    }
+                  />
                 ))}
               </div>
             ) : (
