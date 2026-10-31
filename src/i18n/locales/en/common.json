@@ -2,7 +2,9 @@
   "brand": "BDGCafé",
   "skipToMain": "Skip to main content",
   "common": {
-    "or": "or"
+    "or": "or",
+    "seeMore": "See more",
+    "seeLess": "See less"
   },
   "nav": {
     "home": "Home",
@@ -238,8 +240,6 @@
     "seeMenu": "See menu",
     "latestUpdates": "Latest updates",
     "viewOriginalPost": "View original post",
-    "more": "more",
-    "less": "less",
     "tags": "Tags",
     "openingHours": "Opening hours",
     "open24Hours": "Open 24 hours",
@@ -283,8 +283,6 @@
     "you": "{{name}} (you)",
     "pending": "Pending approval",
     "visited": "visited {{date}}",
-    "seeMore": "See more",
-    "seeLess": "See less",
     "edit": "Edit your review",
     "starsLabel": "{{score}} out of 5 stars",
     "rateStars_one": "Rate {{count}} star",

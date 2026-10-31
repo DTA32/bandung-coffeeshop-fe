@@ -87,7 +87,7 @@ function FeedCard({ item }: { item: CafeFeedItem }) {
             aria-expanded={expanded}
             className="self-start cursor-pointer border-none bg-transparent p-0 text-xs font-semibold text-moss hover:underline"
           >
-            {expanded ? t('cafe.less') : t('cafe.more')}
+            {expanded ? t('common.seeLess') : t('common.seeMore')}
           </button>
         )}
         {item.link && (
