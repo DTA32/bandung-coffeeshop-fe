@@ -22,6 +22,7 @@ const STATIC_PATHS = [
 interface SitemapEntry {
   path: string // bare (Indonesian) path
   lastmod?: string
+  image?: string // absolute URL, emitted as <image:image>
 }
 
 // The sitemap's pages: the static ones, every active or closed cafe, and the
@@ -36,7 +37,11 @@ export function sitemapEntries(
   const entries: SitemapEntry[] = STATIC_PATHS.map((path) => ({ path }))
 
   for (const cafe of data.cafes) {
-    entries.push({ path: `/cafe/${cafe.id}`, lastmod: cafe.updated_at })
+    entries.push({
+      path: `/cafe/${cafe.id}`,
+      lastmod: cafe.updated_at,
+      image: cafe.image ?? undefined,
+    })
   }
 
   const registry = buildSrpRegistry(options)
@@ -78,9 +83,10 @@ function escapeXml(s: string): string {
 }
 
 // Renders the entries as a sitemap with hreflang alternates, per Google's
-// localized-versions format. The namespace is the protocol's exact http:// URI.
+// localized-versions format, and a cafe's first photo as an <image:image> per
+// Google's image sitemap extension. The namespaces are the exact http:// URIs.
 export function renderSitemapXml(entries: SitemapEntry[]): string {
-  const urls = entries.map(({ path, lastmod }) => {
+  const urls = entries.map(({ path, lastmod, image }) => {
     const lines = [`    <loc>${escapeXml(SITE_URL + path)}</loc>`]
     if (lastmod) lines.push(`    <lastmod>${escapeXml(lastmod)}</lastmod>`)
     for (const link of alternateLinks(path)) {
@@ -88,11 +94,16 @@ export function renderSitemapXml(entries: SitemapEntry[]): string {
         `    <xhtml:link rel="alternate" hreflang="${link.hrefLang}" href="${escapeXml(link.href)}" />`,
       )
     }
+    if (image) {
+      lines.push(
+        `    <image:image>\n      <image:loc>${escapeXml(image)}</image:loc>\n    </image:image>`,
+      )
+    }
     return `  <url>\n${lines.join('\n')}\n  </url>`
   })
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
     ...urls,
     '</urlset>',
     '',

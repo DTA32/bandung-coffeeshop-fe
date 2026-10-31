@@ -5,6 +5,7 @@ import type { ApiResponse } from '@/lib/type'
 export interface SitemapCafe {
   id: string
   updated_at: string
+  image: string | null // first cafe image URL (the detail's images[0])
 }
 
 export interface SitemapSrp {
