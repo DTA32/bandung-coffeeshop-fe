@@ -1,5 +1,6 @@
 import { useRouteContext } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import BrandLockup from '@/components/BrandLockup'
 import LocaleLink from '@/components/LocaleLink'
 import LanguageToggle from '@/components/LanguageToggle'
 import ThemeToggle from '@/components/ThemeToggle'
@@ -14,7 +15,13 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-30 flex h-12 items-center justify-between border-b border-grove-light bg-cream px-6 md:px-16">
       <LocaleLink to="/{-$locale}" className="no-underline">
-        <span className="text-xl font-bold text-forest">{t('brand')}</span>
+        <BrandLockup
+          label={t('brand')}
+          className="gap-2 text-forest"
+          markClassName="size-8"
+          wordmarkClassName="h-5"
+          creaseClassName="fill-cream"
+        />
       </LocaleLink>
 
       <nav
