@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import BrandLockup from '@/components/BrandLockup'
 import LocaleLink from '@/components/LocaleLink'
 
 export default function Footer() {
@@ -8,7 +9,13 @@ export default function Footer() {
       <div className="w-full flex flex-col md:flex-row gap-4">
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex flex-col gap-0">
-            <p className="text-lg font-bold">{t('brand')}</p>
+            <BrandLockup
+              label={t('brand')}
+              className="gap-3 self-start pb-2"
+              markClassName="size-12"
+              wordmarkClassName="h-7.5"
+              creaseClassName="fill-forest-lighter"
+            />
             <p className="text-bark">{t('footer.tagline')}</p>
           </div>
         </div>

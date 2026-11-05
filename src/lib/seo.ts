@@ -11,8 +11,8 @@ import type { CafeListing } from '@/lib/api/search'
 
 export const SITE_URL = 'https://bdgcafe.com'
 export const SITE_NAME = 'BDGCafé'
-// Fallback OG image (the site logo) for pages without a content image.
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/logo512.png`
+// Fallback OG image (logo lockup, 1200×630) for pages without a content image.
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`
 
 // Locale-prefixed path: '/en/...' for English, bare for Indonesian. `path`
 // starts with '/'; '/' (home) → '/en' or '/'.
@@ -149,9 +149,9 @@ function alternateLinks(canonicalPath: string) {
 
 // Maps a SeoMeta into a TanStack head object: title + description + Open Graph /
 // Twitter meta, the canonical link, hreflang alternates, and any JSON-LD
-// <script>s. og:image falls back to the site logo when there's no content image,
-// so every page ships a valid image; twitter:card is the large card only for a
-// real content image.
+// <script>s. og:image falls back to the 1200×630 logo lockup when there's no
+// content image, so every page ships a valid image; twitter:card is always the
+// large card, since the square `summary` crop would cut the wide lockup.
 export function seoHead(seo: SeoMeta) {
   const url = SITE_URL + seo.canonicalPath
   const ogImage = seo.ogImage ?? DEFAULT_OG_IMAGE
@@ -170,10 +170,7 @@ export function seoHead(seo: SeoMeta) {
         content: ogLocale(seo.locale === 'en' ? 'id' : 'en'),
       },
       { property: 'og:image', content: ogImage },
-      {
-        name: 'twitter:card',
-        content: seo.ogImage ? 'summary_large_image' : 'summary',
-      },
+      { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:image', content: ogImage },
       ...(seo.noindex ? [{ name: 'robots', content: 'noindex, follow' }] : []),
     ],
