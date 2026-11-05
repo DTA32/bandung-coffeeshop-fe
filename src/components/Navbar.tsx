@@ -132,12 +132,10 @@ function NavMenu() {
         id={menuId}
         hidden={!open}
         aria-hidden={!open}
-        className={
-          cn(
-            'absolute right-4 bottom-full mb-2 flex w-55 flex-col gap-2 rounded-2xl border border-grove-light bg-surface p-3.5 text-left text-sm shadow-lg',
-            open ? 'flex' : 'hidden'
-          )
-        }
+        className={cn(
+          'absolute right-4 bottom-full mb-2 flex w-55 flex-col gap-2 rounded-2xl border border-grove-light bg-surface p-3.5 text-left text-sm shadow-lg',
+          open ? 'flex' : 'hidden',
+        )}
       >
         <LanguageToggle variant="menu" />
         <ThemeToggle variant="menu" />
