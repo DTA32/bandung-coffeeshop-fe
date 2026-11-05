@@ -2,6 +2,7 @@ import { useId } from 'react'
 import { useRouterState } from '@tanstack/react-router'
 import { CircleAlert, X } from 'lucide-react'
 import { Trans, useTranslation } from 'react-i18next'
+import BrandLockup from '@/components/BrandLockup'
 import Dialog from '@/components/shared/Dialog'
 import LocaleLink from '@/components/LocaleLink'
 import { loginUrl } from '@/lib/api/auth'
@@ -81,7 +82,13 @@ export default function LoginModal({
       </button>
 
       <div className="flex flex-col gap-2">
-        <span className="text-xl font-bold text-forest">{t('brand')}</span>
+        <BrandLockup
+          label={t('brand')}
+          className="gap-2 self-start text-forest"
+          markClassName="size-8"
+          wordmarkClassName="h-5"
+          creaseClassName="fill-surface"
+        />
         <h2 id={titleId} className="text-lg font-bold text-forest">
           {cafeName
             ? t('auth.titleReview', { cafe: cafeName })

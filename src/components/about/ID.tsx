@@ -1,10 +1,18 @@
+import { Wordmark } from '@/components/BrandLockup'
 import Image from '@/components/Image'
 
 export default function AboutID() {
   return (
     <section className="mx-auto max-w-3xl rounded-2xl p-6 sm:p-8 text-forest flex flex-col gap-10">
       <div className="flex flex-col gap-4">
-        <h1 className="font-semibold">Tentang BDGCafé ☕️</h1>
+        <h1 className="font-semibold">
+          Tentang{' '}
+          <Wordmark
+            className="inline-block h-[1.1em] align-[-0.035em]"
+            creaseClassName="fill-cream"
+          />
+          <span className="sr-only">BDGCafé</span>
+        </h1>
         <p className="text-lg text-bark">
           BDGCafé adalah panduan untuk kafe terbaik di Bandung yang dibuat
           oleh&nbsp;
