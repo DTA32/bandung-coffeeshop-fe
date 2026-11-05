@@ -218,6 +218,7 @@ export function organizationJsonLd(): object {
     '@type': 'Organization',
     name: SITE_NAME,
     url: SITE_URL,
+    logo: `${SITE_URL}/logo512.png`,
     description:
       'Honest, personal coffee shop reviews and discovery in Bandung.',
   }

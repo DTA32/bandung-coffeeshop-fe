@@ -8,12 +8,12 @@ export default function Footer() {
     <footer className="bg-forest-lighter text-forest text-sm py-4 px-6 md:px-16 flex flex-col gap-2">
       <div className="w-full flex flex-col md:flex-row gap-4">
         <div className="flex-1 flex flex-col gap-4">
-          <div className="flex flex-col gap-0">
+          <div className="flex flex-col gap-2">
             <BrandLockup
               label={t('brand')}
-              className="gap-3 self-start pb-2"
-              markClassName="size-12"
-              wordmarkClassName="h-7.5"
+              className="gap-1.5 self-start"
+              markClassName="size-8"
+              wordmarkClassName="h-5"
               creaseClassName="fill-forest-lighter"
             />
             <p className="text-bark">{t('footer.tagline')}</p>
