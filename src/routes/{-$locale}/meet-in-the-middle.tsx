@@ -12,8 +12,8 @@ import { z } from 'zod'
 import { decodeMarker, encodeMarker, randomGreenHex } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import { DesktopLayout, MobileLayout } from '@/components/meet-in-the-middle'
-import { searchCafes } from '@/lib/api/search'
-import type { SearchCafesData } from '@/lib/api/search'
+import { searchCafes, searchCafeMarkers } from '@/lib/api/search'
+import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import {
   seoHead,
@@ -93,6 +93,7 @@ function useMeetInTheMiddle() {
   const [radiusKm, setRadiusKm] = useState(1.0)
   const [sort, setSort] = useState<string>('distance')
   const [results, setResults] = useState<SearchCafesData | null>(null)
+  const [cafeMarkers, setCafeMarkers] = useState<CafeMarker[]>([])
   const [resultsRadiusKm, setResultsRadiusKm] = useState(1.0)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -116,8 +117,16 @@ function useMeetInTheMiddle() {
     })
   }
 
-  function addMarker(lat: number, lng: number) {
+  // Clearing the previous search drops both its list and its pins, so a stale
+  // marker set never lingers after the markers/radius change that invalidated
+  // it.
+  function clearResults() {
     setResults(null)
+    setCafeMarkers([])
+  }
+
+  function addMarker(lat: number, lng: number) {
+    clearResults()
     commitMarkers([
       ...markers,
       {
@@ -132,7 +141,7 @@ function useMeetInTheMiddle() {
 
   function removeMarker(id: string) {
     setEditingId(null)
-    setResults(null)
+    clearResults()
     commitMarkers(markers.filter((m) => m.id !== id))
   }
 
@@ -141,7 +150,7 @@ function useMeetInTheMiddle() {
   }
 
   function updateMarkerPosition(id: string, lat: number, lng: number) {
-    setResults(null)
+    clearResults()
     commitMarkers(
       markers.map((m) => (m.id === id ? { ...m, lat, lng } : m)),
       { replace: true },
@@ -150,24 +159,42 @@ function useMeetInTheMiddle() {
 
   function changeRadius(km: number) {
     setRadiusKm(km)
-    setResults(null)
+    clearResults()
   }
 
-  async function runSearch(sortValue: string | undefined = sort) {
+  // runSearch fetches the paginated list. On the initial search (and any
+  // filter/radius change) it also refetches the map pins from the markers
+  // endpoint; a sort change passes refetchMarkers=false since sort order is
+  // irrelevant to pins.
+  async function runSearch(
+    sortValue: string | undefined = sort,
+    refetchMarkers = true,
+  ) {
     if (!midpoint) return
     setLoading(true)
+    const coords = `${midpoint.lat},${midpoint.lng}`
+    const radiusM = radiusKm * 1000
     try {
-      const data = await searchCafes(
-        {
-          sort: sortValue,
-          size: 200,
-          page: 1,
-          query_coords: `${midpoint.lat},${midpoint.lng}`,
-          radius_max: radiusKm * 1000,
-        },
-        locale,
-      )
+      const [data, markerData] = await Promise.all([
+        searchCafes(
+          {
+            sort: sortValue,
+            size: 200,
+            page: 1,
+            query_coords: coords,
+            radius_max: radiusM,
+          },
+          locale,
+        ),
+        refetchMarkers
+          ? searchCafeMarkers(
+              { query_coords: coords, radius_max: radiusM },
+              locale,
+            )
+          : Promise.resolve<CafeMarker[] | null>(null),
+      ])
       setResults(data)
+      if (markerData) setCafeMarkers(markerData)
       setResultsRadiusKm(radiusKm)
     } catch (e) {
       console.log(e)
@@ -180,7 +207,7 @@ function useMeetInTheMiddle() {
 
   function handleChangeSort(next: string) {
     setSort(next)
-    runSearch(next)
+    runSearch(next, false)
   }
 
   const sharedProps = {
@@ -188,6 +215,7 @@ function useMeetInTheMiddle() {
     radiusKm,
     onChangeRadius: changeRadius,
     results,
+    cafeMarkers,
     resultsRadiusKm,
     sort,
     onChangeSort: handleChangeSort,

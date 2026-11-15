@@ -5,8 +5,12 @@ import {
   ExploreError,
   ExploreNotFound,
 } from '@/components/explore'
-import { searchCafes } from '@/lib/api/search'
-import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
+import { markerParamsOf, searchCafes } from '@/lib/api/search'
+import type {
+  ExploreSearch,
+  SearchCafesData,
+  SearchCafesParams,
+} from '@/lib/api/search'
 import {
   exploreLoaderDeps,
   validateExploreSearch,
@@ -31,6 +35,7 @@ import { createI18n, normalizeLocale } from '@/i18n'
 
 interface SplatLoaderData {
   searchData: SearchCafesData
+  markerParams: SearchCafesParams
   locationData: LocationData | undefined
   appliedFilters: Partial<ExploreSearch>
   srpContent: SrpContent
@@ -93,11 +98,12 @@ export const Route = createFileRoute('/{-$locale}/explore/$')({
     // it. (locationSplat below keeps the focus available for applyFilters.)
     const hasPathFilters = Object.keys(resolved.params).length > 0
 
+    const searchParams = { ...deps, ...focus, ...resolved.params }
     const [locationData, searchData] = await Promise.all([
       focus && !hasPathFilters
         ? getLocation(focus.query_id, lang)
         : Promise.resolve(undefined as LocationData | undefined),
-      searchCafes({ ...deps, ...focus, ...resolved.params }, lang),
+      searchCafes(searchParams, lang),
     ])
 
     if (Array.isArray(locationData)) {
@@ -151,6 +157,8 @@ export const Route = createFileRoute('/{-$locale}/explore/$')({
 
     const toReturn = {
       searchData,
+      // Filters + focus only (no page/sort), for the client-side map markers.
+      markerParams: markerParamsOf(searchParams),
       locationData,
       // appliedFilters: the filters this pretty URL encodes in its PATH (not the
       // query string), so the filter button's count + modal pre-selection match.
@@ -185,6 +193,7 @@ export const Route = createFileRoute('/{-$locale}/explore/$')({
 function ExploreSplat() {
   const {
     searchData,
+    markerParams,
     locationData,
     appliedFilters,
     srpContent,
@@ -195,6 +204,7 @@ function ExploreSplat() {
   return (
     <ExplorePage
       data={searchData}
+      markerParams={markerParams}
       search={search}
       location={locationData}
       appliedFilters={appliedFilters}

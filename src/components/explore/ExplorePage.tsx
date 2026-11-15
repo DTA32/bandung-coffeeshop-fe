@@ -1,5 +1,6 @@
 import { useRouteContext, useRouterState } from '@tanstack/react-router'
 import { LayoutGrid, List, Map } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/SearchBox'
 import { CafeCard, CafeListItem } from '@/components/cafe'
@@ -15,9 +16,15 @@ import LocaleLink from '@/components/LocaleLink'
 import type { SrpContent } from '@/lib/srp'
 import type { FilterOptions } from '@/lib/api/filters'
 import { buildExploreH1, srpLocationClause } from '@/lib/seoTemplate'
-import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
-import { cleanExploreSearch } from '@/lib/api/search'
+import type {
+  CafeMarker,
+  ExploreSearch,
+  SearchCafesData,
+  SearchCafesParams,
+} from '@/lib/api/search'
+import { cleanExploreSearch, searchCafeMarkers } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
+import type { Locale } from '@/lib/locale'
 import type { LocationData } from '@/lib/api/location'
 import { cn } from '@/lib/cn'
 import { parseWeather, WEATHER_CURRENT, weatherPhrase } from '@/lib/explore'
@@ -55,6 +62,40 @@ export function ExploreNotFound() {
       </LocaleLink>
     </main>
   )
+}
+
+// Map pins for every cafe matching the filters, fetched on the client only
+// while a map is on screen (effects never run during SSR). params carries
+// filters + focus only, so page/sort/view changes keep the same key and don't
+// refetch. A new key aborts the in-flight request; the old pins stay up until
+// the new ones arrive.
+function useCafeMarkers(
+  params: SearchCafesParams | undefined,
+  enabled: boolean,
+  lang: Locale,
+): CafeMarker[] {
+  const [markers, setMarkers] = useState<CafeMarker[]>([])
+  const fetchedKey = useRef<string | null>(null)
+  const key = params ? JSON.stringify([lang, params]) : null
+
+  useEffect(() => {
+    if (!enabled || !params || key === null || key === fetchedKey.current)
+      return
+    const controller = new AbortController()
+    searchCafeMarkers(params, lang, controller.signal)
+      .then((data) => {
+        fetchedKey.current = key
+        setMarkers(data)
+      })
+      .catch((e) => {
+        // Aborted by a newer key, or a 404 the list call already surfaces.
+        if (!controller.signal.aborted) console.error(e)
+      })
+    return () => controller.abort()
+    // params is captured through key.
+  }, [key, enabled])
+
+  return markers
 }
 
 // Grid / List / Show-Map view toggle bar.
@@ -156,6 +197,7 @@ function ViewToggle({
 
 export default function ExplorePage({
   data,
+  markerParams,
   search,
   location,
   appliedFilters,
@@ -164,6 +206,8 @@ export default function ExplorePage({
   filterOptions,
 }: {
   data: SearchCafesData
+  // The list's filters + focus without page/size/sort/order; drives the pins.
+  markerParams?: SearchCafesParams
   search: ExploreSearch
   location?: LocationData
   appliedFilters?: Partial<ExploreSearch>
@@ -184,6 +228,10 @@ export default function ExplorePage({
   const page = search.page ?? 1
   const view = search.view ?? 'grid'
   const mapView = search.map_view === true
+  // A map is on screen in the full map view, or as the minimized preview a
+  // non-POI location with show_map renders (ExplorePanel → LocationHero).
+  const mapShown = mapView || (!!location?.show_map && location.type !== 'poi')
+  const cafeMarkers = useCafeMarkers(markerParams, mapShown, locale)
   const totalPages = Math.ceil(data.total / (search.size ?? 8))
 
   // Path-encoded filters (pretty URL) merged onto the query-string search. Used
@@ -237,7 +285,7 @@ export default function ExplorePage({
           isMobile={isMobile}
           location={location}
           marker={marker}
-          results={data}
+          cafes={cafeMarkers}
           onPlace={placeMarker}
           onHideMap={() => goTo({ map_view: undefined, view: undefined })}
           onExpandMap={() => goTo({ map_view: true, view: 'list' })}
@@ -251,7 +299,7 @@ export default function ExplorePage({
             isMobile={isMobile}
             location={location}
             marker={marker}
-            results={data}
+            cafes={cafeMarkers}
             onPlace={placeMarker}
             onHideMap={() => goTo({ map_view: undefined, view: undefined })}
             onExpandMap={() => goTo({ map_view: true, view: 'list' })}

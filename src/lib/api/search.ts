@@ -27,6 +27,15 @@ export interface CafeListing {
   coordinates?: { lat: number; lng: number }
 }
 
+// CafeMarker is a single map pin from /v1/search/cafes/markers: the minimum
+// needed to draw a cafe and link to it. coordinates is always present (the
+// backend omits cafes without coordinates).
+export interface CafeMarker {
+  id: string
+  name: string
+  coordinates: { lat: number; lng: number }
+}
+
 export type WeatherCondition = 'clear' | 'cloudy' | 'rain'
 
 export interface CurrentWeather {
@@ -186,6 +195,41 @@ export async function searchCafes(
   if (res.status === 404) throw notFound()
   if (!res.ok) throw new Error('Failed to fetch cafes')
   const json: { success: boolean; data: SearchCafesData } = await res.json()
+  return json.data
+}
+
+// markerParamsOf drops the params /v1/search/cafes/markers ignores
+// (page/size/sort/order), leaving only the filters and focus. Loaders hand
+// this to ExplorePage so the markers fetch keys off filters alone.
+export function markerParamsOf({
+  page: _page,
+  size: _size,
+  sort: _sort,
+  order: _order,
+  ...filters
+}: SearchCafesParams): SearchCafesParams {
+  return filters
+}
+
+// searchCafeMarkers fetches every cafe matching the filters as a map pin from
+// /v1/search/cafes/markers. It reuses buildSearchParams but drops the params
+// the endpoint ignores (page/size/sort/order), and mirrors searchCafes's
+// 404→notFound handling so an unknown location behaves the same as the list.
+// Pass a signal to abort an in-flight request when filters change.
+export async function searchCafeMarkers(
+  params: SearchCafesParams,
+  lang?: Locale,
+  signal?: AbortSignal,
+): Promise<CafeMarker[]> {
+  const sp = buildSearchParams(markerParamsOf(params))
+  const res = await apiFetch('/v1/search/cafes/markers', {
+    lang,
+    params: sp,
+    signal,
+  })
+  if (res.status === 404) throw notFound()
+  if (!res.ok) throw new Error('Failed to fetch cafe markers')
+  const json: { success: boolean; data: CafeMarker[] } = await res.json()
   return json.data
 }
 
