@@ -4,8 +4,8 @@ import {
   ExploreError,
   ExploreNotFound,
 } from '@/components/explore'
-import { searchCafes } from '@/lib/api/search'
-import type { SearchCafesData } from '@/lib/api/search'
+import { markerParamsOf, searchCafes } from '@/lib/api/search'
+import type { SearchCafesData, SearchCafesParams } from '@/lib/api/search'
 import { getFilterOptions } from '@/lib/api/filters'
 import type { FilterOptions } from '@/lib/api/filters'
 import { buildSrpContent, countSrpFilters, isIndexableSrp } from '@/lib/srp'
@@ -18,6 +18,7 @@ import { createI18n, normalizeLocale } from '@/i18n'
 
 interface IndexLoaderData {
   searchData: SearchCafesData
+  markerParams: SearchCafesParams
   srpContent: SrpContent
   seo: SeoMeta
   filterOptions: FilterOptions | undefined
@@ -58,7 +59,13 @@ export const Route = createFileRoute('/{-$locale}/explore/')({
       resultCount: searchData.total,
     })
     if (!indexable) seo.noindex = true
-    return { searchData, srpContent, seo, filterOptions }
+    return {
+      searchData,
+      markerParams: markerParamsOf(deps),
+      srpContent,
+      seo,
+      filterOptions,
+    }
   },
   errorComponent: ExploreError,
   notFoundComponent: ExploreNotFound,
@@ -66,11 +73,13 @@ export const Route = createFileRoute('/{-$locale}/explore/')({
 })
 
 function ExploreIndex() {
-  const { searchData, srpContent, filterOptions } = Route.useLoaderData()
+  const { searchData, markerParams, srpContent, filterOptions } =
+    Route.useLoaderData()
   const search = Route.useSearch()
   return (
     <ExplorePage
       data={searchData}
+      markerParams={markerParams}
       search={search}
       srpContent={srpContent}
       filterOptions={filterOptions}

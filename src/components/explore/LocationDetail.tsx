@@ -6,18 +6,18 @@ import LocationDescendants, {
 import LocationHero from '@/components/explore/LocationHero'
 import WelcomeHeading from '@/components/explore/WelcomeHeading'
 import type { LocationData } from '@/lib/api/location'
-import type { SearchCafesData } from '@/lib/api/search'
+import type { CafeMarker } from '@/lib/api/search'
 import { cn } from '@/lib/cn'
 
 export default function LocationDetail({
   location,
   isMobile,
-  searchResult,
+  cafes,
   onExpandMap,
 }: {
   location: LocationData
   isMobile: boolean
-  searchResult: SearchCafesData | null
+  cafes: CafeMarker[]
   onExpandMap: () => void
 }) {
   const { t } = useTranslation()
@@ -51,7 +51,7 @@ export default function LocationDetail({
       <LocationHero
         location={location}
         isMobile={isMobile}
-        searchResult={searchResult}
+        cafes={cafes}
         onExpandMap={onExpandMap}
       />
       {!isMobile && (

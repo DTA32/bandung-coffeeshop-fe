@@ -1,5 +1,5 @@
 import type { LocationData } from '@/lib/api/location'
-import type { SearchCafesData } from '@/lib/api/search'
+import type { CafeMarker } from '@/lib/api/search'
 import ExploreMapView from '@/components/explore/ExploreMapView'
 import LocationDetail from '@/components/explore/LocationDetail'
 import { TriangleAlert } from 'lucide-react'
@@ -13,7 +13,8 @@ type Props = {
   isMobile: boolean
   location?: LocationData
   marker: MapMarker | null
-  results: SearchCafesData
+  // Pins for every cafe matching the filters (from the markers endpoint).
+  cafes: CafeMarker[]
   onPlace: (lat: number, lng: number, opts?: { replace?: boolean }) => void
   onHideMap: () => void
   onExpandMap: () => void
@@ -24,7 +25,7 @@ export default function ExplorePanel({
   isMobile,
   location,
   marker,
-  results,
+  cafes,
   onPlace,
   onHideMap,
   onExpandMap,
@@ -41,7 +42,7 @@ export default function ExplorePanel({
       >
         <ExploreMapView
           marker={marker}
-          results={results}
+          cafes={cafes}
           onPlace={onPlace}
           onHideMap={onHideMap}
           isMobile={isMobile}
@@ -68,7 +69,7 @@ export default function ExplorePanel({
         <LocationDetail
           location={location}
           isMobile={isMobile}
-          searchResult={results}
+          cafes={cafes}
           onExpandMap={onExpandMap}
         />
       </aside>
