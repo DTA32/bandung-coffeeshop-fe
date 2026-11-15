@@ -155,7 +155,7 @@ export async function getRandomCafe(lang?: Locale): Promise<RandomCafe> {
 
 // ---- User reviews (BCF-30) ----
 // Browser-only: these are fetched after hydration, never in a loader, so the
-// prerendered page stays anonymous and the session cookie is sent.
+// SSR'd page stays anonymous and the session cookie is sent.
 
 export interface CafeReviewItem {
   id: number

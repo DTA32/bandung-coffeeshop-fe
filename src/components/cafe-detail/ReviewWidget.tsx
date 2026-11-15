@@ -25,8 +25,8 @@ interface MineState {
   review: MyReview | null
 }
 
-// ReviewWidget is the user-reviews carousel. Pages are prerendered, so the
-// list and the user's own review are fetched in the browser after hydration.
+// ReviewWidget is the user-reviews carousel. Pages are SSR'd anonymously, so
+// the list and the user's own review are fetched in the browser after hydration.
 export default function ReviewWidget({
   cafeId,
   cafeName,

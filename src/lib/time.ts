@@ -1,7 +1,7 @@
 // formatRelativeTime renders "2 days ago" / "2 hari yang lalu" style text.
 // It depends on the current time, so only call it on the client after
-// hydration: prerendered HTML would otherwise freeze the build time and
-// mismatch on hydrate.
+// hydration: the server's clock and timezone can differ from the browser's,
+// and the SSR HTML would then mismatch on hydrate.
 const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ['year', 365 * 24 * 3600],
   ['month', 30 * 24 * 3600],

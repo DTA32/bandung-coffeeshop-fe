@@ -327,7 +327,7 @@ export function countSrpFilters(params: SrpFilterParams): number {
 // filter combinations are near-duplicates of each other. Every other SRP is
 // rendered noindex, follow so its cafe links are still crawled. Pagination
 // doesn't matter here: ?page=N keeps the page's verdict (it stays out of the
-// sitemap instead, see scripts/prune-sitemap.ts).
+// sitemap instead, see src/lib/sitemap.ts).
 export function isIndexableSrp({
   filterCount,
   resultCount,
