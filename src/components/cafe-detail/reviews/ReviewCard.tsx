@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
 import { ExternalLink, Pencil } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { StarDisplay } from './StarRating'
 import { useLocale, dateLocale } from '@/lib/locale'
 import { cn } from '@/lib/cn'
+import { useExpandableText } from '@/lib/hooks/useExpandableText'
 import type { CafeReviewItem, MyReviewStatus } from '@/lib/api/cafe'
 
 export const REVIEW_CARD_CLASS =
@@ -38,30 +38,14 @@ function linkHost(link: string): string {
 export default function ReviewCard({ review, own }: ReviewCardProps) {
   const { t } = useTranslation()
   const locale = useLocale()
-  const [expanded, setExpanded] = useState(false)
-  const [clamped, setClamped] = useState(false)
-  const textRef = useRef<HTMLParagraphElement>(null)
   const content = review.content ?? ''
-  // "See more" shows only when the clamped text actually overflows; it is
-  // re-measured when the card resizes and once web fonts have loaded.
-  useEffect(() => {
-    const el = textRef.current
-    if (!el || expanded) return
-    let active = true
-    const measure = () => {
-      if (active) setClamped(el.scrollHeight > el.clientHeight + 1)
-    }
-    measure()
-    void document.fonts.ready.then(measure)
-    const observer =
-      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
-    observer?.observe(el)
-    return () => {
-      active = false
-      observer?.disconnect()
-    }
-  }, [content, expanded])
-  const isLong = expanded || clamped
+  const {
+    ref: textRef,
+    expanded,
+    clamp,
+    isLong,
+    toggle,
+  } = useExpandableText<HTMLParagraphElement>(content, 'line-clamp-6')
   const visited = review.visited_at
     ? formatVisit(review.visited_at, dateLocale(locale))
     : null
@@ -110,7 +94,7 @@ export default function ReviewCard({ review, own }: ReviewCardProps) {
           ref={textRef}
           className={cn(
             'm-0 whitespace-pre-line text-[13px] leading-[1.6] text-moss-dark',
-            !expanded && 'line-clamp-6',
+            clamp && 'line-clamp-6',
           )}
         >
           {content}
@@ -121,7 +105,7 @@ export default function ReviewCard({ review, own }: ReviewCardProps) {
           {isLong ? (
             <button
               type="button"
-              onClick={() => setExpanded((v) => !v)}
+              onClick={toggle}
               aria-expanded={expanded}
               className="text-start cursor-pointer border-none bg-transparent p-0 text-xs font-semibold text-moss hover:underline"
             >

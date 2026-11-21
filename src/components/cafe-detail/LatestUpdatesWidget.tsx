@@ -6,23 +6,19 @@ import ImageGallery from '@/components/ImageGallery'
 import { useLocale, dateLocale } from '@/lib/locale'
 import { formatRelativeTime } from '@/lib/time'
 import type { CafeFeedItem } from '@/lib/api/cafe'
+import { cn } from '@/lib/cn'
+import { useExpandableText } from '@/lib/hooks/useExpandableText'
 
 interface LatestUpdatesWidgetProps {
   items: CafeFeedItem[]
 }
 
-// Content longer than this (or with many line breaks) gets the more/less toggle.
-const LONG_CONTENT_CHARS = 140
-const LONG_CONTENT_LINES = 3
-
 function FeedCard({ item }: { item: CafeFeedItem }) {
   const { t } = useTranslation()
   const locale = useLocale()
-  const [expanded, setExpanded] = useState(false)
   const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const isLong =
-    item.content.length > LONG_CONTENT_CHARS ||
-    item.content.split('\n').length > LONG_CONTENT_LINES
+  const { ref, expanded, clamp, isLong, toggle } =
+    useExpandableText<HTMLParagraphElement>(item.content, 'line-clamp-3')
   const published = new Date(item.published_at).toLocaleString(
     dateLocale(locale),
     {
@@ -74,16 +70,18 @@ function FeedCard({ item }: { item: CafeFeedItem }) {
           {relative ?? published}
         </time>
         <p
-          className={`text-[13px] leading-[1.6] m-0 whitespace-pre-line text-moss-dark ${
-            expanded ? '' : 'line-clamp-3'
-          }`}
+          ref={ref}
+          className={cn(
+            'text-[13px] leading-[1.6] m-0 whitespace-pre-line text-moss-dark',
+            clamp && 'line-clamp-3',
+          )}
         >
           {item.content}
         </p>
         {isLong && (
           <button
             type="button"
-            onClick={() => setExpanded((v) => !v)}
+            onClick={toggle}
             aria-expanded={expanded}
             className="self-start cursor-pointer border-none bg-transparent p-0 text-xs font-semibold text-moss hover:underline"
           >

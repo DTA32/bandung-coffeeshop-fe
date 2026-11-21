@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import LocationDescendants, {
   hasPoiDescendants,
@@ -8,6 +7,7 @@ import WelcomeHeading from '@/components/explore/WelcomeHeading'
 import type { LocationData } from '@/lib/api/location'
 import type { CafeMarker } from '@/lib/api/search'
 import { cn } from '@/lib/cn'
+import { useExpandableText } from '@/lib/hooks/useExpandableText'
 
 export default function LocationDetail({
   location,
@@ -21,31 +21,15 @@ export default function LocationDetail({
   onExpandMap: () => void
 }) {
   const { t } = useTranslation()
-  const [expanded, setExpanded] = useState(false)
-  const [clamped, setClamped] = useState(false)
-  const textRef = useRef<HTMLParagraphElement>(null)
-  // Collapse again when navigating to another location.
-  useEffect(() => setExpanded(false), [location.description])
-  // "See more" shows only when the clamped text actually overflows; it is
-  // re-measured on resize and once web fonts have loaded.
-  useEffect(() => {
-    const el = textRef.current
-    if (!el || expanded) return
-    let active = true
-    const measure = () => {
-      if (active) setClamped(el.scrollHeight > el.clientHeight + 1)
-    }
-    measure()
-    void document.fonts.ready.then(measure)
-    const observer =
-      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
-    observer?.observe(el)
-    return () => {
-      active = false
-      observer?.disconnect()
-    }
-  }, [location.description, expanded, isMobile])
-  const isLong = expanded || clamped
+  const clampClass = isMobile ? 'line-clamp-3' : 'line-clamp-5'
+  // Collapses again, instantly, when navigating to another location.
+  const {
+    ref: textRef,
+    expanded,
+    clamp,
+    isLong,
+    toggle,
+  } = useExpandableText<HTMLParagraphElement>(location.description, clampClass)
   return (
     <div className="flex flex-col gap-4">
       <LocationHero
@@ -64,7 +48,7 @@ export default function LocationDetail({
             ref={textRef}
             className={cn(
               'text-muted whitespace-pre-line',
-              !expanded && (isMobile ? 'line-clamp-3' : 'line-clamp-5'),
+              clamp && clampClass,
             )}
           >
             {location.description}
@@ -72,7 +56,7 @@ export default function LocationDetail({
           {isLong && (
             <button
               type="button"
-              onClick={() => setExpanded((v) => !v)}
+              onClick={toggle}
               aria-expanded={expanded}
               className="mt-1 cursor-pointer border-none bg-transparent p-0 text-xs font-semibold text-moss hover:underline"
             >
