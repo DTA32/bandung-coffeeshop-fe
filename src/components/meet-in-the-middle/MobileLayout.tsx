@@ -6,6 +6,7 @@ import { CafeListItem } from '@/components/cafe'
 import { MapView } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import MarkerListItem from './MarkerListItem'
+import ResultsListFooter from './ResultsListFooter'
 import SortSelect from './SortSelect'
 import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
@@ -38,6 +39,10 @@ type Props = {
   loading: boolean
   alert: string
   onSearch: () => void
+  hasMore: boolean
+  loadingMore: boolean
+  loadMoreFailed: boolean
+  onLoadMore: () => void
 }
 
 export default function MobileLayout({
@@ -60,6 +65,10 @@ export default function MobileLayout({
   loading,
   alert,
   onSearch,
+  hasMore,
+  loadingMore,
+  loadMoreFailed,
+  onLoadMore,
 }: Props) {
   const { t } = useTranslation()
   const locale = useLocale()
@@ -176,6 +185,12 @@ export default function MobileLayout({
                 {results.cafes.map((cafe) => (
                   <CafeListItem key={cafe.id} cafe={cafe} />
                 ))}
+                <ResultsListFooter
+                  hasMore={hasMore}
+                  loadingMore={loadingMore}
+                  loadMoreFailed={loadMoreFailed}
+                  onLoadMore={onLoadMore}
+                />
               </div>
             </>
           )}
