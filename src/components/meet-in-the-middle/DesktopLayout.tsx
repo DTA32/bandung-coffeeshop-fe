@@ -3,7 +3,7 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LatLng, LatLngExpression } from 'leaflet'
 import Breadcrumb from '@/components/Breadcrumb'
-import { CafeListItem } from '@/components/cafe'
+import { CafeListItem, SkeletonCafeListItem } from '@/components/cafe'
 import { MapView } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import MarkerListItem from './MarkerListItem'
@@ -12,6 +12,10 @@ import SortSelect from './SortSelect'
 import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import { mitmCrumbs } from '@/lib/seo'
+import { cn } from '@/lib/cn'
+
+// Placeholder rows shown on the first search, before any results exist.
+const SKELETON_ROWS = [0, 1, 2, 3]
 
 type Props = {
   markers: UserMarker[]
@@ -160,6 +164,16 @@ export default function DesktopLayout({
           </span>
         </button>
       </div>
+      {!results && loading && (
+        <div
+          aria-busy="true"
+          className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm p-5 gap-2"
+        >
+          {SKELETON_ROWS.map((i) => (
+            <SkeletonCafeListItem key={i} />
+          ))}
+        </div>
+      )}
       {results && (
         <div className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm">
           {results.total === 0 ? (
@@ -183,7 +197,11 @@ export default function DesktopLayout({
               </div>
               <div
                 ref={listRef}
-                className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto"
+                aria-busy={loading}
+                className={cn(
+                  'flex flex-col gap-2 max-h-[60vh] overflow-y-auto transition-opacity',
+                  loading && 'opacity-50',
+                )}
               >
                 {results.cafes.map((cafe) => (
                   <CafeListItem key={cafe.id} cafe={cafe} />

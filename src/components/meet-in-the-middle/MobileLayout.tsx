@@ -2,7 +2,7 @@ import { ArrowUpDown, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { LatLngExpression } from 'leaflet'
 import Breadcrumb from '@/components/Breadcrumb'
-import { CafeListItem } from '@/components/cafe'
+import { CafeListItem, SkeletonCafeListItem } from '@/components/cafe'
 import { MapView } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import MarkerListItem from './MarkerListItem'
@@ -18,6 +18,9 @@ const RADIUS_PRESETS = [
   { val: 1.0, label: '1km' },
   { val: 2.0, label: '2km' },
 ]
+
+// Placeholder rows shown on the first search, before any results exist.
+const SKELETON_ROWS = [0, 1, 2, 3]
 
 type Props = {
   markers: UserMarker[]
@@ -181,7 +184,13 @@ export default function MobileLayout({
                   <SortSelect value={sort} onChange={onChangeSort} />
                 </div>
               </div>
-              <div className="flex flex-col gap-2">
+              <div
+                aria-busy={loading}
+                className={cn(
+                  'flex flex-col gap-2 transition-opacity',
+                  loading && 'opacity-50',
+                )}
+              >
                 {results.cafes.map((cafe) => (
                   <CafeListItem key={cafe.id} cafe={cafe} />
                 ))}
@@ -194,6 +203,15 @@ export default function MobileLayout({
               </div>
             </>
           )}
+        </div>
+      ) : loading ? (
+        <div
+          aria-busy="true"
+          className="flex flex-1 flex-col bg-cream px-4 py-4 gap-2"
+        >
+          {SKELETON_ROWS.map((i) => (
+            <SkeletonCafeListItem key={i} />
+          ))}
         </div>
       ) : (
         <div className="flex-1" />
