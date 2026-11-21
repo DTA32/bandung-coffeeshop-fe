@@ -5,9 +5,16 @@ import { COLORS } from '@/lib/colors'
 // call setIcon, which rebuilds the element and would replay the drop-in.
 const userIcons = new Map<string, L.DivIcon>()
 
+// Icon HTML is styled with Tailwind classes (Tailwind scans this file). Only
+// colours stay inline: the map icons keep the fixed COLORS palette in both
+// themes, while the colour tokens change under `.dark`, and a user marker's
+// colour is dynamic.
+//
 // Animation classes go on an inner element, never on Leaflet's icon root,
-// which Leaflet positions with `transform`. The keyframes use the standalone
-// translate/scale properties, so they compose with the inline transforms.
+// which Leaflet positions with `transform`. The `-translate-*` utilities use
+// the `translate` property, which the drop-in keyframe animates too, so the
+// centering translate sits on an outer wrapper and the animation on the
+// element inside it.
 export function userIcon(color: string, name: string) {
   const key = `${color}|${name}`
   const cached = userIcons.get(key)
@@ -22,10 +29,12 @@ function buildUserIcon(color: string, name: string) {
   return L.divIcon({
     className: '',
     html: `
-      <div class="motion-safe:animate-marker-drop" style="display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%)">
-        <span style="margin-top:2px;background:white;border:1px solid ${COLORS.groveLight};border-radius:6px;padding:2px 6px;font-size:11px;color:${COLORS.forest};white-space:nowrap;font-family:inherit">${safeName}</span>
-        <div style="position:relative;width:16px;height:16px;border-radius:50%;background:${color}BF;box-shadow:0 1px 4px rgba(0,0,0,.3)">
-            <span style="position:absolute;top:50%;left:50%;width:8px;height:8px;background:${color};border-radius:50%;transform:translate(-50%,-50%)"></span>
+      <div class="-translate-x-1/2 -translate-y-full">
+        <div class="flex flex-col items-center motion-safe:animate-marker-drop">
+          <span class="mt-0.5 whitespace-nowrap rounded-md border bg-white px-1.5 py-0.5 text-[11px]" style="border-color:${COLORS.groveLight};color:${COLORS.forest}">${safeName}</span>
+          <div class="relative size-4 rounded-full shadow-marker" style="background:${color}BF">
+            <span class="absolute top-1/2 left-1/2 size-2 -translate-1/2 rounded-full" style="background:${color}"></span>
+          </div>
         </div>
       </div>`,
     iconSize: [0, 0],
@@ -35,7 +44,7 @@ function buildUserIcon(color: string, name: string) {
 
 export const midpointIcon = L.divIcon({
   className: '',
-  html: `<div style="width:16px;height:16px;border-radius:50%;background:${COLORS.forest};border:3px solid white;box-shadow:0 1px 4px rgba(0,0,0,.3);transform:translate(-50%,-50%)"></div>`,
+  html: `<div class="size-4 -translate-1/2 rounded-full border-3 border-white shadow-marker" style="background:${COLORS.forest}"></div>`,
   iconSize: [0, 0],
   iconAnchor: [0, 0],
 })
@@ -46,9 +55,9 @@ export const midpointIcon = L.divIcon({
 export const midpointPulseIcon = L.divIcon({
   className: '',
   html: `
-    <div style="position:relative;width:16px;height:16px;transform:translate(-50%,-50%)">
-      <span class="opacity-0 motion-safe:animate-marker-pulse" style="position:absolute;inset:0;border-radius:50%;background:${COLORS.forest}"></span>
-      <div style="position:absolute;inset:0;border-radius:50%;background:${COLORS.forest};border:3px solid white;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>
+    <div class="relative size-4 -translate-1/2">
+      <span class="absolute inset-0 rounded-full opacity-0 motion-safe:animate-marker-pulse" style="background:${COLORS.forest}"></span>
+      <div class="absolute inset-0 rounded-full border-3 border-white shadow-marker" style="background:${COLORS.forest}"></div>
     </div>`,
   iconSize: [0, 0],
   iconAnchor: [0, 0],
@@ -57,9 +66,11 @@ export const midpointPulseIcon = L.divIcon({
 export const queryMarkerIcon = L.divIcon({
   className: '',
   html: `
-    <div class="motion-safe:animate-marker-drop" style="position:relative;width:28px;height:28px;transform:translate(-50%,-50%)">
-      <div style="position:absolute;inset:0;border-radius:50%;background:${COLORS.grove}AA"></div>
-      <div style="position:absolute;top:50%;left:50%;width:14px;height:14px;border-radius:50%;background:${COLORS.moss};border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.3);transform:translate(-50%,-50%)"></div>
+    <div class="size-7 -translate-1/2">
+      <div class="relative size-full motion-safe:animate-marker-drop">
+        <div class="absolute inset-0 rounded-full" style="background:${COLORS.grove}AA"></div>
+        <div class="absolute top-1/2 left-1/2 size-3.5 -translate-1/2 rounded-full border-2 border-white shadow-marker" style="background:${COLORS.moss}"></div>
+      </div>
     </div>`,
   iconSize: [0, 0],
   iconAnchor: [0, 0],
@@ -67,7 +78,7 @@ export const queryMarkerIcon = L.divIcon({
 
 export const cafeIcon = L.divIcon({
   className: '',
-  html: `<div style="width:24px;height:24px;border-radius:50%;background:${COLORS.cream};border:2px solid ${COLORS.grove};box-shadow:0 1px 4px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;line-height:1">☕</div>`,
+  html: `<div class="flex size-6 items-center justify-center rounded-full border-2 text-[13px] leading-none text-white shadow-marker" style="background:${COLORS.cream};border-color:${COLORS.grove}">☕</div>`,
   iconSize: [26, 26],
   iconAnchor: [13, 13],
 })

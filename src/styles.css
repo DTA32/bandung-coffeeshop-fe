@@ -31,6 +31,7 @@
   --color-muted-bg: var(--color-gray-100);
 
   --shadow-dialog: 0 24px 60px rgb(30 42 24 / 0.2);
+  --shadow-marker: 0 1px 4px rgb(0 0 0 / 0.3);
 
   --font-sans: 'Plus Jakarta Sans Variable', sans-serif;
 
