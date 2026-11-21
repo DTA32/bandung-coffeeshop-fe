@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ClientOnly, useRouteContext } from '@tanstack/react-router'
 import { useLocale, localePrefix } from '@/lib/locale'
+import Toast from '@/components/shared/Toast'
 
 function ShareButtonInternal({
   id,
@@ -37,9 +38,7 @@ function ShareButtonInternal({
   return (
     <>
       {showAlert && (
-        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-moss text-sm font-semibold px-4 py-2 rounded-md shadow-md z-50 transition-opacity duration-300">
-          {t('cafe.urlCopied')}
-        </div>
+        <Toast className="fixed top-16 z-50">{t('cafe.urlCopied')}</Toast>
       )}
       <button
         className="text-xs font-semibold text-forest hover:underline cursor-pointer"

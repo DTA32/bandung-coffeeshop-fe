@@ -13,6 +13,7 @@ import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import { mitmCrumbs } from '@/lib/seo'
 import { cn } from '@/lib/cn'
+import Toast from '@/components/shared/Toast'
 
 // Placeholder rows shown on the first search, before any results exist.
 const SKELETON_ROWS = [0, 1, 2, 3]
@@ -76,9 +77,9 @@ export default function DesktopLayout({
   return (
     <main className="w-screen h-[95vh] relative">
       {alert && (
-        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-20 transition-opacity duration-300 text-center">
+        <Toast tone="warning" className="fixed top-16 z-20">
           {alert}
-        </div>
+        </Toast>
       )}
       <MapView
         markers={markers}

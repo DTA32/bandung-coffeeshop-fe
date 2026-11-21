@@ -12,6 +12,7 @@ import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import { mitmCrumbs } from '@/lib/seo'
 import { cn } from '@/lib/cn'
+import Toast from '@/components/shared/Toast'
 
 const RADIUS_PRESETS = [
   { val: 0.5, label: '500m' },
@@ -78,9 +79,9 @@ export default function MobileLayout({
   return (
     <main className="flex flex-col bg-cream min-h-screen mb-8">
       {alert && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-20 transition-opacity duration-300 text-center">
+        <Toast tone="warning" className="fixed top-4 z-20">
           {alert}
-        </div>
+        </Toast>
       )}
       <div className="bg-forest dark:bg-cream text-cream dark:text-moss px-5 py-4">
         <h1 className="text-lg font-bold">{t('mitm.title')}</h1>

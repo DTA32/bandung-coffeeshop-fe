@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { MapView, queryMarkerIcon } from '@/components/map'
 import type { CafeMarker } from '@/lib/api/search'
 import { cn } from '@/lib/cn'
+import Toast from '@/components/shared/Toast'
 
 type MapMarker = { lat: number; lng: number }
 
@@ -83,9 +84,9 @@ export default function ExploreMapView({
         }
       >
         {alert && (
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-20 transition-opacity duration-300 text-center">
+          <Toast tone="warning" className="absolute top-4 z-20">
             {alert}
-          </div>
+          </Toast>
         )}
         <MapView
           markers={
