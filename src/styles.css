@@ -104,5 +104,7 @@ body {
 }
 
 .cafe-pin-labels-off .leaflet-tooltip.cafe-pin-label {
-  display: none;
+  /* visibility, not display: Leaflet measures the label width to center it,
+     and a display:none label measures 0 wide (shown off-center on reveal). */
+  visibility: hidden;
 }
