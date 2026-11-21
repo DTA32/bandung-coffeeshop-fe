@@ -398,8 +398,8 @@ export interface FaqItem {
 
 const FAQ_VARIANTS = 3
 
-// Ranges from 1.68 up (WiFi Standar/Cepat, parking Normal/Mudah): good enough
-// to mention. The lowest range is left out of the FAQ.
+// Ranges from 1.68 up (WiFi Standar/Cepat, parking Normal/Mudah). A WiFi or
+// parking rating in the lowest range drops its whole FAQ item.
 const FAQ_RATING_MIN = 1.68
 
 // FNV-1a, 32-bit.
@@ -466,8 +466,8 @@ export function buildCafeFaq(
     items.push({ question: question.join(' '), answer: answer.join(' ') })
   }
 
-  const wifi = review.ratings.wifi
-  if (wifi) add(0, 'wifi', { extra: faqRating(wifi), askMore: true })
+  const wifi = faqRating(review.ratings.wifi)
+  if (wifi) add(0, 'wifi', { extra: wifi, askMore: true })
 
   if (tags.has('indoor-smoking')) add(1, 'smoking')
 
@@ -482,10 +482,13 @@ export function buildCafeFaq(
     add(3, 'wfc', { extra: ratingSentence(ratingRange(review.ratings.noise)) })
   }
 
+  // No parking rating: address only. A low one: no item at all.
   const address = cafe.description?.trim()
-  if (address) {
+  const parking = faqRating(review.ratings.parking)
+  const parkingLow = review.ratings.parking !== undefined && !parking
+  if (address && !parkingLow) {
     add(4, 'address', {
-      extra: faqRating(review.ratings.parking),
+      extra: parking,
       askMore: true,
       vars: { address },
     })
