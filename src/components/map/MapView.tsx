@@ -17,7 +17,7 @@ import { useIsDark } from '@/lib/hooks/theme'
 import { prefersReducedMotion } from '@/lib/helper'
 import type { CafeMarker } from '@/lib/api/search'
 import type { UserMarker } from './markers'
-import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
+import { cafeIcon, midpointIcon, midpointPulseIcon, userIcon } from './mapIcons'
 import { GeoJSON } from 'react-leaflet/GeoJSON'
 import type { GeoJsonObject } from 'geojson'
 
@@ -187,7 +187,15 @@ export default function MapView({
             }}
           />
         ))}
-      {midpoint && <Marker position={midpoint} icon={midpointIcon} />}
+      {/* Keyed on its position so it remounts, and pulses once, every time
+          the midpoint is recalculated. */}
+      {midpoint && (
+        <Marker
+          key={JSON.stringify(midpoint)}
+          position={midpoint}
+          icon={midpointPulseIcon}
+        />
+      )}
       {circleAt && (
         <>
           <Circle
