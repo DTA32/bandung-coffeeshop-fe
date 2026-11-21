@@ -1,6 +1,5 @@
 import { useRouteContext, useRouterState } from '@tanstack/react-router'
 import { LayoutGrid, List, Map } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/SearchBox'
 import { CafeCard, CafeListItem } from '@/components/cafe'
@@ -17,14 +16,13 @@ import type { SrpContent } from '@/lib/srp'
 import type { FilterOptions } from '@/lib/api/filters'
 import { buildExploreH1, srpLocationClause } from '@/lib/seoTemplate'
 import type {
-  CafeMarker,
   ExploreSearch,
   SearchCafesData,
   SearchCafesParams,
 } from '@/lib/api/search'
-import { cleanExploreSearch, searchCafeMarkers } from '@/lib/api/search'
+import { cleanExploreSearch } from '@/lib/api/search'
+import { useCafeMarkers } from '@/lib/hooks/useCafeMarkers'
 import { useLocale } from '@/lib/locale'
-import type { Locale } from '@/lib/locale'
 import type { LocationData } from '@/lib/api/location'
 import { cn } from '@/lib/cn'
 import { parseWeather, WEATHER_CURRENT, weatherPhrase } from '@/lib/explore'
@@ -62,40 +60,6 @@ export function ExploreNotFound() {
       </LocaleLink>
     </main>
   )
-}
-
-// Map pins for every cafe matching the filters, fetched on the client only
-// while a map is on screen (effects never run during SSR). params carries
-// filters + focus only, so page/sort/view changes keep the same key and don't
-// refetch. A new key aborts the in-flight request; the old pins stay up until
-// the new ones arrive.
-function useCafeMarkers(
-  params: SearchCafesParams | undefined,
-  enabled: boolean,
-  lang: Locale,
-): CafeMarker[] {
-  const [markers, setMarkers] = useState<CafeMarker[]>([])
-  const fetchedKey = useRef<string | null>(null)
-  const key = params ? JSON.stringify([lang, params]) : null
-
-  useEffect(() => {
-    if (!enabled || !params || key === null || key === fetchedKey.current)
-      return
-    const controller = new AbortController()
-    searchCafeMarkers(params, lang, controller.signal)
-      .then((data) => {
-        fetchedKey.current = key
-        setMarkers(data)
-      })
-      .catch((e) => {
-        // Aborted by a newer key, or a 404 the list call already surfaces.
-        if (!controller.signal.aborted) console.error(e)
-      })
-    return () => controller.abort()
-    // params is captured through key.
-  }, [key, enabled])
-
-  return markers
 }
 
 // Grid / List / Show-Map view toggle bar.
