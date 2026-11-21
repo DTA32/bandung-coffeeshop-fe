@@ -25,6 +25,10 @@ import { useDelayedTrue } from '@/lib/hooks/useDelayedTrue'
 import appCss from '@/styles.css?url'
 import Footer from '@/components/Footer'
 
+// Navigations that finish within this window (hover-preloaded links, cached
+// loaders) never dim, so they don't flicker.
+const NAV_DIM_DELAY_MS = 150
+
 export const Route = createRootRoute({
   beforeLoad: async () => {
     const ua = await getUserAgentInfo()
@@ -159,10 +163,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     </html>
   )
 }
-
-// Navigations that finish within this window (hover-preloaded links, cached
-// loaders) never dim, so they don't flicker.
-const NAV_DIM_DELAY_MS = 150
 
 function SkipLink() {
   const { t } = useTranslation()
