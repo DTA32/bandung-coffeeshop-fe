@@ -165,11 +165,11 @@ export default function DesktopLayout({
           </span>
         </button>
       </div>
-      {/* One panel from the first search on: it slides up once with the
+      {/* One panel from the first search on: it slides in from the right once with the
           placeholder rows inside and stays mounted while they're swapped for
           results, so re-searches, sort changes and more pages don't replay it. */}
       {(loading || results) && (
-        <div className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm motion-safe:animate-slide-up">
+        <div className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm motion-safe:animate-slide-in-right">
           {!results ? (
             <div aria-busy="true" className="flex flex-col p-5 gap-2">
               {SKELETON_ROWS.map((i) => (
