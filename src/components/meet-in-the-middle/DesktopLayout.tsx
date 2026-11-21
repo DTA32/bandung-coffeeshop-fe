@@ -7,7 +7,7 @@ import { MapView } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import MarkerListItem from './MarkerListItem'
 import SortSelect from './SortSelect'
-import type { SearchCafesData } from '@/lib/api/search'
+import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import { mitmCrumbs } from '@/lib/seo'
 
@@ -18,6 +18,7 @@ type Props = {
   radiusKm: number
   onChangeRadius: (km: number) => void
   results: SearchCafesData | null
+  cafeMarkers: CafeMarker[]
   resultsRadiusKm: number
   sort: string
   onChangeSort: (sort: string) => void
@@ -40,6 +41,7 @@ export default function DesktopLayout({
   radiusKm,
   onChangeRadius,
   results,
+  cafeMarkers,
   resultsRadiusKm,
   sort,
   onChangeSort,
@@ -66,8 +68,9 @@ export default function DesktopLayout({
       <MapView
         markers={markers}
         midpoint={midpointPosition}
-        results={results}
+        cafes={cafeMarkers}
         resultsRadiusKm={resultsRadiusKm}
+        showResultsCircle={results !== null}
         onAddMarker={onAddMarker}
         onMoveMarker={onMoveMarker}
         zoomControlPosition="bottomleft"

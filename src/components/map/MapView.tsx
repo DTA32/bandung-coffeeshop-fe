@@ -13,7 +13,7 @@ import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
 import { useLocale, localeParam } from '@/lib/locale'
 import { COLORS } from '@/lib/colors'
 import { useIsDark } from '@/lib/hooks/theme'
-import type { SearchCafesData } from '@/lib/api/search'
+import type { CafeMarker } from '@/lib/api/search'
 import type { UserMarker } from './markers'
 import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
 import { GeoJSON } from 'react-leaflet/GeoJSON'
@@ -57,8 +57,12 @@ function MapController({ center }: { center: LatLngExpression | null }) {
 type Props = {
   markers: UserMarker[]
   midpoint: LatLngExpression | null
-  results: SearchCafesData | null
+  // Cafe pins to draw on the map.
+  cafes: CafeMarker[]
   resultsRadiusKm: number
+  // Draw the results radius circle around the midpoint (Meet in the Middle
+  // sets it once a search has results). Independent of the pins.
+  showResultsCircle?: boolean
   onAddMarker?: (lat: number, lng: number) => void
   onMoveMarker?: (id: string, lat: number, lng: number) => void
   zoomControlPosition?: ControlPosition
@@ -80,8 +84,9 @@ type Props = {
 export default function MapView({
   markers,
   midpoint,
-  results,
+  cafes,
   resultsRadiusKm,
+  showResultsCircle = false,
   onAddMarker,
   onMoveMarker,
   zoomControlPosition,
@@ -104,7 +109,7 @@ export default function MapView({
   const circleAt =
     circleCenter !== undefined
       ? circleCenter
-      : midpoint && results
+      : showResultsCircle && midpoint
         ? midpoint
         : null
   const circleR = circleRadiusM ?? resultsRadiusKm * 1000
@@ -162,31 +167,29 @@ export default function MapView({
           <Marker position={circleAt} icon={midpointIcon} />
         </>
       )}
-      {results?.cafes
-        .filter((c) => c.coordinates)
-        .map((c) => (
-          <Marker
-            key={c.id}
-            position={[c.coordinates!.lat, c.coordinates!.lng]}
-            icon={cafeIcon}
-            eventHandlers={{
-              mouseover: () =>
-                router.preloadRoute({
-                  to: '/{-$locale}/cafe/$cafeId',
-                  params: { cafeId: c.id, locale: localeParam(locale) },
-                }),
-              click: () =>
-                navigate({
-                  to: '/{-$locale}/cafe/$cafeId',
-                  params: { cafeId: c.id, locale: localeParam(locale) },
-                }),
-            }}
-          >
-            <Tooltip direction="top" offset={[0, -12]} opacity={1}>
-              {c.name}
-            </Tooltip>
-          </Marker>
-        ))}
+      {cafes.map((c) => (
+        <Marker
+          key={c.id}
+          position={[c.coordinates.lat, c.coordinates.lng]}
+          icon={cafeIcon}
+          eventHandlers={{
+            mouseover: () =>
+              router.preloadRoute({
+                to: '/{-$locale}/cafe/$cafeId',
+                params: { cafeId: c.id, locale: localeParam(locale) },
+              }),
+            click: () =>
+              navigate({
+                to: '/{-$locale}/cafe/$cafeId',
+                params: { cafeId: c.id, locale: localeParam(locale) },
+              }),
+          }}
+        >
+          <Tooltip direction="top" offset={[0, -12]} opacity={1}>
+            {c.name}
+          </Tooltip>
+        </Marker>
+      ))}
       {polygon && (
         <GeoJSON
           key={JSON.stringify(polygon)}

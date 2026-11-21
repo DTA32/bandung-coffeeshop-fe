@@ -7,14 +7,14 @@ import 'leaflet/dist/leaflet.css'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MapView, queryMarkerIcon } from '@/components/map'
-import type { SearchCafesData } from '@/lib/api/search'
+import type { CafeMarker } from '@/lib/api/search'
 import { cn } from '@/lib/cn'
 
 type MapMarker = { lat: number; lng: number }
 
 type Props = {
   marker: MapMarker | null
-  results: SearchCafesData
+  cafes: CafeMarker[]
   onPlace: (lat: number, lng: number, opts?: { replace?: boolean }) => void
   onHideMap: () => void
   isMobile: boolean
@@ -26,7 +26,7 @@ type Props = {
 
 export default function ExploreMapView({
   marker,
-  results,
+  cafes,
   onPlace,
   onHideMap,
   isMobile,
@@ -102,7 +102,7 @@ export default function ExploreMapView({
               : []
           }
           midpoint={null}
-          results={results}
+          cafes={cafes}
           resultsRadiusKm={0}
           onAddMarker={(lat, lng) => onPlace(lat, lng)}
           onMoveMarker={(_id, lat, lng) => onPlace(lat, lng, { replace: true })}

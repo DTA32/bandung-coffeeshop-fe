@@ -15,8 +15,13 @@ import LocaleLink from '@/components/LocaleLink'
 import type { SrpContent } from '@/lib/srp'
 import type { FilterOptions } from '@/lib/api/filters'
 import { buildExploreH1, srpLocationClause } from '@/lib/seoTemplate'
-import type { ExploreSearch, SearchCafesData } from '@/lib/api/search'
+import type {
+  ExploreSearch,
+  SearchCafesData,
+  SearchCafesParams,
+} from '@/lib/api/search'
 import { cleanExploreSearch } from '@/lib/api/search'
+import { useCafeMarkers } from '@/lib/hooks/useCafeMarkers'
 import { useLocale } from '@/lib/locale'
 import type { LocationData } from '@/lib/api/location'
 import { cn } from '@/lib/cn'
@@ -156,6 +161,7 @@ function ViewToggle({
 
 export default function ExplorePage({
   data,
+  markerParams,
   search,
   location,
   appliedFilters,
@@ -164,6 +170,8 @@ export default function ExplorePage({
   filterOptions,
 }: {
   data: SearchCafesData
+  // The list's filters + focus without page/size/sort/order; drives the pins.
+  markerParams?: SearchCafesParams
   search: ExploreSearch
   location?: LocationData
   appliedFilters?: Partial<ExploreSearch>
@@ -184,6 +192,10 @@ export default function ExplorePage({
   const page = search.page ?? 1
   const view = search.view ?? 'grid'
   const mapView = search.map_view === true
+  // A map is on screen in the full map view, or as the minimized preview a
+  // non-POI location with show_map renders (ExplorePanel → LocationHero).
+  const mapShown = mapView || (!!location?.show_map && location.type !== 'poi')
+  const cafeMarkers = useCafeMarkers(markerParams, mapShown, locale)
   const totalPages = Math.ceil(data.total / (search.size ?? 8))
 
   // Path-encoded filters (pretty URL) merged onto the query-string search. Used
@@ -237,7 +249,7 @@ export default function ExplorePage({
           isMobile={isMobile}
           location={location}
           marker={marker}
-          results={data}
+          cafes={cafeMarkers}
           onPlace={placeMarker}
           onHideMap={() => goTo({ map_view: undefined, view: undefined })}
           onExpandMap={() => goTo({ map_view: true, view: 'list' })}
@@ -251,7 +263,7 @@ export default function ExplorePage({
             isMobile={isMobile}
             location={location}
             marker={marker}
-            results={data}
+            cafes={cafeMarkers}
             onPlace={placeMarker}
             onHideMap={() => goTo({ map_view: undefined, view: undefined })}
             onExpandMap={() => goTo({ map_view: true, view: 'list' })}

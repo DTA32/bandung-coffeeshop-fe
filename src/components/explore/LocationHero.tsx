@@ -7,18 +7,18 @@ import type { LatLngExpression } from 'leaflet'
 import { MapView } from '@/components/map'
 import WelcomeHeading from '@/components/explore/WelcomeHeading'
 import Image from '@/components/Image'
-import type { SearchCafesData } from '@/lib/api/search'
+import type { CafeMarker } from '@/lib/api/search'
 import { cn } from '@/lib/cn'
 
 export default function LocationHero({
   location,
   isMobile,
-  searchResult,
+  cafes,
   onExpandMap,
 }: {
   location: LocationData
   isMobile: boolean
-  searchResult: SearchCafesData | null
+  cafes: CafeMarker[]
   onExpandMap: () => void
 }) {
   const { t } = useTranslation()
@@ -49,7 +49,7 @@ export default function LocationHero({
             <MapView
               markers={[]}
               midpoint={null}
-              results={searchResult}
+              cafes={cafes}
               resultsRadiusKm={0}
               polygon={location.polygon}
               center={polygonCenter ?? undefined}
