@@ -29,6 +29,10 @@ import Footer from '@/components/Footer'
 // loaders) never dim, so they don't flicker.
 const NAV_DIM_DELAY_MS = 150
 
+// Meet in the middle mirrors its markers into the URL on every edit, so
+// navigations that stay on that page never dim. Entering or leaving it still does.
+const MITM_PATH = /\/meet-in-the-middle\/?$/
+
 export const Route = createRootRoute({
   beforeLoad: async () => {
     const ua = await getUserAgentInfo()
@@ -119,7 +123,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const locale = localeFromPathname(pathname)
   const i18n = useMemo(() => createI18n(locale), [locale])
-  const isLoading = useRouterState({ select: (s) => s.isLoading })
+  const isLoading = useRouterState({
+    select: (s) =>
+      s.isLoading &&
+      !(
+        MITM_PATH.test(s.location.pathname) &&
+        MITM_PATH.test(s.resolvedLocation?.pathname ?? '')
+      ),
+  })
   const dimmed = useDelayedTrue(isLoading, NAV_DIM_DELAY_MS)
 
   return (
