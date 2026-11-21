@@ -2,7 +2,7 @@ import { ArrowUpDown, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { LatLngExpression } from 'leaflet'
 import Breadcrumb from '@/components/Breadcrumb'
-import { CafeListItem, CafeListItemSkeleton } from '@/components/cafe'
+import { CafeListItem, SkeletonCafeListItem } from '@/components/cafe'
 import { MapView } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import MarkerListItem from './MarkerListItem'
@@ -195,7 +195,7 @@ export default function MobileLayout({
           className="flex flex-1 flex-col bg-cream px-4 py-4 gap-2"
         >
           {SKELETON_ROWS.map((i) => (
-            <CafeListItemSkeleton key={i} />
+            <SkeletonCafeListItem key={i} />
           ))}
         </div>
       ) : (

@@ -2,7 +2,7 @@ import { ArrowUpDown, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { LatLng, LatLngExpression } from 'leaflet'
 import Breadcrumb from '@/components/Breadcrumb'
-import { CafeListItem, CafeListItemSkeleton } from '@/components/cafe'
+import { CafeListItem, SkeletonCafeListItem } from '@/components/cafe'
 import { MapView } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import MarkerListItem from './MarkerListItem'
@@ -159,7 +159,7 @@ export default function DesktopLayout({
           className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm p-5 gap-2"
         >
           {SKELETON_ROWS.map((i) => (
-            <CafeListItemSkeleton key={i} />
+            <SkeletonCafeListItem key={i} />
           ))}
         </div>
       )}
