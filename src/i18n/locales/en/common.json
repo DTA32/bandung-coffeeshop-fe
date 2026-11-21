@@ -209,7 +209,49 @@
         "air-conditioned-seating": "air-conditioned seating"
       },
       "descCta": "Read our full review.",
-      "descCtaMenu": "Read our review & see the menu."
+      "descCtaMenu": "Read our review & see the menu.",
+      "faq": {
+        "title": "Frequently asked questions",
+        "wifi": {
+          "q1": "Does {{name}} have WiFi?",
+          "q2": "Is there WiFi at {{name}}?",
+          "q3": "Can I use WiFi at {{name}}?",
+          "more1": "How fast is it?",
+          "more2": "Is it fast?",
+          "more3": "Is it good enough for work?",
+          "a": "Yes.",
+          "aMore": "WiFi at {{name}} is rated {{label}}: {{desc}}."
+        },
+        "smoking": {
+          "q1": "Can I smoke inside {{name}}?",
+          "q2": "Does {{name}} have an indoor smoking area?",
+          "q3": "Is {{name}} smoker-friendly?",
+          "a": "Yes. {{name}} has an indoor area where smoking is allowed."
+        },
+        "open24": {
+          "q1": "Is {{name}} open 24 hours?",
+          "q2": "What time does {{name}} close?",
+          "q3": "Can I hang out late at night at {{name}}?",
+          "a": "{{name}} is open 24 hours, every day."
+        },
+        "wfc": {
+          "q1": "Is {{name}} good for working (WFC)?",
+          "q2": "Is {{name}} a good place to work?",
+          "q3": "Is {{name}} good for working or studying?",
+          "a": "Yes, {{name}} is WFC-friendly.",
+          "aMore": "The noise level is {{label}}: {{desc}}."
+        },
+        "address": {
+          "q1": "Where is {{name}} located?",
+          "q2": "What's the address of {{name}}?",
+          "q3": "Where can I find {{name}}?",
+          "more1": "What's parking like?",
+          "more2": "Is parking easy?",
+          "more3": "Is there enough parking?",
+          "a": "{{name}} is at {{address}}.",
+          "aMore": "Parking is {{label}}: {{desc}}."
+        }
+      }
     },
     "aboutTitle": "About BDGCafe - Bandung Coffee Shop Reviews",
     "aboutDesc": "BDGCafe is a personal guide to Bandung's coffee shops - honest reviews and discovery for finding your perfect café.",

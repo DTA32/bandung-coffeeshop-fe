@@ -16,6 +16,7 @@ import {
   PriceCard,
   UpdatedAt,
   NearbyCafe,
+  FaqWidget,
   ReviewWidget,
 } from '@/components/cafe-detail'
 import LocaleLink from '@/components/LocaleLink'
@@ -30,9 +31,10 @@ import {
   cafeJsonLd,
   cafeCrumbs,
   breadcrumbJsonLd,
+  faqPageJsonLd,
 } from '@/lib/seo'
 import type { SeoMeta } from '@/lib/seo'
-import { buildCafeMeta } from '@/lib/seoTemplate'
+import { buildCafeFaq, buildCafeMeta } from '@/lib/seoTemplate'
 import { createI18n, normalizeLocale } from '@/i18n'
 
 interface CafeSearch {
@@ -73,6 +75,8 @@ export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
       t,
       locale: lang,
     })
+    // FAQ built once here so the card and the FAQPage JSON-LD share the text
+    const faq = buildCafeFaq(cafe, review, t)
     const canonicalPath = localizedPath(lang, `/cafe/${params.cafeId}`)
     const seo: SeoMeta = {
       title,
@@ -83,9 +87,10 @@ export const Route = createFileRoute('/{-$locale}/cafe/$cafeId')({
       jsonLd: [
         cafeJsonLd(cafe, review, canonicalPath),
         breadcrumbJsonLd(cafeCrumbs(cafe, (k) => i18n.t(k), lang)),
+        ...(faq.length > 0 ? [faqPageJsonLd(faq)] : []),
       ],
     }
-    return { cafe, review, nearbyCafes, feed, seo }
+    return { cafe, review, nearbyCafes, feed, faq, seo }
   },
   errorComponent: CafeErrorComponent,
   notFoundComponent: CafeNotFoundComponent,
@@ -125,7 +130,7 @@ function CafeNotFoundComponent() {
 }
 
 function Widgets(): JSX.Element {
-  const { cafe, review, nearbyCafes, feed } = Route.useLoaderData()
+  const { cafe, review, nearbyCafes, feed, faq } = Route.useLoaderData()
   const { ua } = useRouteContext({ from: '__root__' })
   const { t } = useTranslation()
   if (ua.isMobile) {
@@ -157,6 +162,7 @@ function Widgets(): JSX.Element {
         />
         <RatingsCard ratings={review.ratings} />
         <NearbyCafe cafes={nearbyCafes.cafes} />
+        <FaqWidget items={faq} />
         <UpdatedAt updated_at={cafe.updated_at} />
       </div>
     )
@@ -176,6 +182,7 @@ function Widgets(): JSX.Element {
         />
         <RatingsCard ratings={review.ratings} />
         <NearbyCafe cafes={nearbyCafes.cafes} />
+        <FaqWidget items={faq} />
       </div>
       <aside
         aria-label={t('cafe.detailsRegion')}
