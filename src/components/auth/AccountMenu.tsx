@@ -64,7 +64,7 @@ export default function AccountMenu() {
           id={menuId}
           role="menu"
           aria-label={t('auth.accountMenu')}
-          className="absolute top-full right-0 z-40 mt-2 flex w-60 flex-col rounded-xl border border-grove-light bg-surface p-1.5 shadow-lg"
+          className="absolute top-full right-0 z-40 mt-2 flex w-60 origin-top-right flex-col rounded-xl border border-grove-light bg-surface p-1.5 shadow-lg motion-safe:animate-pop-in"
         >
           <div className="flex flex-col gap-0.5 px-3 py-2">
             <span className="truncate text-sm font-bold text-forest">
