@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import type { CSSProperties } from 'react'
 import { useRouteContext } from '@tanstack/react-router'
 import { LayoutGrid, List, Map } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -61,6 +63,15 @@ export function ExploreNotFound() {
     </main>
   )
 }
+
+// Explore cards slide up one after another. They start at 0.4 opacity rather
+// than 0, because an above-the-fold card image is likely the LCP element and
+// doesn't count as painted while fully transparent.
+const CARD_ENTER =
+  'motion-safe:animate-slide-up [--slide-up-from:12px] [--slide-up-opacity:0.4]'
+const cardEnterDelay = (index: number): CSSProperties => ({
+  animationDelay: `${Math.min(index * 40, 280)}ms`,
+})
 
 // Grid / List / Show-Map view toggle bar.
 // Rendered above the results on mobile and inline with the header controls on desktop.
@@ -196,6 +207,24 @@ export default function ExplorePage({
   const mapShown = mapView || (!!location?.show_map && location.type !== 'poi')
   const cafeMarkers = useCafeMarkers(markerParams, mapShown, locale)
   const totalPages = Math.ceil(data.total / (search.size ?? 8))
+  // Keys the cards container on the search the shown data was loaded with, so
+  // it remounts and the cards replay their enter animation on a page, filter,
+  // sort or grid/list change. Toggling the map doesn't replay it. Path filters
+  // live in the splat, not in `search`, so it is part of the key too.
+  const cardsKey = JSON.stringify([
+    locationSplat,
+    { ...search, map_view: undefined },
+  ])
+
+  // Turning the map on slides it in; a direct load of a map_view=true URL
+  // (or the map staying on across navigations) doesn't animate.
+  const [mapToggledOn, setMapToggledOn] = useState(false)
+  const goToView = (update: ExploreSearch) => {
+    if ('map_view' in update) setMapToggledOn(update.map_view === true)
+    goTo(update)
+  }
+  const expandMap = () => goToView({ map_view: true, view: 'list' })
+  const hideMap = () => goToView({ map_view: undefined, view: undefined })
 
   // Path-encoded filters (pretty URL) merged onto the query-string search. Used
   // ONLY for display: the filter button's count and the modal's pre-selection.
@@ -234,7 +263,7 @@ export default function ExplorePage({
           view={view}
           mapView={mapView}
           showMap={location?.show_map}
-          onGoTo={goTo}
+          onGoTo={goToView}
         />
       )}
       {isMobile && (
@@ -245,8 +274,9 @@ export default function ExplorePage({
           marker={marker}
           cafes={cafeMarkers}
           onPlace={placeMarker}
-          onHideMap={() => goTo({ map_view: undefined, view: undefined })}
-          onExpandMap={() => goTo({ map_view: true, view: 'list' })}
+          onHideMap={hideMap}
+          onExpandMap={expandMap}
+          animateMapIn={mapToggledOn}
         />
       )}
 
@@ -259,8 +289,9 @@ export default function ExplorePage({
             marker={marker}
             cafes={cafeMarkers}
             onPlace={placeMarker}
-            onHideMap={() => goTo({ map_view: undefined, view: undefined })}
-            onExpandMap={() => goTo({ map_view: true, view: 'list' })}
+            onHideMap={hideMap}
+            onExpandMap={expandMap}
+            animateMapIn={mapToggledOn}
           />
         )}
         <div className="flex flex-col w-full max-w-screen-2xl">
@@ -275,7 +306,7 @@ export default function ExplorePage({
                 view={view}
                 mapView={mapView}
                 showMap={location?.show_map}
-                onGoTo={goTo}
+                onGoTo={goToView}
               />
             )}
 
@@ -314,6 +345,7 @@ export default function ExplorePage({
               </div>
             ) : view === 'grid' ? (
               <div
+                key={cardsKey}
                 className={cn(
                   'grid gap-6 grid-cols-1',
                   mapView || (location && location.type !== 'poi')
@@ -321,11 +353,13 @@ export default function ExplorePage({
                     : 'md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
                 )}
               >
-                {data.cafes.map((cafe) => (
+                {data.cafes.map((cafe, i) => (
                   <CafeCard
                     key={cafe.id}
                     cafe={cafe}
                     small={false}
+                    className={CARD_ENTER}
+                    style={cardEnterDelay(i)}
                     imageSizes={
                       mapView || (location && location.type !== 'poi')
                         ? '(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw'
@@ -335,9 +369,14 @@ export default function ExplorePage({
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col gap-4">
-                {data.cafes.map((cafe) => (
-                  <CafeListItem key={cafe.id} cafe={cafe} />
+              <div key={cardsKey} className="flex flex-col gap-4">
+                {data.cafes.map((cafe, i) => (
+                  <CafeListItem
+                    key={cafe.id}
+                    cafe={cafe}
+                    className={CARD_ENTER}
+                    style={cardEnterDelay(i)}
+                  />
                 ))}
               </div>
             )}
