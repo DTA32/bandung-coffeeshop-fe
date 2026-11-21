@@ -78,3 +78,33 @@ body {
     background-color 0.2s ease,
     color 0.2s ease;
 }
+
+/* BCF-38: permanent cafe-name labels on mobile map pins. Compact one-line
+   pill, truncated so neighbouring labels overlap less. Hidden below the
+   zoom threshold via the class MapView toggles on the map container. */
+.leaflet-tooltip.cafe-pin-label {
+  max-width: 120px;
+  padding: 1px 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--color-forest);
+  background: var(--color-surface);
+  border: 1px solid var(--color-grove-light);
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+}
+
+.leaflet-tooltip.cafe-pin-label::before {
+  display: none;
+}
+
+.cafe-pin-labels-off .leaflet-tooltip.cafe-pin-label {
+  /* visibility, not display: Leaflet measures the label width to center it,
+     and a display:none label measures 0 wide (shown off-center on reveal). */
+  visibility: hidden;
+}

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   Circle,
   MapContainer,
@@ -8,7 +9,7 @@ import {
   useMapEvents,
   ZoomControl,
 } from 'react-leaflet'
-import { useNavigate, useRouter } from '@tanstack/react-router'
+import { useNavigate, useRouteContext, useRouter } from '@tanstack/react-router'
 import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
 import { useLocale, localeParam } from '@/lib/locale'
 import { COLORS } from '@/lib/colors'
@@ -51,6 +52,28 @@ function ClickHandler({
 function MapController({ center }: { center: LatLngExpression | null }) {
   const map = useMap()
   if (center) map.setView(center, 15)
+  return null
+}
+
+// Mobile shows cafe names permanently, but only from this zoom in; at city
+// zoom the labels would cover the map.
+const PIN_LABEL_MIN_ZOOM = 15
+const PIN_LABELS_OFF_CLASS = 'cafe-pin-labels-off'
+
+// Toggles a class on the map container that hides the permanent pin labels
+// (see `.cafe-pin-label` in styles.css) while zoomed out past the threshold.
+function PinLabelZoomGate() {
+  const map = useMap()
+  const sync = () => {
+    map
+      .getContainer()
+      .classList.toggle(
+        PIN_LABELS_OFF_CLASS,
+        map.getZoom() < PIN_LABEL_MIN_ZOOM,
+      )
+  }
+  useMapEvents({ zoomend: sync })
+  useEffect(sync, [map])
   return null
 }
 
@@ -103,6 +126,10 @@ export default function MapView({
   const router = useRouter()
   const locale = useLocale()
   const isDark = useIsDark()
+  const { ua } = useRouteContext({ from: '__root__' })
+  // Touch users can't hover, so mobile keeps cafe names visible. Not on the
+  // non-interactive preview, which is a single click target.
+  const showPinLabels = ua.isMobile && interactive
   const tiles = isDark ? TILES.dark : TILES.light
   // Forest-green overlays disappear on the dark basemap; switch to grove.
   const overlayColor = isDark ? COLORS.grove : COLORS.forest
@@ -136,6 +163,7 @@ export default function MapView({
       {zoomControlPosition && <ZoomControl position={zoomControlPosition} />}
       {interactive && onAddMarker && <ClickHandler onAdd={onAddMarker} />}
       <MapController center={focusCenter} />
+      {showPinLabels && <PinLabelZoomGate />}
       {onMoveMarker &&
         markers.map((m) => (
           <Marker
@@ -185,7 +213,13 @@ export default function MapView({
               }),
           }}
         >
-          <Tooltip direction="top" offset={[0, -12]} opacity={1}>
+          <Tooltip
+            direction="top"
+            offset={[0, -12]}
+            opacity={1}
+            permanent={showPinLabels}
+            className={showPinLabels ? 'cafe-pin-label' : undefined}
+          >
             {c.name}
           </Tooltip>
         </Marker>
