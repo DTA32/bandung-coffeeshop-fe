@@ -368,7 +368,9 @@
     "cafesFound": "{{count}} Kafe ditemukan",
     "withinMidpoint": "dalam radius {{km}}km dari titik tengah",
     "sortBy": "Urutkan:",
-    "inArea": "di {{location}}"
+    "inArea": "di {{location}}",
+    "loadMoreFailed": "Gagal memuat kafe lainnya.",
+    "retry": "Coba lagi"
   },
   "about": {
     "title": "Tentang",

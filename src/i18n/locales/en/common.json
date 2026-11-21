@@ -373,7 +373,9 @@
     "cafesFound": "{{count}} Cafes found",
     "withinMidpoint": "within {{km}}km of midpoint",
     "sortBy": "Sort by:",
-    "inArea": "in {{location}}"
+    "inArea": "in {{location}}",
+    "loadMoreFailed": "Couldn't load more cafes.",
+    "retry": "Try again"
   },
   "about": {
     "title": "About",

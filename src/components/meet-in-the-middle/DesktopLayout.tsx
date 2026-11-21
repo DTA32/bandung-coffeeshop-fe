@@ -1,4 +1,5 @@
 import { ArrowUpDown, Search } from 'lucide-react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LatLng, LatLngExpression } from 'leaflet'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -6,6 +7,7 @@ import { CafeListItem } from '@/components/cafe'
 import { MapView } from '@/components/map'
 import type { UserMarker } from '@/components/map'
 import MarkerListItem from './MarkerListItem'
+import ResultsListFooter from './ResultsListFooter'
 import SortSelect from './SortSelect'
 import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
@@ -32,6 +34,10 @@ type Props = {
   loading: boolean
   alert: string
   onSearch: () => void
+  hasMore: boolean
+  loadingMore: boolean
+  loadMoreFailed: boolean
+  onLoadMore: () => void
 }
 
 export default function DesktopLayout({
@@ -55,9 +61,14 @@ export default function DesktopLayout({
   loading,
   alert,
   onSearch,
+  hasMore,
+  loadingMore,
+  loadMoreFailed,
+  onLoadMore,
 }: Props) {
   const { t } = useTranslation()
   const locale = useLocale()
+  const listRef = useRef<HTMLDivElement>(null)
   return (
     <main className="w-screen h-[95vh] relative">
       {alert && (
@@ -170,10 +181,20 @@ export default function DesktopLayout({
                   })}
                 </p>
               </div>
-              <div className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
+              <div
+                ref={listRef}
+                className="flex flex-col gap-2 max-h-[60vh] overflow-y-auto"
+              >
                 {results.cafes.map((cafe) => (
                   <CafeListItem key={cafe.id} cafe={cafe} />
                 ))}
+                <ResultsListFooter
+                  hasMore={hasMore}
+                  loadingMore={loadingMore}
+                  loadMoreFailed={loadMoreFailed}
+                  onLoadMore={onLoadMore}
+                  rootRef={listRef}
+                />
               </div>
               <div className="flex gap-2 justify-center items-center w-full">
                 <ArrowUpDown size={16} className="text-bark" />
