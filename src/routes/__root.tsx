@@ -15,7 +15,7 @@ import TelemetryClient, {
   reportClientError,
 } from '@/components/TelemetryClient'
 import AuthProvider from '@/lib/auth/AuthProvider'
-import { getUserAgentInfo } from '@/lib/helper'
+import { getUserAgentInfo, skipNavigationDim } from '@/lib/helper'
 import { localeFromPathname } from '@/lib/locale'
 import { requestLogger } from '@/lib/middleware'
 import { createI18n } from '@/i18n'
@@ -28,10 +28,6 @@ import Footer from '@/components/Footer'
 // Navigations that finish within this window (hover-preloaded links, cached
 // loaders) never dim, so they don't flicker.
 const NAV_DIM_DELAY_MS = 150
-
-// Meet in the middle mirrors its markers into the URL on every edit, so
-// navigations that stay on that page never dim. Entering or leaving it still does.
-const MITM_PATH = /\/meet-in-the-middle\/?$/
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
@@ -126,10 +122,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const isLoading = useRouterState({
     select: (s) =>
       s.isLoading &&
-      !(
-        MITM_PATH.test(s.location.pathname) &&
-        MITM_PATH.test(s.resolvedLocation?.pathname ?? '')
-      ),
+      !skipNavigationDim(s.resolvedLocation?.pathname, s.location.pathname),
   })
   const dimmed = useDelayedTrue(isLoading, NAV_DIM_DELAY_MS)
 
