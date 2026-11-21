@@ -121,6 +121,10 @@ export default function ReviewModal({
   const isEdit = mine !== null
 
   const [view, setView] = useState<View>('form')
+  // Only the first form view slides in. Result views and a return to the form
+  // remount the Dialog (it is keyed on the view) without animating.
+  const [leftForm, setLeftForm] = useState(false)
+  if (view !== 'form' && !leftForm) setLeftForm(true)
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState<'save' | 'remove' | null>(null)
   const [showErrors, setShowErrors] = useState(false)
@@ -277,6 +281,7 @@ export default function ReviewModal({
       <Dialog
         key={view}
         open
+        animate={false}
         onClose={onClose}
         labelledBy={ids.title}
         className="flex flex-col items-center gap-4 px-8 pt-9 pb-7 text-center sm:max-w-120"
@@ -357,6 +362,7 @@ export default function ReviewModal({
     <Dialog
       key="form"
       open
+      animate={!leftForm}
       onClose={onClose}
       labelledBy={ids.title}
       className="relative flex max-h-[92dvh] flex-col sm:max-w-190"

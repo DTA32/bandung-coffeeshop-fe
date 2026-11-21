@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { cn } from '@/lib/cn'
 import LocaleLink from '@/components/LocaleLink'
 import Image from '@/components/Image'
@@ -12,6 +13,8 @@ export default function CafeCard({
   showBorder = false,
   small = true,
   imageSizes,
+  className,
+  style,
 }: {
   cafe: CafeListing
   showBorder?: boolean
@@ -19,6 +22,9 @@ export default function CafeCard({
   // Rendered slot width for the srcset; grid callers with different column
   // counts should pass their own. Defaults to the 1/2/3/4-column grid.
   imageSizes?: string
+  // Passed to the root link, e.g. for an enter animation and its delay.
+  className?: string
+  style?: CSSProperties
 }) {
   let formattedRemark = cafe.remark
   if (cafe.price_range && cafe.remark) {
@@ -38,8 +44,10 @@ export default function CafeCard({
       className={cn(
         'flex flex-col overflow-hidden rounded-xl bg-surface no-underline transition hover:shadow-md w-full shrink-0',
         showBorder && 'border-[0.5px] border-grove-light',
-        small && 'max-w-xs'
+        small && 'max-w-xs',
+        className,
       )}
+      style={style}
       title={linkTitle}
     >
       <div className="aspect-video h-36 md:h-auto w-full overflow-hidden bg-grove-light">

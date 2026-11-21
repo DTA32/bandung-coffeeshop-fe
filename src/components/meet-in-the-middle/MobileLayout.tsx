@@ -12,6 +12,7 @@ import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import { mitmCrumbs } from '@/lib/seo'
 import { cn } from '@/lib/cn'
+import Toast from '@/components/shared/Toast'
 
 const RADIUS_PRESETS = [
   { val: 0.5, label: '500m' },
@@ -78,9 +79,9 @@ export default function MobileLayout({
   return (
     <main className="flex flex-col bg-cream min-h-screen mb-8">
       {alert && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-20 transition-opacity duration-300 text-center">
+        <Toast tone="warning" className="fixed top-4 z-20">
           {alert}
-        </div>
+        </Toast>
       )}
       <div className="bg-forest dark:bg-cream text-cream dark:text-moss px-5 py-4">
         <h1 className="text-lg font-bold">{t('mitm.title')}</h1>
@@ -157,9 +158,20 @@ export default function MobileLayout({
           {loading ? t('mitm.searching') : t('mitm.findMeetingSpots')}
         </span>
       </button>
-      {results ? (
-        <div className="flex flex-col bg-cream px-4 py-4 gap-3">
-          {results.total === 0 ? (
+      {/* One section from the first search on: it slides up once with the
+          placeholder rows inside and stays mounted while they're swapped for
+          results, so re-searches, sort changes and more pages don't replay it. */}
+      {loading || results ? (
+        <div
+          aria-busy={!results || undefined}
+          className={cn(
+            'flex flex-col bg-cream px-4 py-4 motion-safe:animate-slide-up',
+            results ? 'gap-3' : 'flex-1 gap-2',
+          )}
+        >
+          {!results ? (
+            SKELETON_ROWS.map((i) => <SkeletonCafeListItem key={i} />)
+          ) : results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
               <p className="text-forest font-semibold">
                 {t('mitm.noCafesFound')}
@@ -203,15 +215,6 @@ export default function MobileLayout({
               </div>
             </>
           )}
-        </div>
-      ) : loading ? (
-        <div
-          aria-busy="true"
-          className="flex flex-1 flex-col bg-cream px-4 py-4 gap-2"
-        >
-          {SKELETON_ROWS.map((i) => (
-            <SkeletonCafeListItem key={i} />
-          ))}
         </div>
       ) : (
         <div className="flex-1" />

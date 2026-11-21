@@ -1,7 +1,6 @@
 import { useCallback, useId, useRef, useState } from 'react'
 import { useRouteContext, useRouterState } from '@tanstack/react-router'
 import {
-  ChevronDown,
   ChevronUp,
   CircleUserRound,
   Compass,
@@ -92,8 +91,6 @@ function NavMenu() {
   useClickOutside(rootRef, close, open)
   useEscapeKey(closeAndRefocus, open)
 
-  const Chevron = open ? ChevronDown : ChevronUp
-
   return (
     <div ref={rootRef}>
       <button
@@ -125,7 +122,11 @@ function NavMenu() {
             open ? 'border-moss' : 'border-grove-light',
           )}
         >
-          <Chevron size={16} aria-hidden="true" />
+          <ChevronUp
+            size={16}
+            aria-hidden="true"
+            className={cn('transition-transform', open && 'rotate-180')}
+          />
         </span>
       </button>
       <div
@@ -133,7 +134,9 @@ function NavMenu() {
         hidden={!open}
         aria-hidden={!open}
         className={cn(
-          'absolute right-4 bottom-full mb-2 flex w-55 flex-col gap-2 rounded-2xl border border-grove-light bg-surface p-3.5 text-left text-sm shadow-lg',
+          // The keyframe replays each time `hidden` is lifted, since a
+          // display:none element restarts its animation when shown.
+          'absolute right-4 bottom-full mb-2 flex w-55 origin-bottom-right flex-col gap-2 rounded-2xl border border-grove-light bg-surface p-3.5 text-left text-sm shadow-lg motion-safe:animate-pop-in',
           open ? 'flex' : 'hidden',
         )}
       >

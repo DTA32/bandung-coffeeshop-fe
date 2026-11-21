@@ -21,4 +21,14 @@ function skipNavigationDim(fromPath: string | undefined, toPath: string) {
   return NO_NAV_DIM_PATHS.some((re) => re.test(fromPath) && re.test(toPath))
 }
 
-export { getUserAgentInfo, skipNavigationDim }
+// prefersReducedMotion reports whether the OS asks for reduced motion. False
+// during SSR, where there is no window; call it from client-only code or
+// event handlers.
+function prefersReducedMotion() {
+  return (
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
+}
+
+export { getUserAgentInfo, prefersReducedMotion, skipNavigationDim }

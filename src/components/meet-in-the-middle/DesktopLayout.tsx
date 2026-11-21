@@ -13,6 +13,7 @@ import type { SearchCafesData, CafeMarker } from '@/lib/api/search'
 import { useLocale } from '@/lib/locale'
 import { mitmCrumbs } from '@/lib/seo'
 import { cn } from '@/lib/cn'
+import Toast from '@/components/shared/Toast'
 
 // Placeholder rows shown on the first search, before any results exist.
 const SKELETON_ROWS = [0, 1, 2, 3]
@@ -76,9 +77,9 @@ export default function DesktopLayout({
   return (
     <main className="w-screen h-[95vh] relative">
       {alert && (
-        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-grove-light text-warning text-sm font-semibold px-4 py-2 rounded-md shadow-md z-20 transition-opacity duration-300 text-center">
+        <Toast tone="warning" className="fixed top-16 z-20">
           {alert}
-        </div>
+        </Toast>
       )}
       <MapView
         markers={markers}
@@ -164,19 +165,18 @@ export default function DesktopLayout({
           </span>
         </button>
       </div>
-      {!results && loading && (
-        <div
-          aria-busy="true"
-          className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm p-5 gap-2"
-        >
-          {SKELETON_ROWS.map((i) => (
-            <SkeletonCafeListItem key={i} />
-          ))}
-        </div>
-      )}
-      {results && (
-        <div className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm">
-          {results.total === 0 ? (
+      {/* One panel from the first search on: it slides in from the right once with the
+          placeholder rows inside and stays mounted while they're swapped for
+          results, so re-searches, sort changes and more pages don't replay it. */}
+      {(loading || results) && (
+        <div className="absolute top-10 right-8 flex flex-col z-10 max-w-sm border border-grove-light rounded-2xl bg-surface/90 shadow-lg w-sm motion-safe:animate-slide-in-right">
+          {!results ? (
+            <div aria-busy="true" className="flex flex-col p-5 gap-2">
+              {SKELETON_ROWS.map((i) => (
+                <SkeletonCafeListItem key={i} />
+              ))}
+            </div>
+          ) : results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 h-48 p-4 text-center">
               <p className="text-forest font-semibold">
                 {t('mitm.noCafesFound')}

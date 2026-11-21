@@ -14,9 +14,10 @@ import type { ControlPosition, DivIcon, LatLngExpression } from 'leaflet'
 import { useLocale, localeParam } from '@/lib/locale'
 import { COLORS } from '@/lib/colors'
 import { useIsDark } from '@/lib/hooks/theme'
+import { prefersReducedMotion } from '@/lib/helper'
 import type { CafeMarker } from '@/lib/api/search'
 import type { UserMarker } from './markers'
-import { cafeIcon, midpointIcon, userIcon } from './mapIcons'
+import { cafeIcon, midpointIcon, midpointPulseIcon, userIcon } from './mapIcons'
 import { GeoJSON } from 'react-leaflet/GeoJSON'
 import type { GeoJsonObject } from 'geojson'
 
@@ -51,7 +52,8 @@ function ClickHandler({
 // Recenters the map whenever `center` changes (e.g. geolocation).
 function MapController({ center }: { center: LatLngExpression | null }) {
   const map = useMap()
-  if (center) map.setView(center, 15)
+  // Same-zoom setView still pans with an animation unless told not to.
+  if (center) map.setView(center, 15, { animate: !prefersReducedMotion() })
   return null
 }
 
@@ -140,6 +142,9 @@ export default function MapView({
         ? midpoint
         : null
   const circleR = circleRadiusM ?? resultsRadiusKm * 1000
+  // The map is client-only, so matchMedia is safe here. Leaflet reads these
+  // options once at creation, which matches how the OS setting is used.
+  const animate = !prefersReducedMotion()
   return (
     <MapContainer
       style={{ width: '100%', height: '100%', isolation: 'isolate' }}
@@ -152,6 +157,9 @@ export default function MapView({
       touchZoom={interactive}
       boxZoom={interactive}
       keyboard={interactive}
+      zoomAnimation={animate}
+      fadeAnimation={animate}
+      markerZoomAnimation={animate}
     >
       {/* Keyed so switching themes remounts the layer (attribution isn't
           updated in place). */}
@@ -179,7 +187,15 @@ export default function MapView({
             }}
           />
         ))}
-      {midpoint && <Marker position={midpoint} icon={midpointIcon} />}
+      {/* Keyed on its position so it remounts, and pulses once, every time
+          the midpoint is recalculated. */}
+      {midpoint && (
+        <Marker
+          key={JSON.stringify(midpoint)}
+          position={midpoint}
+          icon={midpointPulseIcon}
+        />
+      )}
       {circleAt && (
         <>
           <Circle

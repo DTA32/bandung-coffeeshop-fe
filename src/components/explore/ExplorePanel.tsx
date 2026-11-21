@@ -18,6 +18,10 @@ type Props = {
   onPlace: (lat: number, lng: number, opts?: { replace?: boolean }) => void
   onHideMap: () => void
   onExpandMap: () => void
+  // Slide the map view in: from the left next to the results (desktop, lg up),
+  // from the top where it stacks above them. Only set when the user turned
+  // the map on in this session, never on a direct load of a map_view=true URL.
+  animateMapIn?: boolean
 }
 
 export default function ExplorePanel({
@@ -29,6 +33,7 @@ export default function ExplorePanel({
   onPlace,
   onHideMap,
   onExpandMap,
+  animateMapIn = false,
 }: Props) {
   const { t } = useTranslation()
   if (mapView) {
@@ -38,6 +43,10 @@ export default function ExplorePanel({
         className={cn(
           isMobile ? 'w-full h-80' : 'w-full lg:max-w-2xl h-160',
           polygon && 'flex flex-col gap-2',
+          animateMapIn &&
+            (isMobile
+              ? 'motion-safe:animate-slide-down'
+              : 'max-lg:motion-safe:animate-slide-down lg:motion-safe:animate-slide-in-left'),
         )}
       >
         <ExploreMapView

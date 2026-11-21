@@ -16,6 +16,10 @@ interface DialogProps {
   variant?: 'adaptive' | 'fullscreen'
   className?: string
   overlayClassName?: string
+  // Adaptive only: slide the panel up and fade the backdrop in on mount. Turn
+  // it off when a dialog remounts to swap content (e.g. ReviewModal's result
+  // views), so the panel doesn't slide in again.
+  animate?: boolean
   children: ReactNode
 }
 
@@ -42,6 +46,7 @@ export default function Dialog({
   variant = 'adaptive',
   className,
   overlayClassName,
+  animate = true,
   children,
 }: DialogProps) {
   const ref = useRef<HTMLDivElement>(null)
@@ -59,13 +64,22 @@ export default function Dialog({
       aria-label={label}
       aria-labelledby={labelledBy}
       tabIndex={-1}
-      className={cn(OVERLAY[variant], 'outline-none', overlayClassName)}
+      className={cn(
+        OVERLAY[variant],
+        'outline-none',
+        variant === 'adaptive' && animate && 'motion-safe:animate-fade-in',
+        overlayClassName,
+      )}
       onClick={onClose}
     >
       {variant === 'adaptive' ? (
         <div
           className={cn(
             'w-full rounded-t-[20px] bg-surface shadow-dialog sm:rounded-[20px]',
+            // Below `sm` the sheet rises from the screen edge; from `sm` up the
+            // centered modal rises a short way while fading in.
+            animate &&
+              'motion-safe:animate-slide-up max-sm:[--slide-up-from:100%] max-sm:[--slide-up-opacity:1] sm:[--slide-up-from:24px]',
             className,
           )}
           onClick={(e) => e.stopPropagation()}
