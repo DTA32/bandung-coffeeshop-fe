@@ -1,4 +1,4 @@
-import { useRouteContext, useRouterState } from '@tanstack/react-router'
+import { useRouteContext } from '@tanstack/react-router'
 import { LayoutGrid, List, Map } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import SearchBox from '@/components/SearchBox'
@@ -181,7 +181,6 @@ export default function ExplorePage({
 }) {
   const { t } = useTranslation()
   const locale = useLocale()
-  const isLoading = useRouterState({ select: (s) => s.isLoading })
   const { ua } = useRouteContext({ from: '__root__' })
   const isMobile = ua.isMobile
 
@@ -221,12 +220,7 @@ export default function ExplorePage({
   const h1 = buildExploreH1(srpContent?.crumbs ?? [], locationClause, t, locale)
 
   return (
-    <main
-      className={cn(
-        'flex flex-col bg-cream flex-1 transition-opacity',
-        isLoading ? 'opacity-50' : 'opacity-100',
-      )}
-    >
+    <main className="flex flex-col bg-cream flex-1">
       <SearchBox
         variant="srp"
         initialQuery={data.location_name}

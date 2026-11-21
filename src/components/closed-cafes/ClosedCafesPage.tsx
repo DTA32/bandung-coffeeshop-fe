@@ -1,4 +1,3 @@
-import { useRouterState } from '@tanstack/react-router'
 import { DoorClosed } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -7,7 +6,6 @@ import Pagination from '@/components/explore/Pagination'
 import type { SearchCafesData } from '@/lib/api/search'
 import { closedCafesCrumbs } from '@/lib/seo'
 import { useLocale } from '@/lib/locale'
-import { cn } from '@/lib/cn'
 
 // Stripped-down explore results page for closed / relocated cafes: title band,
 // count line, CafeCard grid and pagination — no search box, filters or map.
@@ -22,16 +20,10 @@ export default function ClosedCafesPage({
 }) {
   const { t } = useTranslation()
   const locale = useLocale()
-  const isLoading = useRouterState({ select: (s) => s.isLoading })
   const totalPages = Math.ceil(data.total / size)
 
   return (
-    <main
-      className={cn(
-        'flex flex-col bg-cream flex-1 transition-opacity',
-        isLoading ? 'opacity-50' : 'opacity-100',
-      )}
-    >
+    <main className="flex flex-col bg-cream flex-1">
       <header className="bg-surface border-b border-grove-light px-6 md:px-16 py-8 flex flex-col gap-2">
         <h1 className="flex items-center gap-3 text-2xl md:text-3xl font-bold text-forest m-0">
           <DoorClosed

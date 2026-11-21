@@ -7,7 +7,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { I18nextProvider, useTranslation } from 'react-i18next'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Header from '@/components/Header'
 import Navbar from '@/components/Navbar'
 import LocaleLink from '@/components/LocaleLink'
@@ -19,6 +19,7 @@ import { getUserAgentInfo } from '@/lib/helper'
 import { localeFromPathname } from '@/lib/locale'
 import { requestLogger } from '@/lib/middleware'
 import { createI18n } from '@/i18n'
+import { cn } from '@/lib/cn'
 
 import appCss from '@/styles.css?url'
 import Footer from '@/components/Footer'
@@ -113,6 +114,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const locale = localeFromPathname(pathname)
   const i18n = useMemo(() => createI18n(locale), [locale])
+  const isLoading = useRouterState({ select: (s) => s.isLoading })
+  const dimmed = useDelayedTrue(isLoading, NAV_DIM_DELAY_MS)
 
   return (
     <html lang={locale}>
@@ -125,7 +128,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <TelemetryClient />
             <SkipLink />
             <Header />
-            <div id="main" className="contents">
+            <div
+              id="main"
+              aria-busy={dimmed}
+              className={cn(
+                'flex flex-1 flex-col transition-opacity',
+                dimmed ? 'opacity-50' : 'opacity-100',
+              )}
+            >
               {children}
             </div>
             {import.meta.env.PROD ? null : (
@@ -147,6 +157,25 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </body>
     </html>
   )
+}
+
+// Navigations that finish within this window (hover-preloaded links, cached
+// loaders) never dim, so they don't flicker.
+const NAV_DIM_DELAY_MS = 150
+
+// useDelayedTrue turns true only once `value` has stayed true for `delayMs`,
+// and turns false as soon as `value` does.
+function useDelayedTrue(value: boolean, delayMs: number) {
+  const [delayed, setDelayed] = useState(false)
+  useEffect(() => {
+    if (!value) {
+      setDelayed(false)
+      return
+    }
+    const id = setTimeout(() => setDelayed(true), delayMs)
+    return () => clearTimeout(id)
+  }, [value, delayMs])
+  return delayed
 }
 
 function SkipLink() {
