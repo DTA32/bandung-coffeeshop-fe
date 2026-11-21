@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/cn'
 import LocaleLink from '@/components/LocaleLink'
@@ -8,10 +9,15 @@ export default function CafeListItem({
   cafe,
   withBorder = false,
   openNewTab = false,
+  className,
+  style,
 }: {
   cafe: CafeListing
   withBorder?: boolean
   openNewTab?: boolean
+  // Passed to the root link, e.g. for an enter animation and its delay.
+  className?: string
+  style?: CSSProperties
 }) {
   const { t } = useTranslation()
   let formattedRemark = cafe.remark
@@ -43,7 +49,9 @@ export default function CafeListItem({
       className={cn(
         'flex gap-4 rounded-xl bg-surface no-underline transition hover:bg-grove-light/20 h-20 md:h-25',
         withBorder && 'border border-grove-light',
+        className,
       )}
+      style={style}
       title={linkTitle}
     >
       <div

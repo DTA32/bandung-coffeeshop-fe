@@ -1,5 +1,5 @@
 import { useCallback, useId, useRef, useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import type { DayHours } from '@/lib/api/cafe'
@@ -40,8 +40,6 @@ export default function OpeningHours({ hours, todayText }: OpeningHoursProps) {
   useClickOutside(rootRef, close, open)
   useEscapeKey(closeAndRefocus, open)
 
-  const Chevron = open ? ChevronUp : ChevronDown
-
   return (
     <dd ref={rootRef} className="m-0 flex justify-end">
       <button
@@ -57,14 +55,21 @@ export default function OpeningHours({ hours, todayText }: OpeningHoursProps) {
         )}
       >
         {todayText}
-        <Chevron size={14} aria-hidden="true" className="shrink-0 text-bark" />
+        <ChevronDown
+          size={14}
+          aria-hidden="true"
+          className={cn(
+            'shrink-0 text-bark transition-transform',
+            open && 'rotate-180',
+          )}
+        />
       </button>
 
       {open && (
         <ul
           id={popoverId}
           aria-label={t('cafe.openingHours')}
-          className="absolute top-full right-0 z-40 mt-2 flex w-full flex-col gap-0.5 rounded-xl border border-grove-light bg-surface p-1.5 text-left shadow-lg md:w-75"
+          className="absolute top-full right-0 z-40 mt-2 flex w-full flex-col gap-0.5 rounded-xl border border-grove-light bg-surface p-1.5 text-left shadow-lg md:w-75 origin-top motion-safe:animate-unfold"
         >
           {hours.map((day, i) => {
             const today = i === 0

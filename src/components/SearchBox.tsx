@@ -156,7 +156,7 @@ export default function SearchBox({
     <div
       id={listboxId}
       role="listbox"
-      className="absolute left-0 right-0 top-full z-40 mt-1 overflow-hidden rounded-lg border border-grove-light bg-surface shadow-lg"
+      className="absolute left-0 right-0 top-full z-40 mt-1 origin-top overflow-hidden rounded-lg border border-grove-light bg-surface shadow-lg motion-safe:animate-unfold"
     >
       {groupOrder.map((type) => {
         const items = grouped[type]
