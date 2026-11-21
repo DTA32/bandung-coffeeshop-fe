@@ -158,9 +158,20 @@ export default function MobileLayout({
           {loading ? t('mitm.searching') : t('mitm.findMeetingSpots')}
         </span>
       </button>
-      {results ? (
-        <div className="flex flex-col bg-cream px-4 py-4 gap-3">
-          {results.total === 0 ? (
+      {/* One section from the first search on: it slides up once with the
+          placeholder rows inside and stays mounted while they're swapped for
+          results, so re-searches, sort changes and more pages don't replay it. */}
+      {loading || results ? (
+        <div
+          aria-busy={!results || undefined}
+          className={cn(
+            'flex flex-col bg-cream px-4 py-4 motion-safe:animate-slide-up',
+            results ? 'gap-3' : 'flex-1 gap-2',
+          )}
+        >
+          {!results ? (
+            SKELETON_ROWS.map((i) => <SkeletonCafeListItem key={i} />)
+          ) : results.total === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 py-8 text-center">
               <p className="text-forest font-semibold">
                 {t('mitm.noCafesFound')}
@@ -204,15 +215,6 @@ export default function MobileLayout({
               </div>
             </>
           )}
-        </div>
-      ) : loading ? (
-        <div
-          aria-busy="true"
-          className="flex flex-1 flex-col bg-cream px-4 py-4 gap-2"
-        >
-          {SKELETON_ROWS.map((i) => (
-            <SkeletonCafeListItem key={i} />
-          ))}
         </div>
       ) : (
         <div className="flex-1" />
