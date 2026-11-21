@@ -1,6 +1,12 @@
 import type { SrpItem } from '@/lib/srp'
 import type { CafeListing } from '@/lib/api/search'
-import type { CafeData, CafePrice, CafeReview } from '@/lib/api/cafe'
+import type {
+  CafeData,
+  CafePrice,
+  CafeReview,
+  RatingEntry,
+  RatingRange,
+} from '@/lib/api/cafe'
 import {
   breadcrumbJsonLd,
   cafeItemListJsonLd,
@@ -314,11 +320,16 @@ function hoursClause(cafe: CafeData, t: TFn): string | undefined {
   return t('seo.cafe.descHours', { open: range.open, close: range.close })
 }
 
+// The range a rating's score falls in. name/description come localized from
+// the BE (lang).
+function ratingRange(entry: RatingEntry | undefined): RatingRange | undefined {
+  if (!entry) return undefined
+  return entry.range.find((r) => entry.score <= r.upper_bound)
+}
+
 // The WiFi range label the score falls in ("Cepat" / "Fast").
 function wifiClause(review: CafeReview, t: TFn): string | undefined {
-  const wifi = review.ratings.wifi
-  if (!wifi) return undefined
-  const range = wifi.range.find((r) => wifi.score <= r.upper_bound)
+  const range = ratingRange(review.ratings.wifi)
   if (!range) return undefined
   return t('seo.cafe.descWifi', { label: range.name.toLowerCase() })
 }
@@ -374,4 +385,114 @@ export function buildCafeMeta(args: {
     title: buildCafeTitle(cafe, t),
     description: buildCafeDescription(cafe, review, t),
   }
+}
+
+// CDP FAQ (BCF-42). Up to 5 items, each shown only when the cafe's own data
+// answers it. Each question has 3 phrasings; the one used is fixed per cafe
+// (hash of cafe.id, locale-independent) so SSR, hydration and both locales
+// agree, while different cafes read differently.
+export interface FaqItem {
+  question: string
+  answer: string
+}
+
+const FAQ_VARIANTS = 3
+
+// Ranges from 1.68 up (WiFi Standar/Cepat, parking Normal/Mudah). A WiFi or
+// parking rating in the lowest range drops its whole FAQ item.
+const FAQ_RATING_MIN = 1.68
+
+// FNV-1a, 32-bit.
+function hashId(id: string): number {
+  let h = 0x811c9dc5
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i)
+    h = Math.imul(h, 0x01000193) >>> 0
+  }
+  return h
+}
+
+// Label + description for the answer's rating sentence ("cepat: Cocok
+// untuk ..."). The label is lowercased to sit mid-sentence, as in wifiClause.
+function ratingSentence(
+  range: RatingRange | undefined,
+): { label: string; desc: string } | undefined {
+  if (!range) return undefined
+  return {
+    label: range.name.toLowerCase(),
+    desc: range.description.trim().replace(/\.$/, ''),
+  }
+}
+
+// The rating sentence, only for a range worth mentioning (>= FAQ_RATING_MIN).
+function faqRating(entry: RatingEntry | undefined) {
+  const range = ratingRange(entry)
+  if (!range || range.lower_bound < FAQ_RATING_MIN) return undefined
+  return ratingSentence(range)
+}
+
+export function buildCafeFaq(
+  cafe: CafeData,
+  review: CafeReview,
+  t: TFn,
+): FaqItem[] {
+  if (cafe.status !== 'active') return []
+  const name = cafe.name
+  const hash = hashId(cafe.id)
+  const tags = new Set(review.tags.map((tag) => tag.slug))
+  const items: FaqItem[] = []
+
+  // i = the question's fixed position (Q1–Q5), so neighbouring questions
+  // don't all land on the same variant number. `extra` adds the bracketed
+  // rating sentence to the answer, and with `askMore` the bracketed follow-up
+  // to the question.
+  const add = (
+    i: number,
+    key: string,
+    opts: {
+      extra?: { label: string; desc: string }
+      askMore?: boolean
+      vars?: Record<string, string>
+    } = {},
+  ) => {
+    const { extra, askMore = false, vars } = opts
+    const v = ((hash + i) % FAQ_VARIANTS) + 1
+    const k = `seo.cafe.faq.${key}`
+    const o = { name, ...vars, ...extra }
+    const question = [t(`${k}.q${v}`, o)]
+    if (extra && askMore) question.push(t(`${k}.more${v}`, o))
+    const answer = [t(`${k}.a`, o)]
+    if (extra) answer.push(t(`${k}.aMore`, o))
+    items.push({ question: question.join(' '), answer: answer.join(' ') })
+  }
+
+  const wifi = faqRating(review.ratings.wifi)
+  if (wifi) add(0, 'wifi', { extra: wifi, askMore: true })
+
+  if (tags.has('indoor-smoking')) add(1, 'smoking')
+
+  const allDay =
+    cafe.regular_hours.length === 7 &&
+    cafe.regular_hours.every(
+      (d) => !d.closed && d.ranges.length === 1 && isAllDay(d.ranges[0]),
+    )
+  if (allDay) add(2, 'open24')
+
+  if (tags.has('wfc-friendly')) {
+    add(3, 'wfc', { extra: ratingSentence(ratingRange(review.ratings.noise)) })
+  }
+
+  // No parking rating: address only. A low one: no item at all.
+  const address = cafe.description?.trim()
+  const parking = faqRating(review.ratings.parking)
+  const parkingLow = review.ratings.parking !== undefined && !parking
+  if (address && !parkingLow) {
+    add(4, 'address', {
+      extra: parking,
+      askMore: true,
+      vars: { address },
+    })
+  }
+
+  return items
 }
