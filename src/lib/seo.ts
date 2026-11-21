@@ -202,6 +202,22 @@ export function breadcrumbJsonLd(crumbs: Crumb[]): object {
   }
 }
 
+// CDP FAQ (BCF-42). Items come from buildCafeFaq, the same list the visible
+// FaqWidget renders, so the text matches exactly.
+export function faqPageJsonLd(
+  items: { question: string; answer: string }[],
+): object {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  }
+}
+
 // Home: the site itself + the publisher.
 export function websiteJsonLd(locale: Locale): object {
   return {

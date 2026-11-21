@@ -204,7 +204,49 @@
         "air-conditioned-seating": "ruangan ber-AC"
       },
       "descCta": "Cek ulasan lengkapnya.",
-      "descCtaMenu": "Cek ulasan & menunya."
+      "descCtaMenu": "Cek ulasan & menunya.",
+      "faq": {
+        "title": "Pertanyaan umum",
+        "wifi": {
+          "q1": "Apakah {{name}} ada WiFi?",
+          "q2": "{{name}} ada WiFi nggak?",
+          "q3": "Bisa pakai WiFi di {{name}}?",
+          "more1": "Seberapa cepat?",
+          "more2": "Kencang nggak?",
+          "more3": "Cukup buat kerja?",
+          "a": "Ada.",
+          "aMore": "WiFi di {{name}} tergolong {{label}}: {{desc}}."
+        },
+        "smoking": {
+          "q1": "Boleh merokok di dalam {{name}}?",
+          "q2": "Apakah {{name}} punya area merokok di dalam ruangan?",
+          "q3": "Apakah {{name}} ramah perokok?",
+          "a": "Boleh. {{name}} menyediakan area merokok di dalam ruangan."
+        },
+        "open24": {
+          "q1": "Apakah {{name}} buka 24 jam?",
+          "q2": "{{name}} buka sampai jam berapa?",
+          "q3": "Bisa nongkrong tengah malam di {{name}}?",
+          "a": "{{name}} buka 24 jam setiap hari."
+        },
+        "wfc": {
+          "q1": "Apakah {{name}} cocok buat WFC?",
+          "q2": "Enak nggak kerja di {{name}}?",
+          "q3": "{{name}} cocok buat kerja atau nugas?",
+          "a": "Cocok, {{name}} termasuk kafe ramah WFC.",
+          "aMore": "Tingkat kebisingannya {{label}}: {{desc}}."
+        },
+        "address": {
+          "q1": "Di mana alamat {{name}}?",
+          "q2": "{{name}} lokasinya di mana?",
+          "q3": "Alamat lengkap {{name}} di mana?",
+          "more1": "Parkirnya gimana?",
+          "more2": "Gampang cari parkir?",
+          "more3": "Parkirannya luas?",
+          "a": "{{name}} beralamat di {{address}}.",
+          "aMore": "Parkirnya {{label}}: {{desc}}."
+        }
+      }
     },
     "aboutTitle": "Tentang BDGCafe - Ulasan Coffee Shop Bandung",
     "aboutDesc": "BDGCafe adalah panduan personal untuk coffee shop di Bandung - ulasan jujur dan discovery untuk menemukan kafe idealmu.",
